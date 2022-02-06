@@ -1,0 +1,574 @@
+% Document setup
+\documentclass[article, a4paper, 11pt, oneside]{memoir}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[UKenglish]{babel}
+
+% Document info
+\newcommand\doctitle{Notes on linear algebra}
+\newcommand\docauthor{Danny Nygård Hansen}
+
+% Formatting and layout
+\usepackage[autostyle]{csquotes}
+\renewcommand{\mktextelp}{(\textellipsis\unkern)}
+\usepackage[final]{microtype}
+\usepackage{xcolor}
+\frenchspacing
+\usepackage{latex-sty/articlepagestyle}
+\usepackage{latex-sty/articlesectionstyle}
+
+% Fonts
+\usepackage{amssymb}
+\usepackage[largesmallcaps,partialup]{kpfonts}
+\DeclareSymbolFontAlphabet{\mathrm}{operators} % https://tex.stackexchange.com/questions/40874/kpfonts-siunitx-and-math-alphabets
+\linespread{1.06}
+% \let\mathfrak\undefined
+% \usepackage{eufrak}
+\DeclareMathAlphabet\mathfrak{U}{euf}{m}{n}
+\SetMathAlphabet\mathfrak{bold}{U}{euf}{b}{n}
+% https://tex.stackexchange.com/questions/13815/kpfonts-with-eufrak
+\usepackage{inconsolata}
+
+% Hyperlinks
+\usepackage{hyperref}
+\definecolor{linkcolor}{HTML}{4f4fa3}
+\hypersetup{%
+	pdftitle=\doctitle,
+	pdfauthor=\docauthor,
+	colorlinks,
+	linkcolor=linkcolor,
+	citecolor=linkcolor,
+	urlcolor=linkcolor,
+	bookmarksnumbered=true
+}
+
+% Equation numbering
+\numberwithin{equation}{chapter}
+
+% Footnotes
+\footmarkstyle{\textsuperscript{#1}\hspace{0.25em}}
+
+% Mathematics
+\usepackage{latex-sty/basicmathcommands}
+\usepackage{latex-sty/framedtheorems}
+\usepackage{tikz-cd}
+\tikzcdset{arrow style=math font} % https://tex.stackexchange.com/questions/300352/equalities-look-broken-with-tikz-cd-and-math-font
+\usetikzlibrary{babel}
+
+% Lists
+\usepackage{enumitem}
+\setenumerate[0]{label=\normalfont(\arabic*)}
+
+% Bibliography
+\usepackage[backend=biber, style=authoryear, maxcitenames=2, useprefix]{biblatex}
+\addbibresource{references.bib}
+
+% Title
+\title{\doctitle}
+\author{\docauthor}
+
+\newcommand{\calM}{\mathcal{M}}
+\DeclareMathOperator{\sign}{sgn}
+\DeclareMathOperator{\adj}{adj}
+
+
+\usepackage{listofitems}
+\setsepchar{,}
+
+\makeatletter
+
+\newcommand{\mat@dims}[1]{%
+    \readlist*\@dims{#1}%
+    \ifnum \@dimslen=1
+        \def\@dimsout{\@dims[1]}%
+    \else
+        \def\@dimsout{\@dims[1], \@dims[2]}%
+    \fi
+    \@dimsout
+}
+
+\newcommand{\matgroup}[3]{\mathrm{#1}_{#2}(#3)}
+\newcommand{\GL}[2]{\matgroup{GL}{#1}{#2}}
+\newcommand{\trans}{^{\top}}
+\newcommand{\mat}[2]{\calM_{\mat@dims{#1}}(#2)}
+
+\makeatother
+
+
+\begin{document}
+
+\maketitle
+
+\chapter{Linear equations and matrices}
+
+\section{Linear equations}
+
+Throughout we let $F$ denote an arbitrary field and $R$ a commutative ring. Let $m$ and $n$ be positive integers. A \emph{linear equation in $n$ unknowns} is an equation on the form
+%
+\begin{equation*}
+    l \colon a_1 x_1 + \cdots + a_n x_n = b,
+\end{equation*}
+%
+where $a_1, \ldots, a_n, b \in F$. A \emph{solution} to $l$ is an element $v = (v_1, \ldots, v_n) \in F^n$ such that
+%
+\begin{equation*}
+    a_1 v_1 + \cdots + a_n v_n = b.
+\end{equation*}
+%
+A \emph{system of linear equations in $n$ unknowns} is a tuple $L = (l_1, \ldots, l_m)$, where each $l_i$ is a linear equation in $n$ unknowns. An element $v \in F^n$ is a \emph{solution} to $L$ if it is a solution to each linear equation $l_1, \ldots, l_m$.
+
+Let $L$ and $L'$ be systems of linear equations in $n$ unknowns. We say that $L$ and $L'$ are \emph{solution equivalent} if they have the same solutions. Furthermore, we say that they are \emph{combination equivalent} if each equation in $L'$ is a linear combination of the equations in $L$, and vice versa. Clearly, if $L$ and $L'$ are combination equivalent they are also solution equivalent, but the converse does not hold.
+
+
+\section{Matrices}
+
+It is well-known that a system of linear equations is equivalent to a matrix equation on the form $Ax = b$, where $A \in \mat{m,n}{F}$, $x \in F^n$ and $b \in F^m$. Recall the \emph{elementary row operations} on $A$:
+%
+\begin{enumerate}
+    \item multiplication of one row of $A$ by a nonzero scalar,
+    \item addition to one row of $A$ a scalar multiple of another (different) row, and
+    \item interchange of two rows of $A$.
+\end{enumerate}
+%
+If $e$ is an elementary row operation, we write $e(A)$ for the matrix obtained when applying $e$ to $A$. Clearly each elementary row operation $e$ has an \enquote{inverse}, i.e. an elementary row operation $e'$ such that $e'(e(A)) = e(e'(A)) = A$. Two matrices $A,B \in \mat{m,n}{F}$ are called \emph{row-equivalent} if $A$ is obtained by applying a finite sequence of elementary row operations to $B$ (and vice versa, though this need not be assumed since each elementary row operation has an inverse).
+
+Clearly, if $A, B \in \mat{m,n}{F}$ are row-equivalent, then the systems of equations $Ax = 0$ and $Bx = 0$ are combination equivalent, hence have the same solutions.
+
+\begin{definition}
+    A matrix $H \in \mat{m,n}{F}$ is called \emph{row-reduced} if
+    %
+    \begin{enumdef}
+        \item the first nonzero entry of each nonzero row in $H$ is $1$, and
+        \item each column of $H$ containing the leading nonzero entry of some row has all its other entries equal $0$.
+    \end{enumdef}
+    %
+    If $H$ is row-reduced, it is called a \emph{row-reduced echelon matrix} if it also has the following properties:
+    %
+    \begin{enumdef}[resume]
+        \item Every row of $H$ only containing zeroes occur below every row which has a nonzero entry, and
+        \item if rows $1, \ldots, r$ are the nonzero rows of $H$, and if the leading nonzero entry of row $i$ occurs in column $k_i$, then $k_1 < \cdots < k_r$.
+    \end{enumdef}
+\end{definition}
+
+An \emph{elementary matrix} is a matrix obtained by applying a single elementary row operation to the identity matrix $I$. It is easy to show that if $e$ is an elementary row operation and $E = e(I) \in \mat{m}{F}$, then $e(A) = EA$ for $A \in \mat{m,n}{F}$. If $B \in \mat{m,n}{F}$, then $A$ and $B$ are row-equivalent if and only if $A = PB$, where $P \in \mat{m}{F}$ is a product of elementary matrices.
+
+\begin{proposition}
+    Every matrix in $\mat{m,n}{F}$ is row-equivalent to a unique row-reduced echelon matrix.
+\end{proposition}
+
+\begin{proof}
+    The usual Gauss--Jordan elimination algorithm proves existence. If $H, K \in \mat{m,n}{R}$ are row-equivalent row-reduced echelon matrices, we claim that $H = K$. We prove this by induction in $n$. If $n = 1$ then this is obvious, so assume that $n > 1$. Let $H_1$ and $K_1$ be the matrices obtained by deleting the $n$th column in $H$ and $K$ respectively. Then $H_1$ and $K_1$ are also row-equivalent\footnote{It should be obvious that deleting columns preserves row-equivalence, but we give a more precise argument: If $P \in \mat{m}{F}$ is a product of elementary matrices and $a_1, \ldots, a_n \in F^m$ are the columns in $A$, then the columns in $PA$ are $Pa_1, \ldots, Pa_m$. Thus elementary row operations are applied to each column independently of the other columns.} and row-reduced echelon matrices, so by induction $H_1 = K_1$. Thus if $H$ and $K$ differ, they must differ in the $n$th column.
+
+    Let $H_2$ be the matrix obtained by deleting columns in $H$, only keeping those columns containing pivots, as well as keeping the $n$th column. Define $K_2$ similarly. Thus we have deleted the same columns in $H$ and $K$, so $H_2$ and $K_2$ are also row-equivalent. Say that the number of columns in $H_2$ and $K_2$ is $r+1$, and write the matrices on the form
+    %
+    \begin{equation*}
+        H_2
+            = \begin{pmatrix}
+                I_r & h \\
+                0   & h'
+            \end{pmatrix}
+        \quad \text{and} \quad
+        K_2
+            = \begin{pmatrix}
+                I_r & k \\
+                0   & k'
+            \end{pmatrix},
+    \end{equation*}
+    %
+    where $h,k \in F^r$ and $h',k' \in F^{m-r}$ are column vectors. Since $H_2$ and $K_2$ are row-equivalent, the systems $H_2 x = 0$ and $K_2 x = 0$ are solution equivalent. If $h' = 0$, then $H_2 x = 0$ has the solution $(-h,1)$. But this is also a solution to $K_2 x = 0$, so $h = k$ and $k' = 0$. If $h' \neq 0$, then $H_2 x = 0$ only has the trivial solution. But then $K_2 x = 0$ also only has the trivial solution, and hence $k' \neq 0$. But that must be because both $H_2$ and $K_2$ has a pivot in the $n$th column, so also in this case $H_2 = K_2$.
+\end{proof}
+
+
+\section{Invertible matrices}
+
+Notice that elementary matrices are invertible, since elementary row operations are invertible.
+
+\begin{lemma}
+    If $A \in \mat{n}{F}$, then the following are equivalent:
+    %
+    \begin{enumlem}
+        \item \label{enum:lemma-A-invertible} $A$ is invertible,
+        \item \label{enum:lemma-A-equivalent-to-I} $A$ is row-equivalent to $I_n$,
+        \item \label{enum:lemma-A-elementary-matrix-product} $A$ is a product of elementary matrices, and
+        \item \label{enum:lemma-only-trivial-solution} the system $Ax = 0$ has only the trivial solution $x = 0$.
+    \end{enumlem}
+\end{lemma}
+% I don't think we will need (iii), but I guess I'll leave it.
+
+\begin{proof}
+\begin{proofsec}
+    \item[\subcref{enum:lemma-A-invertible} $\Leftrightarrow$ \subcref{enum:lemma-A-equivalent-to-I}]
+    Let $H \in \mat{n}{F}$ be a row-reduced echelon matrix that is row-equivalent to $A$. Then $R = PA$, where $P \in \mat{n}{F}$ is a product of elementary matrices. Then $A = P\inv H$, so $A$ is invertible if and only if $H$ is. But the only invertible row-reduced echelon matrix is the identity matrix, so (i) and (ii) are equivalent.
+    
+    \item[\subcref{enum:lemma-A-invertible} $\Leftrightarrow$ \subcref{enum:lemma-A-elementary-matrix-product}]
+    Clearly (iii) implies (i), and the above shows that (i) implies that $A = P\inv$.
+
+    \item[\subcref{enum:lemma-A-equivalent-to-I} $\Leftrightarrow$ \subcref{enum:lemma-only-trivial-solution}]
+    If $A$ and $I_n$ are row-equivalent, then the systems $Ax = 0$ and $I_n x = 0$ have the same solutions. Conversely, assume that $Ax = 0$ only has the trivial solution. If $H \in \mat{m,n}{F}$ is a row-reduced echelon matrix that is row-equivalent to $A$, then $Hx = 0$ has no nontrivial solution. Thus if $r$ is the number of nonzero rows in $H$, then $r \geq n$. But then $r = n$, so $H$ must be the identity matrix.
+\end{proofsec}
+\end{proof}
+
+
+\begin{proposition}
+    Let $A \in \mat{n}{F}$. Then the following are equivalent:
+    %
+    \begin{enumprop}
+        \item $A$ is invertible,
+        \item $A$ has a left inverse, and
+        \item $A$ has a right inverse.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    If $A$ has a left inverse, then $Ax = 0$ has no nontrivial solution, so $A$ is invertible. If $A$ has a right inverse $B \in \mat{n}{F}$, i.e. $AB = I$, then $B$ has a left inverse and is thus invertible. But then $A$ is the inverse of $B$ and hence is itself invertible.
+\end{proof}
+
+
+\chapter{Determinants}
+
+\section{Existence of determinants}
+
+If $M_1, \ldots, M_n, N$ are modules over a commutative ring $R$, a map
+%
+\begin{equation*}
+    \phi \colon M_1 \prod \cdots \prod M_n \to N
+\end{equation*}
+%
+is called \emph{$n$-linear} if the maps $m_i \mapsto \phi(m_1, \ldots, m_n)$ are linear for all $m_i \in M_i$. Since $\mat{m,n}{R} \cong (R^m)^n$, a map $\phi \colon \mat{m,n}{R} \to N$ that is linear in each row is also called $n$-linear.
+
+In the case $M_1 = \cdots = M_n$, we call $\phi$ \emph{alternating} if $\phi(m_1, \ldots, m_n) = 0$ whenever $m_i = m_j$ for some $i \neq j$. Furthermore, $\phi$ is called \emph{skew-symmetric} if
+%
+\begin{multline*}
+    \phi(m_1, \ldots, m_{i-1}, m_i, m_{i+1}, \ldots, m_{j-1}, m_j, m_{j+1}, \ldots, m_n) \\
+        = -\phi(m_1, \ldots, m_{i-1}, m_j, m_{i+1}, \ldots, m_{j-1}, m_i, m_{j+1}, \ldots, m_n)
+\end{multline*}
+%
+for all $i < j$.
+
+\begin{lemma}
+    Let $M$ and $N$ be $R$-modules, and let $\phi \colon M^n \to N$ be an $n$-linear map.
+    %
+    \begin{enumlem}
+        \item \label{enum:alternating-implies-skew-symmetric} If $\phi$ is alternating, then $\phi$ is skew-symmetric.
+        \item \label{enum:alternating-adjacent-rows} If $\phi(m_1, \ldots, m_n) = 0$ whenever $m_i = m_{i+1}$ for some $i = 1, \ldots, n-1$, then $\phi$ is alternating.
+    \end{enumlem}
+\end{lemma}
+
+\begin{proof}
+\begin{proofsec}
+    \item[\subcref{enum:alternating-implies-skew-symmetric}]
+    Consider $m_1, \ldots, m_n \in M$, and let $1 \leq i < j \leq n$. Define a map $\psi \colon M \prod M \to N$ by
+    %
+    \begin{equation*}
+        \psi(a, b)
+            = \phi(m_1, \ldots, m_{i-1}, a, m_{i+1}, \ldots, m_{j-1}, b, m_{j+1}, \ldots, m_n),
+    \end{equation*}
+    %
+    and notice that it suffices to show that $\psi(m_i,m_j) = -\psi(m_j,m_i)$. But $\psi$ is $2$-linear and alternating, so for $a,b \in M$ we have
+    %
+    \begin{equation*}
+        \psi(a+b, a+b)
+            = \psi(a,a) + \psi(a,b) + \psi(b,a) + \psi(b,b)
+            = \psi(a,b) + \psi(b,a).
+    \end{equation*}
+    %
+    Thus $\psi(m_i,m_j) = -\psi(m_j,m_i)$, so $\phi$ is skew-symmetric as claimed.
+
+    \item[\subcref{enum:alternating-adjacent-rows}] 
+    The argument above shows that, in particular, if $A, B \in M^n$, and $B$ is obtained from $A$ by interchanging two adjacent elements, then $\phi(B) = -\phi(A)$. Assuming now that $B$ is obtained from $A$ by interchanging the $i$th and $j$th elements in $A$, with $i < j$, we claim that we may obtain $B$ by successively interchanging adjacent elements of $A$. Writing $A = (m_1, \ldots, m_n)$, we first perform $j - i$ such interchanges and arrive that the tuple
+    %
+    \begin{equation*}
+        (m_1, \ldots, m_{i-1}, m_{i+1}, \ldots, m_{j-1}, m_j, m_i, m_{j+1}, \ldots, m_n),
+    \end{equation*}
+    %
+    moving $m_i$ to the right $j - i$ places. Next we perform another $j-i-1$ interchanges, moving $m_j$ to the left until we reach
+    %
+    \begin{equation*}
+        B = (m_1, \ldots, m_{i-1}, m_j, m_{i+1}, \ldots, m_{j-1}, m_i, m_{j+1}, \ldots, m_n).
+    \end{equation*}
+    %
+    Since each interchange results in a sign change, we have
+    %
+    \begin{equation*}
+        \phi(B) = (-1)^{2(j-i) - 1} \phi(A) = -\phi(A).
+    \end{equation*}
+    %
+    If $m_i = m_j$ for $i < j$, then we claim that $\phi(A) = 0$. For let $B$ be obtained from $A$ by interchanging $m_{i+1}$ and $m_j$. Then $\phi(B) = 0$, so $\phi(A) = -\phi(B) = 0$ by the above argument, and hence $\phi$ is alternating as claimed.
+    \end{proofsec}
+\end{proof}
+
+\begin{definition}
+    If $n$ be a positive integer, a \emph{determinant function} is a map $\phi \colon \mat{n}{R} \to R$ that is $n$-linear, alternating, and which satisfies $\phi(I_n) = 1$.
+\end{definition}
+%
+If $A \in \mat{n}{R}$ with $n > 1$ and $1 \leq i,j \leq n$, denote by $M(A)_{i,j}$ the matrix in $\mat{n-1}{R}$ obtained by removing the the $i$th row and the $j$th column of $A$. This is called the \emph{$(i,j)$-th minor} of $A$. If $\phi \colon \mat{n-1}{R} \to R$ is an $(n-1)$-linear function and $A \in \mat{n}{R}$, then we write $\phi_{i,j}(A) = \phi(M(A)_{i,j})$. Then $\phi_{i,j} \colon \mat{n}{R} \to R$ is clearly linear in all rows except row $i$, and is independent of row $i$.
+
+\begin{theorem}
+    \label{thm:determinant-recursive-definition}
+    Let $n > 1$, and let $\phi \colon \mat{n-1}{R} \to R$ be alternating and $(n-1)$-linear. For $j = 1, \ldots, n$ define a map $\psi_j \colon \mat{n}{R} \to R$ by
+    %
+    \begin{equation*}
+        \psi_j(A)
+            = \sum_{i=1}^n (-1)^{i+j} a_{ij} \phi_{i,j}(A),
+    \end{equation*}
+    %
+    for $A = (a_{ij}) \in \mat{n}{R}$. Then $\psi_j$ is alternating and $n$-linear. If $\phi$ is a determinant function, then so is $\psi_j$.
+\end{theorem}
+
+\begin{proof}
+    Let $A = (a_{ij}) \in \mat{n}{R}$. Then $A \mapsto a_{ij}$ is independent of all rows except row $i$, and $\phi_{i,j}$ is linear in all rows except row $i$. Thus $A \mapsto a_{ij} \phi_{i,j}(A)$ is linear in all rows except row $i$. Conversely, $A \mapsto a_{ij}$ is linear in row $i$, and $\phi_{i,j}$ is independent of row $i$, so $A \mapsto a_{ij} \phi_{i,j}(A)$ is also linear in row $i$. Since $\psi_j$ is a linear combination of $n$-linear maps, is it itself $n$-linear.
+
+    Now assume that $A$ has two equal adjacent rows, say $a_k, a_{k+1} \in R^n$. If $i \neq k$ and $i \neq k+1$, then $M(A)_{i,j}$ has two equal rows, so $\phi_{i,j}(A) = 0$. Thus
+    %
+    \begin{equation*}
+        \psi_j(A)
+            = (-1)^{k+j} a_{kj} \phi_{k,j}(A)
+              + (-1)^{k+1+j} a_{(k+1)j} \phi_{k+1,j}(A).
+    \end{equation*}
+    %
+    Since $a_k = a_{k+1}$ we also have $a_{kj} = a_{(k+1)j}$ and $M(A)_{k,j} = M(A)_{k+1,j}$. Thus $\psi_j(A) = 0$, so \cref{enum:alternating-adjacent-rows} implies that $\psi_j$ is alternating.
+
+    Finally suppose that $\phi$ is a determinant function. Then $M(I_n)_{j,j} = I_{n-1}$ and we have
+    %
+    \begin{equation*}
+        \psi_j(I_n)
+            = (-1)^{j+j} \phi_{j,j}(I_n)
+            = \phi(I_{n-1})
+            = 1,
+    \end{equation*}
+    %
+    so $\psi_j$ is also a determinant function.
+\end{proof}
+
+
+\begin{corollary}
+    For every positive integer $n$, there exists a determinant function $\mat{n}{R} \to R$.
+\end{corollary}
+
+\begin{proof}
+    The identity map on $\mat{1}{R} \cong R$ is a determinant function for $n = 1$, and \cref{thm:determinant-recursive-definition} allows us to recursively construct a determinant for each $n > 1$.
+\end{proof}
+
+
+\section{Uniqueness of determinants}
+
+\begin{theorem}
+    Let $n$ be a positive integer. There is precisely one determinant function on $\mat{n}{R}$, namely the function $\det \colon \mat{n}{R} \to R$ given by
+    %
+    \begin{equation*}
+        \det A
+            = \sum_{\sigma \in S_n} (\sign\sigma) a_{1 \sigma(1)} \cdots a_{n \sigma(n)}
+    \end{equation*}
+    %
+    for $A = (a_{ij}) \in \mat{n}{R}$. If $\phi \colon \mat{n}{R} \to R$ is any alternating $n$-linear function, then
+    %
+    \begin{equation*}
+        \phi(A)
+            = (\det A) \phi(I_n).
+    \end{equation*}
+\end{theorem}
+%
+We use the notation $\det$ for the unique determinant on $\mat{n}{R}$ for all $n$.
+
+\begin{proof}
+    Let $e_1, \ldots, e_n$ denote the rows of $I_n$, and denote the rows of a matrix $A = (a_{ij}) \in \mat{n}{R}$ by $a_1, \ldots, a_n$. Then $a_i = \sum_{j=1}^n a_{ij} e_j$, so
+    %
+    \begin{equation*}
+        \phi(A)
+            = \sum_{k_1, \ldots, k_n} a_{1k_1} \cdots a_{nk_n} \phi(e_{k_1}, \ldots, e_{k_n}),
+    \end{equation*}
+    %
+    where the sum is taken over all $k_i = 1, \ldots, n$. Since $\phi$ is alternating we have $\phi(e_{k_1}, \ldots, e_{k_n}) = 0$ if two of the indices $k_1, \ldots, k_n$ are equal. Thus it suffices to sum over those sequences $(k_1, \ldots, k_n)$ that are permutations of $(1, \ldots, n)$, and so
+    %
+    \begin{equation*}
+        \phi(A)
+            = \sum_{\sigma \in S_n} a_{1 \sigma(1)} \cdots a_{n \sigma(n)} \phi(e_{\sigma(1)}, \ldots, e_{\sigma(n)}).
+    \end{equation*}
+    %
+    Next notice that, since $\phi$ is also skew-symmetric by \cref{enum:alternating-implies-skew-symmetric}, we have $\phi(e_{\sigma(1)}, \ldots, e_{\sigma(n)}) = (-1)^m \phi(e_1, \ldots, e_n)$, where $m$ is the number of transpositions of $(1, \ldots, n)$ it takes to obtain the permutation $(\sigma(1), \ldots, \sigma(n))$. But then $(-1)^m$ is just the sign of $\sigma$, so
+    %
+    \begin{equation*}
+        \phi(A)
+            = \sum_{\sigma \in S_n} (\sign\sigma) a_{1 \sigma(1)} \cdots a_{n \sigma(n)} \phi(I_n).
+    \end{equation*}
+    %
+    Finally, if $\phi$ is a determinant function, then $\phi(I_n) = 1$, so we must have $\phi = \det$. The rest of the theorem follows directly from this.
+\end{proof}
+
+
+\section{Properties of determinants}
+
+\begin{theorem}
+    Let $A,B \in \mat{n}{R}$. Then
+    %
+    \begin{equation*}
+        \det AB
+            = (\det A) (\det B).
+    \end{equation*}
+    %
+    In particular, $\det \colon \GL{n}{R} \to R^*$ is a group homomorphism.
+\end{theorem}
+
+\begin{proof}
+    The map $\phi \colon \mat{n}{R} \to R$ given by $\phi(A) = \det AB$ is clearly $n$-linear and alternating. Hence $\phi(A) = (\det A) \phi(I)$, and $\phi(I) = \det B$.
+
+    Furthermore, if $A$ is invertible, then $1 = \det I = (\det A) (\det A\inv)$. Thus $\det A \in R^*$, so $\det$ is a group homomorphism as claimed.
+\end{proof}
+
+
+\begin{proposition}
+    Let $B_{11}, \ldots, B_{nn}$ be square matrices with entries in $R$ and consider the block matrix
+    %
+    \begin{equation*}
+        A
+            = \begin{pmatrix}
+                B_{11} & B_{12} & \cdots & B_{1n} \\
+                0      & B_{22} & \ddots & B_{2n} \\
+                \vdots & \ddots & \ddots & \vdots \\
+                0      & \cdots & 0      & B_{nn}
+            \end{pmatrix},
+    \end{equation*}
+    %
+    where the remaining $B_{ij}$ are matrices of appropriate dimensions. Then $\det A = \bigprod_{i=1}^n \det B_{ii}$.
+\end{proposition}
+
+\begin{proof}
+    By induction it suffices to consider the case where $A$ has the block form
+    %
+    \begin{equation*}
+        A
+            = \begin{pmatrix}
+                B & C \\
+                0 & D
+            \end{pmatrix}.
+    \end{equation*}
+    %
+    Say that $B \in \mat{r}{R}$ and $D \in \mat{s}{R}$, and put $\phi(B,C,D) = \det A$. Then $D \mapsto \phi(B,C,D)$ is clearly $s$-linear and alternating, so \cref{thm:determinant-recursive-definition} implies that
+    %
+    \begin{equation*}
+        \phi(B,C,D)
+            = (\det D) \phi(B,C,I_s).
+    \end{equation*}
+    %
+    By subtracting multiples of the rows of $I_s$ from $C$ we obtain $\phi(B,C,I_s) = \phi(B,0,I_s)$. Next, $B \mapsto \phi(B,0,I_s)$ is also $r$-linear and alternating, so
+    %
+    \begin{equation*}
+        \phi(B,0,I_s)
+            = (\det B) \phi(I_r,0,I_s).
+    \end{equation*}
+    %
+    But $\phi(I_r,0,I_s) = 1$, so summarising we have
+    %
+    \begin{equation*}
+        \phi(B,C,D)
+            = (\det D) \phi(B,C,I_s)
+            = (\det D) \phi(B,0,I_s)
+            = (\det D) (\det B),
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+
+\begin{proposition}
+    Let $A \in \mat{n}{R}$. Then $\det A = \det A\trans$.
+\end{proposition}
+
+\begin{proof}
+    Writing $A = (a_{ij})$, first notice that
+    %
+    \begin{equation*}
+        \det A\trans
+            = \sum_{\sigma \in S_n} (\sign \sigma\inv) a_{\sigma(1)1} \cdots a_{\sigma(n)n},
+    \end{equation*}
+    %
+    since $\sign \sigma = \sign \sigma\inv$. Next notice that, if $j = \sigma(i)$, then $a_{\sigma(i)i} = a_{j \sigma\inv(j)}$. Since $R$ is commutative, it follows that
+    %
+    \begin{equation*}
+        \det A\trans
+            = \sum_{\sigma \in S_n} (\sign \sigma\inv) a_{1\sigma\inv(1)} \cdots a_{n\sigma\inv(n)},
+    \end{equation*}
+    %
+    and since $\sigma \mapsto \sigma\inv$ is a bijection on $S_n$, it follows that $\det A\trans = \det A$ as desired.
+\end{proof}
+
+Let $A \in \mat{n}{R}$. For $1 \leq i,j \leq n$, the \emph{$(i,j)$-th cofactor} of $A$ is the number $A_{i,j} = (-1)^{i+j} \det M(A)_{i,j}$, where we recall that $M(A)_{i,j}$ is the $(i,j)$-th minor of $A$. The \emph{adjoint matrix} of $A$ is the matrix $\adj A \in \mat{n}{R}$ whose $(i,j)$-th entry is the cofactor $A_{j,i}$. Note that
+%
+\begin{equation*}
+    (A\trans)_{i,j}
+        = (-1)^{i+j} \det M(A\trans)_{i,j}
+        = (-1)^{j+i} \det M(A)_{j,i}
+        = A_{j,i},
+\end{equation*}
+%
+so $\adj A\trans = (\adj A)\trans$. We have the following:
+
+\begin{proposition}
+    \label{thm:adjoint-matrix-product}
+    Let $A \in \mat{n}{R}$. Then
+    %
+    \begin{equation*}
+        (\adj A) A
+            = (\det A) I
+            = A (\adj A).
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    Writing $A = (a_{ij})$ and fixing some $j \in \{1, \ldots, n\}$, \cref{thm:determinant-recursive-definition} implies that
+    %
+    \begin{equation*}
+        \det A
+            = \sum_{i=1}^n (-1)^{i+j} a_{ij} \det M(A)_{i,j}
+            = \sum_{i=1}^n a_{ij} A_{i,j},
+    \end{equation*}
+    %
+    which is just the $(j,j)$-th entry in the product $(\adj A)A$.
+
+    Next we claim that if $k \neq j$, then $\sum_{i=1}^n a_{ik} A_{i,j} = 0$. Let $B = (b_{ij}) \in \mat{n}{R}$ be the matrix obtained from $A$ by replacing the $j$th column of $A$ by its $k$th column. Then $B$ has two equal columns, so $\det B = 0$. Also, $b_{ij} = a_{ik}$ and $M(B)_{i,j} = M(A)_{i,j}$, so it follows that
+    %
+    \begin{align*}
+        0
+            &= \det B
+             = \sum_{i=1}^n (-1)^{i+j} b_{ij} \det M(B)_{i,j} \\
+            &= \sum_{i=1}^n (-1)^{i+j} a_{ik} \det M(A)_{i,j}
+             = \sum_{i=1}^n a_{ik} A_{i,j}.
+    \end{align*}
+    %
+    That is, the $(j,k)$-th entry of the product $(\adj A)A$ is zero, so the off-diagonal entries of $(\adj A)A$ are zero. In total we thus have $(\adj A)A = (\det A) I$.
+
+    Finally we prove the equality $A(\adj A) = (\det A) I$, Applying the first equality to $A\trans$ yields
+    %
+    \begin{equation*}
+        (\adj A\trans) A\trans
+            = (\det A\trans)I
+            = (\det A)I,
+    \end{equation*}
+    %
+    and transposing we get
+    %
+    \begin{equation*}
+        A (\adj A)
+            = A (\adj A\trans)\trans
+            = (\det A) I
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+
+\begin{corollary}
+    Let $A \in \mat{n}{R}$. Then $A$ is a unit in $\mat{n}{R}$ if and only if $\det A$ is a unit in $R$.
+\end{corollary}
+
+\begin{proof}
+    This follows directly from \cref{thm:adjoint-matrix-product}.
+\end{proof}
+
+
+
+\nocite{*}
+
+\printbibliography
+
+\end{document}
