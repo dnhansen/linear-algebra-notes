@@ -68,8 +68,11 @@
 \author{\docauthor}
 
 \newcommand{\calM}{\mathcal{M}}
+\newcommand{\calL}{\mathcal{L}}
 \DeclareMathOperator{\sign}{sgn}
 \DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\spec}{Spec}
+\DeclareMathOperator{\trace}{tr}
 
 
 \usepackage{listofitems}
@@ -353,6 +356,7 @@ If $A \in \mat{n}{R}$ with $n > 1$ and $1 \leq i,j \leq n$, denote by $M(A)_{i,j
 \section{Uniqueness of determinants}
 
 \begin{theorem}
+    \label{thm:determinant-uniqueness}
     Let $n$ be a positive integer. There is precisely one determinant function on $\mat{n}{R}$, namely the function $\det \colon \mat{n}{R} \to R$ given by
     %
     \begin{equation*}
@@ -565,6 +569,193 @@ so $\adj A\trans = (\adj A)\trans$. We have the following:
     This follows directly from \cref{thm:adjoint-matrix-product}.
 \end{proof}
 
+
+\section{Determinants and eigenvalues}
+
+Let $V$ be a vector space of dimension $n < \infty$. If $T \in \calL(V)$, then recall that an \emph{eigenvalue} of $T$ is an element $\lambda \in F$ such that there is a nonzero vector $v \in V$ with $Tv = \lambda v$. The set of eigenvalues of $T$ is called the \emph{spectrum} of $T$ and is denoted $\spec T$. Clearly $\lambda \in \spec T$ if and only if $\lambda I - T$ is not injective, i.e. if $\det(\lambda I - T) = 0$. This motivates the definition of the \emph{characteristic polynomial} $p_T(t) \in F[t]$ of $T$, given by $p_T(t) = \det(tI - T)$. The eigenvalues of $T$ are then precisely the roots of $p_T(t)$.
+
+\begin{proposition}
+    Let $T \in \calL(V)$.
+    %
+    \begin{enumprop}
+        \item $p_T(t)$ is a monic polynomial of degree $n$.
+        \item The constant term of $p_T(t)$ equals $(-1)^n \det T$.
+        \item The coefficient of $t^{n-1}$ in $p_T(t)$ equals $-\trace T$.
+    \end{enumprop}
+    %
+    Assume further that $p_T(t)$ splits over $F$. Then:
+    %
+    \begin{enumprop}[resume]
+        \item $T$ has an eigenvalue.
+        \item $\det T$ is the product of the eigenvalues of $T$.
+        \item $\trace T$ is the sum of the eigenvalues of $T$.
+    \end{enumprop}
+\end{proposition}
+%
+The condition that $p_T(t)$ splits over $F$ means that $p_T(t)$ decomposes into a product of linear factors on the form $t - a \in F[t]$ (up to multiplication by a constant). This is in particular the case if $F$ is algebraically closed.
+
+\begin{proof}
+\begin{proofsec}
+    \item[(i)]
+    Let $A = (a_{ij}) \in \mat{n}{F}$ be a matrix representation of $T$ and write $tI - A = (b_{ij})$, recall that
+    %
+    \begin{equation}
+        \label{eq:characteristic-polynomial-Leibniz}
+        \det(tI - T)
+            = \sum_{\sigma \in S_n} (\sign\sigma) b_{1 \sigma(1)} \cdots b_{n \sigma(n)}
+    \end{equation}
+    %
+    by \cref{thm:determinant-uniqueness}. Hence $p_T(t)$ is a linear combination of products of elements on the form $-a_{ij}$ or $t-a_{ij}$. Thus $p_T(t)$ is a polynomial in $t$. Furthermore, the only entries in $tI - A$ containing $t$ are the diagonal entries, and the largest number of such entries occurring in a single term of \cref{eq:characteristic-polynomial-Leibniz} is $n$, so $\deg p_T(t) \leq n$. But notice that there is only one term in which $t$ appears $n$ times, namely the term corresponding to the identity permutation in $S_n$, giving the product of the diagonal entries in $tI-A$. This term equals
+    %
+    \begin{equation}
+        \label{eq:characteristic-polynomial-diagonal-product}
+        (t-a_{11})(t-a_{22}) \cdots (t-a_{nn}),
+    \end{equation}
+    %
+    and multiplying out we see that the only resulting term containing $t^n$ is $t^n$ itself. Hence $p_T(t)$ is monic and of degree $n$. Thus we may write $p_T(t) = \sum_{i=0}^n c_i t^i$ for appropriate $c_0, \ldots, c_n \in F$.
+
+    \item[(ii)]
+    Simply notice that
+    %
+    \begin{equation*}
+        (-1)^n \det T
+            = \det(-T)
+            = p_T(0)
+            = c_0
+    \end{equation*}
+    %
+    by $n$-linearity of $\det$ and the definition of $p_T(t)$.
+
+    \item[(iii)]
+    The only way for one of the terms in \cref{eq:characteristic-polynomial-Leibniz} to contain the factor $t^{n-1}$ is for at least $n-1$ of the $b_{ij}$ to be a diagonal element. But in choosing $n-1$ elements along the diagonal we are forced to also choose the final diagonal element, since otherwise $\sigma$ would not be a permutation. Hence the factor $t^n$ can only appear in the product \cref{eq:characteristic-polynomial-diagonal-product}. It is then clear that
+    %
+    \begin{equation*}
+        c_{n-1}
+            = - (a_{11} + \cdots + a_{nn})
+            = - \trace T
+    \end{equation*}
+    %
+    as claimed.
+
+    \item[(iv)]
+    Now assume that $p_T(t)$ splits over $F$. Then some linear factor $t-\lambda \in F[t]$ divides $p_T(t)$, which implies that $\lambda \in F$ is an eigenvalue of $T$.
+    
+    \item[(v)]
+    Since $p_T(t)$ is monic we have
+    %
+    \begin{equation*}
+        p_T(t)
+            = (t - \lambda_1) (t - \lambda_2) \cdots (t - \lambda_n)
+    \end{equation*}
+    %
+    for appropriate $\lambda_1, \ldots, \lambda_n \in F$. These are then the (not necessarily distinct) eigenvalues of $T$. Thus $p_T(0) = (-1)^n \lambda_1 \cdots \lambda_n$, and the claim follows from (ii).
+
+    \item[(vi)]
+    We similarly find that $c_{n-1} = -(\lambda_1 + \cdots + \lambda_n)$, so the final claim follows from (iii).
+\end{proofsec}
+\end{proof}
+
+
+\section{Proofs without determinants}
+
+\subsection{Existence of eigenvalues}
+
+% \begin{theorem}[The spectral mapping theorem]
+%     Let $F$ be an algebraically closed field, let $A \in \mat{n}{F}$ and let $p(t) \in F[t]$. Then
+%     %
+%     \begin{equation*}
+%         \spec p(A) = p(\spec A).
+%     \end{equation*}
+% \end{theorem}
+
+% \begin{proof}
+%     First let $\lambda \in \spec A$, and choose a corresponding eigenvector $v \in F^n$. If we write $p(t) = \sum_{i=0}^n a_i t^i$, then
+%     %
+%     \begin{equation*}
+%         p(A)v
+%             = \biggl( \sum_{i=0}^n a_i A^i \biggr) v
+%             = \sum_{i=0}^n a_i A^i v
+%             = \sum_{i=0}^n a_i \lambda^i v
+%             = \biggl( \sum_{i=0}^n a_i \lambda^i \biggr) v
+%             = p(\lambda) v.
+%     \end{equation*}
+%     %
+%     Thus $p(\lambda) \in \spec p(A)$, and so $p(\spec A) \subseteq \spec p(A)$.
+
+%     For the opposite inclusion, let $\lambda \in \spec p(A)$, i.e. $(p(A) - \lambda I) v = 0$ for some nonzero $v \in F^n$.
+% \end{proof}
+
+\newcommand{\ev}{\mathrm{ev}}
+
+Assume that $F$ is algebraically closed, and consider $T \in \calL(V)$. Let $F[t]_k$ denote the vector space of polynomials in $F[t]$ with degree strictly less than $k$, such that $\dim F[t]_k = k$. Consider the map $\ev_T \colon F[t]_{n^2+1} \to \calL(V)$ given by $\ev_T(p) = p(T)$. This cannot be injective, so there is some nonzero $p(t) \in F[t]_{n^2+1}$ such that $p(T) = 0$. Note that $p(t)$ cannot be constant.
+
+Since $F$ is algebraically closed, there exist $c, \lambda_1, \ldots, \lambda_m \in F$ such that $p(t) = c \bigprod_{i=1}^m (t - \lambda_i)$. But then
+%
+\begin{equation*}
+    0
+        = p(T)
+        = c \bigprod_{i=1}^m (T - \lambda_i I),
+\end{equation*}
+%
+so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eigenvalue of $T$.
+
+
+\subsection{Trace is sum of eigenvalues}
+
+\newcommand{\Span}{\operatorname{span}}
+
+\begin{lemma}
+    Let $A \in \mat{n}{F}$ be upper triangular. Then $A$ is invertible if and only if all its diagonal elements are nonzero.
+\end{lemma}
+
+\begin{proof}
+    Denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$, and let $e_1, \ldots, e_n$ denote the standard basis of $F^n$. First assume that the diagonal elements are nonzero. Then notice that $e_1 \in R(A)$, and that
+    %
+    \begin{equation*}
+        A e_i
+            = a_1 e_1 + \cdots + a_{i-1} e_{i-1} + \lambda_i e_i
+    \end{equation*}
+    %
+    for appropriate $a_1, \ldots, a_{i-1} \in R$. By induction we then have $e_i \in R(A)$. Since $(e_1, \ldots, e_n)$ is a basis, this implies that $R(A) = F^n$.
+
+    Conversely, assume that some diagonal element $\lambda_i$ is zero. If $i = 1$, then $Ae_1 = 0$ so $A$ is singular. If $i > 0$, then $A$ maps $\Span(e_1, \ldots, e_i)$ into $\Span(e_1, \ldots, e_{i-1})$, so again $A$ is singular.
+\end{proof}
+
+
+\begin{lemma}
+    Let $A \in \mat{n}{F}$ be upper triangular. Then the eigenvalues of $A$ are its diagonal elements.
+\end{lemma}
+
+\begin{proof}
+    Let $\lambda \in F$, and denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$. By [lemma], the matrix $\lambda I - A$ is singular if and only if $\lambda - \lambda_i = 0$ for some $i$, and hence $\lambda_1, \ldots, \lambda_n$ are the eigenvalues of $A$.
+\end{proof}
+
+
+\begin{proposition}
+    Let $F$ be algebraically closed, and let $T \in \calL(V)$. Then $V$ has a basis with respect to which the matrix of $T$ is upper triangular.
+\end{proposition}
+
+\begin{proof}
+    This is obvious if $\dim V = 1$, so assume that $n = \dim V > 1$, and assume that the claim is true for $F$-vector spaces of dimension $n-1$. Let $v_1 \in V$ be an eigenvector for $T$, and let $U = \Span(v_1)$. Since $U$ is invariant under $T$, we may define a linear operator\footnote{The operator $\tilde T$ may arise as follows: Let $\pi \colon V \to V/U$ be the quotient map. Then $U \subseteq \ker (\pi \circ T)$, so $\pi \circ T$ descends to a linear map $\tilde T \colon V/U \to V/U$.} $\tilde T \in \calL(V/U)$ by $\tilde T(v + U) = Tv + U$. Since $\dim U/V = n-1$, by induction there is a basis $v_2 + U, \ldots, v_n + U$ of $V/U$ with respect to which the matrix of $\tilde T$ is upper triangular. It is easy to show that $v_1, \ldots, v_n$ is then a basis for $V$.
+
+    Now notice that
+    %
+    \begin{equation*}
+        \tilde T(v_i + U)
+            \in \Span(v_2 + U, \ldots, v_i + U)
+    \end{equation*}
+    %
+    for $i \in \{2, \ldots, n\}$. But then $Tv_i \in \Span(v_1, \ldots, v_i)$ for all $i \in \{1, \ldots, n\}$. Hence $T$ is upper triangular with respect to the basis $v_1, \ldots, v_n$ of $V$.
+\end{proof}
+
+
+\begin{corollary}
+    Let $F$ be algebraically closed, and let $T \in \calL(V)$. Then the sum of the eigenvalues of $T$ is $\trace T$.
+\end{corollary}
+
+\begin{proof}
+    Let $A \in \mat{n}{F}$ be an upper triangular matrix for $T$. The diagonal elements of $A$ are the eigenvalues, and the trace of $T$ is just the sum of these elements.
+\end{proof}
 
 
 \nocite{*}
