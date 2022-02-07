@@ -69,6 +69,9 @@
 
 \newcommand{\calM}{\mathcal{M}}
 \newcommand{\calL}{\mathcal{L}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calU}{\mathcal{U}}
 \DeclareMathOperator{\sign}{sgn}
 \DeclareMathOperator{\adj}{adj}
 \DeclareMathOperator{\spec}{Spec}
@@ -736,16 +739,24 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 \end{proposition}
 
 \begin{proof}
-    This is obvious if $\dim V = 1$, so assume that $n = \dim V > 1$, and assume that the claim is true for $F$-vector spaces of dimension $n-1$. Let $v_1 \in V$ be an eigenvector for $T$, and let $U = \Span(v_1)$. Since $U$ is invariant under $T$, we may define a linear operator\footnote{The operator $\tilde T$ may arise as follows: Let $\pi \colon V \to V/U$ be the quotient map. Then $U \subseteq \ker (\pi \circ T)$, so $\pi \circ T$ descends to a linear map $\tilde T \colon V/U \to V/U$.} $\tilde T \in \calL(V/U)$ by $\tilde T(v + U) = Tv + U$. Since $\dim U/V = n-1$, by induction there is a basis $v_2 + U, \ldots, v_n + U$ of $V/U$ with respect to which the matrix of $\tilde T$ is upper triangular. It is easy to show that $v_1, \ldots, v_n$ is then a basis for $V$.
+    This is obvious if $\dim V = 1$, so assume that $n = \dim V > 1$, and assume that the claim is true for $F$-vector spaces of dimension $n-1$. Let $v_1 \in V$ be an eigenvector for $T$, and let $U = \Span(v_1)$. Since $U$ is invariant under $T$, we may define a linear operator\footnote{The operator $\tilde T$ may arise as follows: Let $\pi \colon V \to V/U$ be the quotient map. Then $U \subseteq \ker (\pi \circ T)$ since $U$ is invariant under $T$, so $\pi \circ T$ descends to a linear map $\tilde T \colon V/U \to V/U$.} $\tilde T \in \calL(V/U)$ by $\tilde T(v + U) = Tv + U$. Since $\dim V/U = n-1$, by induction there is a basis $v_2 + U, \ldots, v_n + U$ of $V/U$ with respect to which the matrix of $\tilde T$ is upper triangular. It is easy to show that the collection $v_1, \ldots, v_n$ is linearly independent, hence a basis for $V$.
 
     Now notice that
     %
     \begin{equation*}
-        \tilde T(v_i + U)
+        Tv_i + U
+            = \tilde T(v_i + U)
             \in \Span(v_2 + U, \ldots, v_i + U)
     \end{equation*}
     %
-    for $i \in \{2, \ldots, n\}$. But then $Tv_i \in \Span(v_1, \ldots, v_i)$ for all $i \in \{1, \ldots, n\}$. Hence $T$ is upper triangular with respect to the basis $v_1, \ldots, v_n$ of $V$.
+    for $i \in \{2, \ldots, n\}$. That is, there exist $a_2, \ldots, a_i \in F$ such that
+    %
+    \begin{equation*}
+        Tv_i + U
+            = (a_2 v_2 + \cdots + a_i v_i) + U.
+    \end{equation*}
+    %
+    But then $Tv_i \in \Span(v_1, \ldots, v_i)$ for all $i \in \{2, \ldots, n\}$, and since $U$ is invariant under $T$ this also holds for $i = 1$. Hence $T$ is upper triangular with respect to the basis $v_1, \ldots, v_n$ of $V$.
 \end{proof}
 
 
@@ -755,6 +766,56 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 
 \begin{proof}
     Let $A \in \mat{n}{F}$ be an upper triangular matrix for $T$. The diagonal elements of $A$ are the eigenvalues, and the trace of $T$ is just the sum of these elements.
+\end{proof}
+
+
+\chapter{Inner product spaces}
+
+Let $T \colon V \to V$ is an operator on a (finite-dimensional) $F$-vector space $V$, and let $U$ be a subspace of $V$ that is invariant under $T$. Say that $W$ is a complement of $V$, i.e. that $V = U \oplus W$, then $W$ is not necessarily invariant under $T$. However, we have the following:
+
+\begin{lemma}
+    \label{thm:adjoint-invariant-subspace}
+    Let $T \in \calL(V)$ be an operator on a finite-dimensional inner product space $V$. If a subspace $U$ of $V$ is invariant under $T$, then $U^\perp$ is invariant under $T^*$.
+\end{lemma}
+
+\begin{proof}
+    Let $v \in U^\perp$. For $u \in U$ we have $Tu \in U$, so
+    %
+    \begin{equation*}
+        \inner{T^*v}{u}.
+            = \inner{v}{Tu}
+            = 0.
+    \end{equation*}
+    %
+    Since this holds for all $u \in U$, it follows that $T^*v \in U^\perp$ as desired.
+\end{proof}
+
+\begin{theorem}[The spectral theorem]
+    Let $F$ be either the real or the complex numbers, let $V$ be a finite-dimensional inner product space over $F$, and consider $T \in \calL(V)$. Then $T$ is orthogonally diagonalisable if and only if
+    %
+    \begin{enumthm}
+        \item $F = \reals$ and $T$ is self-adjoint, or
+        \item $F = \complex$ and $T$ is normal.
+    \end{enumthm}
+\end{theorem}
+
+\begin{proof}
+    Assume that either $F = \reals$ and $T$ is self-adjoint, or that $F = \complex$ and $T$ is normal. We prove by induction in $n = \dim V$ that $T$ is orthogonally diagonalisable. If $n = 1$ then this follows since $T$ has an eigenvalue, so assume that the claim is proved for operators on spaces of dimension strictly less than $n$.
+
+    Let $\lambda \in \spec T$, and consider the corresponding eigenspace $E_T(\lambda)$. If $d = \dim E_T(\lambda) = n$, then any orthonormal basis of $E_T(\lambda)$ will suffice. Assume therefore that $0 < d < n$.
+
+    Clearly $E_T(\lambda)$ is invariant under $T$, and we claim that it is also invariant under $T^*$. If $T$ is self-adjoint this is obvious, and if $T$ is normal then for all $w \in E_T(\lambda)$,
+    %
+    \begin{equation*}
+        TT^*w
+            = T^*Tw
+            = T^*(\lambda w)
+            = \lambda T^* w,
+    \end{equation*}
+    %
+    so we also have $T^*(w) \in E_T(\lambda)$. It follows from \cref{thm:adjoint-invariant-subspace} that $E_T(\lambda)^\perp$ is also invariant under both $T$ and $T^*$. We furthermore have $\dim E_T(\lambda)^\perp = n-d$ and $0 < n-d < n$. Let $T_\parallel \in \calL(E_T(\lambda))$ and $T_\perp \in \calL(E_T(\lambda)^\perp)$ denote the restrictions of $T$ to $E_T(\lambda)$ and $E_T(\lambda)^\perp$ respectively. Both these operators are also self-adjoint or normal, depending on the hypothesis, so the induction hypothesis furnishes orthonormal bases $\calU$ and $\calW$ for $E_T(\lambda)$ and $E_T(\lambda)^\perp$ consisting of eigenvectors of $T$. But then $\calV = \calU \union \calW$ is an orthonormal basis for $V$ as desired.
+
+    Conversely, assume that $\calV$ is an orthonormal basis of $V$ consisting of eigenvectors for $T$, and let $A \in \mat{n}{F}$ be the matrix of $T$ with respect to $\calV$. Then $A$ is diagonal with the eigenvalues of $T$ on its diagonal. If $F = \reals$ then the eigenvalues of $T$ are real, so $A$ is a real symmetric matrix, and hence $T$ is self-adjoint. If instead $F = \complex$, then since $A$ is diagonal we have $A^*A = AA^*$, which implies that $T$ is normal.
 \end{proof}
 
 
