@@ -181,7 +181,7 @@ An \emph{elementary matrix} is a matrix obtained by applying a single elementary
             \end{pmatrix},
     \end{equation*}
     %
-    where $h,k \in F^r$ and $h',k' \in F^{m-r}$ are column vectors. Since $H_2$ and $K_2$ are row-equivalent, the systems $H_2 x = 0$ and $K_2 x = 0$ are solution equivalent. If $h' = 0$, then $H_2 x = 0$ has the solution $(-h,1)$. But this is also a solution to $K_2 x = 0$, so $h = k$ and $k' = 0$. If $h' \neq 0$, then $H_2 x = 0$ only has the trivial solution. But then $K_2 x = 0$ also only has the trivial solution, and hence $k' \neq 0$. But that must be because both $H_2$ and $K_2$ has a pivot in the $n$th column, so also in this case $H_2 = K_2$.
+    where $h,k \in F^r$ and $h',k' \in F^{m-r}$ are column vectors. Since $H_2$ and $K_2$ are row-equivalent, the systems $H_2 x = 0$ and $K_2 x = 0$ are solution equivalent. If $h' = 0$, then $H_2 x = 0$ has the solution $(-h,1)$. But this is also a solution to $K_2 x = 0$, so $h = k$ and $k' = 0$. If $h' \neq 0$, then $H_2 x = 0$ only has the trivial solution. But then $K_2 x = 0$ also only has the trivial solution, and hence $k' \neq 0$. But that must be because both $H_2$ and $K_2$ has a pivot in the rightmost column, so also in this case $H_2 = K_2$.
 \end{proof}
 
 
@@ -424,57 +424,95 @@ We use the notation $\det$ for the unique determinant on $\mat{n}{R}$ for all $n
 
 
 \begin{proposition}
-    Let $B_{11}, \ldots, B_{nn}$ be square matrices with entries in $R$ and consider the block matrix
+    Let $A_{11}, \ldots, A_{nn}$ be square matrices with entries in $R$ and consider the block matrix
     %
     \begin{equation*}
-        A
+        M
             = \begin{pmatrix}
-                B_{11} & B_{12} & \cdots & B_{1n} \\
-                0      & B_{22} & \ddots & B_{2n} \\
+                A_{11} & A_{12} & \cdots & A_{1n} \\
+                0      & A_{22} & \cdots & A_{2n} \\
                 \vdots & \ddots & \ddots & \vdots \\
-                0      & \cdots & 0      & B_{nn}
+                0      & \cdots & 0      & A_{nn}
             \end{pmatrix},
     \end{equation*}
     %
-    where the remaining $B_{ij}$ are matrices of appropriate dimensions. Then $\det A = \bigprod_{i=1}^n \det B_{ii}$.
+    where the remaining $A_{ij}$ are matrices of appropriate dimensions. Then $\det M = \bigprod_{i=1}^n \det A_{ii}$.
 \end{proposition}
 
 \begin{proof}
-    By induction it suffices to consider the case where $A$ has the block form
+    By induction it suffices to consider the case where $M$ has the block form
     %
     \begin{equation*}
-        A
+        M
             = \begin{pmatrix}
-                B & C \\
-                0 & D
-            \end{pmatrix}.
+                A & C \\
+                0 & B
+            \end{pmatrix},
     \end{equation*}
     %
-    Say that $B \in \mat{r}{R}$ and $D \in \mat{s}{R}$, and put $\phi(B,C,D) = \det A$. Then $D \mapsto \phi(B,C,D)$ is clearly $s$-linear and alternating, so \cref{thm:determinant-recursive-definition} implies that
+    where $A \in \mat{r}{R}$, $B \in \mat{s}{R}$ and $C \in \mat{r,s}{R}$ for appropriate integers $r,s$. Notice that if we define the matrices
     %
     \begin{equation*}
-        \phi(B,C,D)
-            = (\det D) \phi(B,C,I_s).
+        M_1
+            = \begin{pmatrix}
+                I_r & 0 \\
+                0   & B
+            \end{pmatrix}
+        \quad \text{and} \quad
+        M_2
+            = \begin{pmatrix}
+                A & C   \\
+                0 & I_s
+            \end{pmatrix},
     \end{equation*}
     %
-    By subtracting multiples of the rows of $I_s$ from $C$ we obtain $\phi(B,C,I_s) = \phi(B,0,I_s)$. Next, $B \mapsto \phi(B,0,I_s)$ is also $r$-linear and alternating, so
+    then $M = M_1 M_2$. But using \cref{thm:determinant-recursive-definition} we easily see that $\det M_1 = \det B$ and $\det M_2 = \det A$, so it follows that
     %
     \begin{equation*}
-        \phi(B,0,I_s)
-            = (\det B) \phi(I_r,0,I_s).
-    \end{equation*}
-    %
-    But $\phi(I_r,0,I_s) = 1$, so summarising we have
-    %
-    \begin{equation*}
-        \phi(B,C,D)
-            = (\det D) \phi(B,C,I_s)
-            = (\det D) \phi(B,0,I_s)
-            = (\det D) (\det B),
+        \det M
+            = (\det M_1) (\det M_2)
+            = (\det A) (\det B)
     \end{equation*}
     %
     as desired.
 \end{proof}
+
+% \begin{proof}
+%     By induction it suffices to consider the case where $A$ has the block form
+%     %
+%     \begin{equation*}
+%         A
+%             = \begin{pmatrix}
+%                 B & C \\
+%                 0 & D
+%             \end{pmatrix}.
+%     \end{equation*}
+%     %
+%     Say that $B \in \mat{r}{R}$ and $D \in \mat{s}{R}$, and put $\phi(B,C,D) = \det A$. Then $D \mapsto \phi(B,C,D)$ is clearly $s$-linear and alternating, so \cref{thm:determinant-recursive-definition} implies that
+%     %
+%     \begin{equation*}
+%         \phi(B,C,D)
+%             = (\det D) \phi(B,C,I_s).
+%     \end{equation*}
+%     %
+%     By subtracting multiples of the rows of $I_s$ from $C$ we obtain $\phi(B,C,I_s) = \phi(B,0,I_s)$. Next, $B \mapsto \phi(B,0,I_s)$ is also $r$-linear and alternating, so
+%     %
+%     \begin{equation*}
+%         \phi(B,0,I_s)
+%             = (\det B) \phi(I_r,0,I_s).
+%     \end{equation*}
+%     %
+%     But $\phi(I_r,0,I_s) = 1$, so summarising we have
+%     %
+%     \begin{equation*}
+%         \phi(B,C,D)
+%             = (\det D) \phi(B,C,I_s)
+%             = (\det D) \phi(B,0,I_s)
+%             = (\det D) (\det B),
+%     \end{equation*}
+%     %
+%     as desired.
+% \end{proof}
 
 
 \begin{proposition}
@@ -600,15 +638,15 @@ The condition that $p_T(t)$ splits over $F$ means that $p_T(t)$ decomposes into 
 \begin{proof}
 \begin{proofsec}
     \item[(i)]
-    Let $A = (a_{ij}) \in \mat{n}{F}$ be a matrix representation of $T$ and write $tI - A = (b_{ij})$, recall that
+    Let $A = (a_{ij}) \in \mat{n}{F}$ be a matrix representation of $T$. The $(i,j)$-th entry of $tI - A$ is then $t\delta_{ij} - a_{ij}$, so
     %
     \begin{equation}
         \label{eq:characteristic-polynomial-Leibniz}
         \det(tI - T)
-            = \sum_{\sigma \in S_n} (\sign\sigma) b_{1 \sigma(1)} \cdots b_{n \sigma(n)}
+            = \sum_{\sigma \in S_n} (\sign\sigma) (t\delta_{1\sigma(1)} - a_{1\sigma(1)}) \cdots (t\delta_{n\sigma(n)} - a_{n \sigma(n)})
     \end{equation}
     %
-    by \cref{thm:determinant-uniqueness}. Hence $p_T(t)$ is a linear combination of products of elements on the form $-a_{ij}$ or $t-a_{ij}$. Thus $p_T(t)$ is a polynomial in $t$. Furthermore, the only entries in $tI - A$ containing $t$ are the diagonal entries, and the largest number of such entries occurring in a single term of \cref{eq:characteristic-polynomial-Leibniz} is $n$, so $\deg p_T(t) \leq n$. But notice that there is only one term in which $t$ appears $n$ times, namely the term corresponding to the identity permutation in $S_n$, giving the product of the diagonal entries in $tI-A$. This term equals
+    by \cref{thm:determinant-uniqueness}. Thus $p_T(t)$ is a polynomial in $t$. Furthermore, the only entries in $tI - A$ containing $t$ are the diagonal entries, and the largest number of such entries occurring in a single term of \cref{eq:characteristic-polynomial-Leibniz} is $n$, so $\deg p_T(t) \leq n$. But notice that there is only one term in which $t$ appears $n$ times, namely the term corresponding to the identity permutation in $S_n$, giving the product of the diagonal entries in $tI-A$. This term equals
     %
     \begin{equation}
         \label{eq:characteristic-polynomial-diagonal-product}
@@ -690,7 +728,7 @@ The condition that $p_T(t)$ splits over $F$ means that $p_T(t)$ decomposes into 
 
 \newcommand{\ev}{\mathrm{ev}}
 
-Assume that $F$ is algebraically closed, and consider $T \in \calL(V)$. Let $F[t]_k$ denote the vector space of polynomials in $F[t]$ with degree strictly less than $k$, such that $\dim F[t]_k = k$. Consider the map $\ev_T \colon F[t]_{n^2+1} \to \calL(V)$ given by $\ev_T(p) = p(T)$. This cannot be injective, so there is some nonzero $p(t) \in F[t]_{n^2+1}$ such that $p(T) = 0$. Note that $p(t)$ cannot be constant.
+Assume that $F$ is algebraically closed, and consider $T \in \calL(V)$. For $d \in \naturals$, let $F[t]_d$ denote the vector space of polynomials in $F[t]$ with degree strictly less than $d$, such that $\dim F[t]_d = d$. Consider the map $\ev_T \colon F[t]_{n^2+1} \to \calL(V)$ given by $\ev_T(p) = p(T)$. This cannot be injective, so there is some nonzero $p(t) \in F[t]_{n^2+1}$ such that $p(T) = 0$. Note that $p(t)$ cannot be constant.
 
 Since $F$ is algebraically closed, there exist $c, \lambda_1, \ldots, \lambda_m \in F$ such that $p(t) = c \bigprod_{i=1}^m (t - \lambda_i)$. But then
 %
@@ -719,7 +757,7 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
             = a_1 e_1 + \cdots + a_{i-1} e_{i-1} + \lambda_i e_i
     \end{equation*}
     %
-    for appropriate $a_1, \ldots, a_{i-1} \in R$. By induction we then have $e_i \in R(A)$. Since $(e_1, \ldots, e_n)$ is a basis, this implies that $R(A) = F^n$.
+    for appropriate $a_1, \ldots, a_{i-1} \in F$. By induction we then have $e_i \in R(A)$. Since $(e_1, \ldots, e_n)$ is a basis, this implies that $R(A) = F^n$.
 
     Conversely, assume that some diagonal element $\lambda_i$ is zero. If $i = 1$, then $Ae_1 = 0$ so $A$ is singular. If $i > 0$, then $A$ maps $\Span(e_1, \ldots, e_i)$ into $\Span(e_1, \ldots, e_{i-1})$, so again $A$ is singular.
 \end{proof}
