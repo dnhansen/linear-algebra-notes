@@ -102,6 +102,7 @@
 \newcommand{\matO}[1]{\mathrm{O}(#1)}
 \newcommand{\matSO}[1]{\mathrm{SO}(#1)}
 \newcommand{\field}{\mathbb{F}}
+\DeclareMathOperator{\chr}{char}
 
 
 
@@ -506,7 +507,7 @@ If $M_1, \ldots, M_n, N$ are modules over a commutative ring $R$, a map
     \phi \colon M_1 \prod \cdots \prod M_n \to N
 \end{equation*}
 %
-is called \emph{$n$-linear} if the maps $m_i \mapsto \phi(m_1, \ldots, m_n)$ are linear for all $m_i \in M_i$. Since $\mat{m,n}{R} \cong (R^m)^n$, a map $\phi \colon \mat{m,n}{R} \to N$ that is linear in each row is also called $n$-linear.
+is called \emph{$n$-linear} if, for all $i$, the maps $m_i \mapsto \phi(m_1, \ldots, m_n)$ are linear for all choices of $m_j \in M_j$ where $j \neq i$. Since there is a natural isomorphism $\mat{m,n}{R} \cong (R^n)^m$, a map $\phi \colon \mat{m,n}{R} \to N$ that is linear in each row is also called $n$-linear.
 
 In the case $M_1 = \cdots = M_n$, we call $\phi$ \emph{alternating} if $\phi(m_1, \ldots, m_n) = 0$ whenever $m_i = m_j$ for some $i \neq j$. Furthermore, $\phi$ is called \emph{skew-symmetric} if
 %
@@ -521,14 +522,16 @@ for all $i < j$.
     Let $M$ and $N$ be $R$-modules, and let $\phi \colon M^n \to N$ be an $n$-linear map.
     %
     \begin{enumlem}
-        \item \label{enum:alternating-implies-skew-symmetric} If $\phi$ is alternating, then $\phi$ is skew-symmetric.
+        \item \label{enum:alternating-implies-skew-symmetric} If $\phi$ is alternating, then $\phi$ is skew-symmetric. If $\chr R \neq 2$ then the converse also holds.
         \item \label{enum:alternating-adjacent-rows} If $\phi(m_1, \ldots, m_n) = 0$ whenever $m_i = m_{i+1}$ for some $i = 1, \ldots, n-1$, then $\phi$ is alternating.
     \end{enumlem}
 \end{lemma}
+%
+We shall not use the converse direction of \cref{enum:alternating-implies-skew-symmetric} but we include it for completeness.
 
 \begin{proof}
 \begin{proofsec}
-    \item[\subcref{enum:alternating-implies-skew-symmetric}]
+    \item[Proof of \subcref{enum:alternating-implies-skew-symmetric}]
     Consider $m_1, \ldots, m_n \in M$, and let $1 \leq i < j \leq n$. Define a map $\psi \colon M \prod M \to N$ by
     %
     \begin{equation*}
@@ -546,7 +549,9 @@ for all $i < j$.
     %
     Thus $\psi(m_i,m_j) = -\psi(m_j,m_i)$, so $\phi$ is skew-symmetric as claimed.
 
-    \item[\subcref{enum:alternating-adjacent-rows}] 
+    Conversely, if $\chr R \neq 2$ and $\psi$ is skew-symmetric, then since $\psi(a,b) = -\psi(b,a)$, letting $a = b$ we have $2\psi(a,a) = 0$, so $\psi(a,a) = 0$.
+
+    \item[Proof of \subcref{enum:alternating-adjacent-rows}] 
     The argument above shows that, in particular, if $A, B \in M^n$, and $B$ is obtained from $A$ by interchanging two adjacent elements, then $\phi(B) = -\phi(A)$. Assuming now that $B$ is obtained from $A$ by interchanging the $i$th and $j$th elements in $A$, with $i < j$, we claim that we may obtain $B$ by successively interchanging adjacent elements of $A$. Writing $A = (m_1, \ldots, m_n)$, we first perform $j - i$ such interchanges and arrive that the tuple
     %
     \begin{equation*}
