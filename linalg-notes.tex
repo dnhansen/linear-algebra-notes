@@ -97,9 +97,11 @@
 \newcommand{\matgroup}[3]{\mathrm{#1}_{#2}(#3)}
 \newcommand{\matGL}[2]{\matgroup{GL}{#1}{#2}}
 \newcommand{\trans}{^{\top}}
-\newcommand{\mat}[2]{\calM_{\mat@dims{#1}}(#2)}
+% \newcommand{\mat}[2]{\calM_{\mat@dims{#1}}(#2)}
+\newcommand{\mat}[2]{\mathrm{Mat}_{\mat@dims{#1}}(#2)}
 \newcommand{\matO}[1]{\mathrm{O}(#1)}
 \newcommand{\matSO}[1]{\mathrm{SO}(#1)}
+\newcommand{\field}{\mathbb{F}}
 
 
 
@@ -117,26 +119,26 @@
 
 \section{Linear equations}
 
-Throughout we let $F$ denote an arbitrary field and $R$ a commutative ring. Let $m$ and $n$ be positive integers. A \emph{linear equation in $n$ unknowns} is an equation on the form
+Throughout we let $\field$ denote an arbitrary field and $R$ a commutative ring. Let $m$ and $n$ be positive integers. A \emph{linear equation in $n$ unknowns} is an equation on the form
 %
 \begin{equation*}
     l \colon a_1 x_1 + \cdots + a_n x_n = b,
 \end{equation*}
 %
-where $a_1, \ldots, a_n, b \in F$. A \emph{solution} to $l$ is an element $v = (v_1, \ldots, v_n) \in F^n$ such that
+where $a_1, \ldots, a_n, b \in \field$. A \emph{solution} to $l$ is an element $v = (v_1, \ldots, v_n) \in \field^n$ such that
 %
 \begin{equation*}
     a_1 v_1 + \cdots + a_n v_n = b.
 \end{equation*}
 %
-A \emph{system of linear equations in $n$ unknowns} is a tuple $L = (l_1, \ldots, l_m)$, where each $l_i$ is a linear equation in $n$ unknowns. An element $v \in F^n$ is a \emph{solution} to $L$ if it is a solution to each linear equation $l_1, \ldots, l_m$.
+A \emph{system of linear equations in $n$ unknowns} is a tuple $L = (l_1, \ldots, l_m)$, where each $l_i$ is a linear equation in $n$ unknowns. An element $v \in \field^n$ is a \emph{solution} to $L$ if it is a solution to each linear equation $l_1, \ldots, l_m$.
 
 Let $L$ and $L'$ be systems of linear equations in $n$ unknowns. We say that $L$ and $L'$ are \emph{solution equivalent} if they have the same solutions. Furthermore, we say that they are \emph{combination equivalent} if each equation in $L'$ is a linear combination of the equations in $L$, and vice versa. Clearly, if $L$ and $L'$ are combination equivalent they are also solution equivalent, but the converse does not hold.
 
 
 \section{Matrices}
 
-It is well-known that a system of linear equations is equivalent to a matrix equation on the form $Ax = b$, where $A \in \mat{m,n}{F}$, $x \in F^n$ and $b \in F^m$. Recall the \emph{elementary row operations} on $A$:
+It is well-known that a system of linear equations is equivalent to a matrix equation on the form $Ax = b$, where $A \in \mat{m,n}{\field}$, $x \in \field^n$ and $b \in \field^m$. Recall the \emph{elementary row operations} on $A$:
 %
 \begin{enumerate}
     \item multiplication of one row of $A$ by a nonzero scalar,
@@ -144,12 +146,12 @@ It is well-known that a system of linear equations is equivalent to a matrix equ
     \item interchange of two rows of $A$.
 \end{enumerate}
 %
-If $e$ is an elementary row operation, we write $e(A)$ for the matrix obtained when applying $e$ to $A$. Clearly each elementary row operation $e$ has an \enquote{inverse}, i.e. an elementary row operation $e'$ such that $e'(e(A)) = e(e'(A)) = A$. Two matrices $A,B \in \mat{m,n}{F}$ are called \emph{row-equivalent} if $A$ is obtained by applying a finite sequence of elementary row operations to $B$ (and vice versa, though this need not be assumed since each elementary row operation has an inverse).
+If $e$ is an elementary row operation, we write $e(A)$ for the matrix obtained when applying $e$ to $A$. Clearly each elementary row operation $e$ has an \enquote{inverse}, i.e. an elementary row operation $e'$ such that $e'(e(A)) = e(e'(A)) = A$. Two matrices $A,B \in \mat{m,n}{\field}$ are called \emph{row-equivalent} if $A$ is obtained by applying a finite sequence of elementary row operations to $B$ (and vice versa, though this need not be assumed since each elementary row operation has an inverse).
 
-Clearly, if $A, B \in \mat{m,n}{F}$ are row-equivalent, then the systems of equations $Ax = 0$ and $Bx = 0$ are combination equivalent, hence have the same solutions.
+Clearly, if $A, B \in \mat{m,n}{\field}$ are row-equivalent, then the systems of equations $Ax = 0$ and $Bx = 0$ are combination equivalent, hence have the same solutions.
 
 \begin{definition}
-    A matrix $H \in \mat{m,n}{F}$ is called \emph{row-reduced} if
+    A matrix $H \in \mat{m,n}{\field}$ is called \emph{row-reduced} if
     %
     \begin{enumdef}
         \item the first nonzero entry of each nonzero row in $H$ is $1$, and
@@ -164,14 +166,14 @@ Clearly, if $A, B \in \mat{m,n}{F}$ are row-equivalent, then the systems of equa
     \end{enumdef}
 \end{definition}
 
-An \emph{elementary matrix} is a matrix obtained by applying a single elementary row operation to the identity matrix $I$. It is easy to show that if $e$ is an elementary row operation and $E = e(I) \in \mat{m}{F}$, then $e(A) = EA$ for $A \in \mat{m,n}{F}$. If $B \in \mat{m,n}{F}$, then $A$ and $B$ are row-equivalent if and only if $A = PB$, where $P \in \mat{m}{F}$ is a product of elementary matrices.
+An \emph{elementary matrix} is a matrix obtained by applying a single elementary row operation to the identity matrix $I$. It is easy to show that if $e$ is an elementary row operation and $E = e(I) \in \mat{m}{\field}$, then $e(A) = EA$ for $A \in \mat{m,n}{\field}$. If $B \in \mat{m,n}{\field}$, then $A$ and $B$ are row-equivalent if and only if $A = PB$, where $P \in \mat{m}{\field}$ is a product of elementary matrices.
 
 \begin{proposition}
-    Every matrix in $\mat{m,n}{F}$ is row-equivalent to a unique row-reduced echelon matrix.
+    Every matrix in $\mat{m,n}{\field}$ is row-equivalent to a unique row-reduced echelon matrix.
 \end{proposition}
 
 \begin{proof}
-    The usual Gauss--Jordan elimination algorithm proves existence. If $H, K \in \mat{m,n}{R}$ are row-equivalent row-reduced echelon matrices, we claim that $H = K$. We prove this by induction in $n$. If $n = 1$ then this is obvious, so assume that $n > 1$. Let $H_1$ and $K_1$ be the matrices obtained by deleting the $n$th column in $H$ and $K$ respectively. Then $H_1$ and $K_1$ are also row-equivalent\footnote{It should be obvious that deleting columns preserves row-equivalence, but we give a more precise argument: If $P \in \mat{m}{F}$ is a product of elementary matrices and $a_1, \ldots, a_n \in F^m$ are the columns in $A$, then the columns in $PA$ are $Pa_1, \ldots, Pa_m$. Thus elementary row operations are applied to each column independently of the other columns.} and row-reduced echelon matrices, so by induction $H_1 = K_1$. Thus if $H$ and $K$ differ, they must differ in the $n$th column.
+    The usual Gauss--Jordan elimination algorithm proves existence. If $H, K \in \mat{m,n}{R}$ are row-equivalent row-reduced echelon matrices, we claim that $H = K$. We prove this by induction in $n$. If $n = 1$ then this is obvious, so assume that $n > 1$. Let $H_1$ and $K_1$ be the matrices obtained by deleting the $n$th column in $H$ and $K$ respectively. Then $H_1$ and $K_1$ are also row-equivalent\footnote{It should be obvious that deleting columns preserves row-equivalence, but we give a more precise argument: If $P \in \mat{m}{\field}$ is a product of elementary matrices and $a_1, \ldots, a_n \in \field^m$ are the columns in $A$, then the columns in $PA$ are $Pa_1, \ldots, Pa_m$. Thus elementary row operations are applied to each column independently of the other columns.} and row-reduced echelon matrices, so by induction $H_1 = K_1$. Thus if $H$ and $K$ differ, they must differ in the $n$th column.
 
     Let $H_2$ be the matrix obtained by deleting columns in $H$, only keeping those columns containing pivots, as well as keeping the $n$th column. Define $K_2$ similarly. Thus we have deleted the same columns in $H$ and $K$, so $H_2$ and $K_2$ are also row-equivalent. Say that the number of columns in $H_2$ and $K_2$ is $r+1$, and write the matrices on the form
     %
@@ -189,7 +191,7 @@ An \emph{elementary matrix} is a matrix obtained by applying a single elementary
             \end{pmatrix},
     \end{equation*}
     %
-    where $h,k \in F^r$ and $h',k' \in F^{m-r}$ are column vectors. Since $H_2$ and $K_2$ are row-equivalent, the systems $H_2 x = 0$ and $K_2 x = 0$ are solution equivalent. If $h' = 0$, then $H_2 x = 0$ has the solution $(-h,1)$. But this is also a solution to $K_2 x = 0$, so $h = k$ and $k' = 0$. If $h' \neq 0$, then $H_2 x = 0$ only has the trivial solution. But then $K_2 x = 0$ also only has the trivial solution, and hence $k' \neq 0$. But that must be because both $H_2$ and $K_2$ has a pivot in the rightmost column, so also in this case $H_2 = K_2$.
+    where $h,k \in \field^r$ and $h',k' \in \field^{m-r}$ are column vectors. Since $H_2$ and $K_2$ are row-equivalent, the systems $H_2 x = 0$ and $K_2 x = 0$ are solution equivalent. If $h' = 0$, then $H_2 x = 0$ has the solution $(-h,1)$. But this is also a solution to $K_2 x = 0$, so $h = k$ and $k' = 0$. If $h' \neq 0$, then $H_2 x = 0$ only has the trivial solution. But then $K_2 x = 0$ also only has the trivial solution, and hence $k' \neq 0$. But that must be because both $H_2$ and $K_2$ has a pivot in the rightmost column, so also in this case $H_2 = K_2$.
 \end{proof}
 
 
@@ -198,7 +200,7 @@ An \emph{elementary matrix} is a matrix obtained by applying a single elementary
 Notice that elementary matrices are invertible, since elementary row operations are invertible.
 
 \begin{lemma}
-    If $A \in \mat{n}{F}$, then the following are equivalent:
+    If $A \in \mat{n}{\field}$, then the following are equivalent:
     %
     \begin{enumlem}
         \item \label{enum:lemma-A-invertible} $A$ is invertible,
@@ -212,19 +214,22 @@ Notice that elementary matrices are invertible, since elementary row operations 
 \begin{proof}
 \begin{proofsec}
     \item[\subcref{enum:lemma-A-invertible} $\Leftrightarrow$ \subcref{enum:lemma-A-equivalent-to-I}]
-    Let $H \in \mat{n}{F}$ be a row-reduced echelon matrix that is row-equivalent to $A$. Then $R = PA$, where $P \in \mat{n}{F}$ is a product of elementary matrices. Then $A = P\inv H$, so $A$ is invertible if and only if $H$ is. But the only invertible row-reduced echelon matrix is the identity matrix, so (i) and (ii) are equivalent.
+    Let $H \in \mat{n}{\field}$ be a row-reduced echelon matrix that is row-equivalent to $A$. Then $H = PA$, where $P \in \mat{n}{\field}$ is a product of elementary matrices. Then $A = P\inv H$, so $A$ is invertible if and only if $H$ is. But the only invertible row-reduced echelon matrix is the identity matrix, so (i) and (ii) are equivalent.
     
-    \item[\subcref{enum:lemma-A-invertible} $\Leftrightarrow$ \subcref{enum:lemma-A-elementary-matrix-product}]
-    Clearly (iii) implies (i), and the above shows that (i) implies that $A = P\inv$.
+    \item[\subcref{enum:lemma-A-equivalent-to-I} $\implies$ \subcref{enum:lemma-A-elementary-matrix-product}]
+    As above, there exists a product $P$ of elementary matrices such that $I_n = PA$, so $A = P\inv$.
+
+    \item[\subcref{enum:lemma-A-elementary-matrix-product} $\implies$ \subcref{enum:lemma-A-invertible}]
+    This is obvious since elementary matrices are invertible.
 
     \item[\subcref{enum:lemma-A-equivalent-to-I} $\Leftrightarrow$ \subcref{enum:lemma-only-trivial-solution}]
-    If $A$ and $I_n$ are row-equivalent, then the systems $Ax = 0$ and $I_n x = 0$ have the same solutions. Conversely, assume that $Ax = 0$ only has the trivial solution. If $H \in \mat{m,n}{F}$ is a row-reduced echelon matrix that is row-equivalent to $A$, then $Hx = 0$ has no nontrivial solution. Thus if $r$ is the number of nonzero rows in $H$, then $r \geq n$. But then $r = n$, so $H$ must be the identity matrix.
+    If $A$ and $I_n$ are row-equivalent, then the systems $Ax = 0$ and $I_n x = 0$ have the same solutions. Conversely, assume that $Ax = 0$ only has the trivial solution. If $H \in \mat{m,n}{\field}$ is a row-reduced echelon matrix that is row-equivalent to $A$, then $Hx = 0$ has no nontrivial solution. Thus if $r$ is the number of nonzero rows in $H$, then $r \geq n$. But then $r = n$, so $H$ must be the identity matrix.
 \end{proofsec}
 \end{proof}
 
 
 \begin{proposition}
-    Let $A \in \mat{n}{F}$. Then the following are equivalent:
+    Let $A \in \mat{n}{\field}$. Then the following are equivalent:
     %
     \begin{enumprop}
         \item $A$ is invertible,
@@ -234,7 +239,260 @@ Notice that elementary matrices are invertible, since elementary row operations 
 \end{proposition}
 
 \begin{proof}
-    If $A$ has a left inverse, then $Ax = 0$ has no nontrivial solution, so $A$ is invertible. If $A$ has a right inverse $B \in \mat{n}{F}$, i.e. $AB = I$, then $B$ has a left inverse and is thus invertible. But then $A$ is the inverse of $B$ and hence is itself invertible.
+    If $A$ has a left inverse, then $Ax = 0$ has no nontrivial solution, so $A$ is invertible. If $A$ has a right inverse $B \in \mat{n}{\field}$, i.e. $AB = I$, then $B$ has a left inverse and is thus invertible. But then $A$ is the inverse of $B$ and hence is itself invertible.
+\end{proof}
+
+
+\chapter{Coordinates}
+
+\newcommand{\coordmap}[1]{\phi_{#1}}
+\newcommand{\coordvec}[2]{[#1]_{#2}}
+\newcommand{\basischange}[2]{\phi_{#1,#2}}
+\newcommand{\mr}[3]{{}_{#1}[#2]_{#3}}
+\newcommand{\basischangemat}[2]{\mr{#1}{\square}{#2}}
+\newcommand{\lin}{\calL}
+\newcommand{\smr}[1]{\calM(#1)} % standard matrix representation
+
+\newcommand{\colvec}[1]{\begin{pmatrix}#1\end{pmatrix}}
+
+For $A \in \mat{m,n}{\field}$ we define the map $M_A \colon \field^n \to \field^m$ by $M_A v = Av$.
+
+\begin{proposition}
+    \label{prop:smr-properties}
+    Let $(e_1, \ldots, e_n)$ be the standard basis for $\field^n$. The map
+    %
+    \begin{align*}
+        \calM \colon \lin(\field^n, \field^m) &\to \mat{m,n}{\field}, \\
+        T &\mapsto \bigl( Te_1 \mid \cdots \mid Te_n \bigr),
+    \end{align*}
+    %
+    is a linear isomorphism with inverse $A \mapsto M_A$. The matrix $\smr{T}$ is called the \emph{standard matrix representation} of $T$. If $T \colon \field^n \to \field^m$ and $S \colon \field^m \to \field^l$ are linear maps, then
+    %
+    \begin{enumprop}
+        \item \label{enum:smr-vector-multiplication} $Tv = \smr{T}v$ for all $v \in \field^n$.
+        
+        \item \label{enum:smr-of-identity-map} $\smr{\id_{\field^n}} = I$.
+
+        \item \label{enum:smr-multiplicative} $\smr{S \circ T} = \smr{S} \smr{T}$.
+
+        \item \label{enum:smr-invertibility} $T$ is invertible if and only if $\smr{T}$ is invertible, in which case $\smr{T\inv} = \smr{T}\inv$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    The map $A \mapsto M_A$ is clearly linear, so to prove the first point it suffices to show that this is the inverse of $\calM$. Let $T \in \lin(\field^n,\field^m)$. Then
+    %
+    \begin{equation*}
+        M_{\smr{T}} \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \smr{T} \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \bigl( Te_1 \mid \cdots \mid Te_n \bigr) \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \sum_{i=1}^n \alpha_i Te_i
+            = T \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+    \end{equation*}
+    %
+    for $\alpha_1, \ldots, \alpha_n \in \field$. Conversely, for $A \in \mat{m,n}{\field}$ we have
+    %
+    \begin{equation*}
+        \smr{M_A}
+            = \bigl( M_A e_1 \mid \cdots \mid M_A e_n \bigr)
+            = \bigl( A e_1 \mid \cdots \mid A e_n \bigr)
+            = A,
+    \end{equation*}
+    %
+    since $Ae_i$ is the $i$th column of $A$. We prove the remaining claims:
+    %
+    \begin{proofsec}
+        \item[Proof of \subcref{enum:smr-vector-multiplication}]
+        Simply notice that $Tv = M_{\smr{T}}v = \smr{T}v$.
+
+        \item[Proof of \subcref{enum:smr-of-identity-map}]
+        This is obvious from the definition of $\calM$.
+
+        \item[Proof of \subcref{enum:smr-multiplicative}]
+        Let $v \in \field^n$ and notice that
+        %
+        \begin{equation*}
+            \smr{S \circ T}v
+                = (S \circ T) v
+                = S(Tv)
+                = S(\smr{T}v)
+                = \smr{S}\smr{T}v
+        \end{equation*}
+        %
+        by \subcref{enum:smr-vector-multiplication}. Since this holds for all $v$, the claim follows.
+
+        \item[Proof of \subcref{enum:smr-invertibility}]
+        This follows easily from \subcref{enum:smr-of-identity-map} and \subcref{enum:smr-multiplicative}.
+    \end{proofsec}
+\end{proof}
+
+Let $V$ be a finite-dimensional $\field$-vector space. If $\calV = (v_1, \ldots, v_n)$ is a basis for $V$, then for every $v \in V$ there are unique $\alpha_1, \ldots, \alpha_n \in \field$ such that $v = \sum_{i=1}^n \alpha_i v_i$. Hence the map $\coordmap{\calV} \colon V \to \field^n$ given by $\coordmap{\calV}(v) = (\alpha_1, \ldots, \alpha_n)$ is well-defined. Furthermore, it is clearly linear, and since $\calV$ is a basis it is also bijective, hence a linear isomorphism. The map $\coordmap{\calV}$ is called the \emph{coordinate map} with respect to $\calV$, and the vector $\coordvec{v}{\calV} = \coordmap{\calV}(v)$ is called the \emph{coordinate vector} of $v$ with respect to $\calV$.
+
+Now let $\calW$ be another basis for $V$. The composition $\basischange{\calW}{\calV} = \coordmap{\calW} \circ \coordmap{\calV}\inv$ is called the \emph{change of basis operator} from $\calV$ to $\calW$, and this makes the diagram
+%
+\begin{equation}
+    \label{eq:change-of-basis-diagram}
+    \begin{tikzcd}[row sep=small]
+        & \field^n
+            \ar[dd, "\basischange{\calW}{\calV}"] \\
+        V
+            \ar[ru, "\coordmap{\calV}"]
+            \ar[rd, "\coordmap{\calW}", swap] \\
+        & \field^n
+    \end{tikzcd}
+\end{equation}
+%
+commute. Its standard matrix is denoted $\basischangemat{\calW}{\calV}$. This has the expected properties:
+
+\begin{proposition}
+    Let $\calV$, $\calW$ and $\calU$ be bases for a finite-dimensional $\field$-vector space $V$. Then
+    %
+    \begin{enumprop}
+        \item \label{enum:basis-change-coordvec} $\coordvec{v}{\calW} = \basischange{\calW}{\calV} (\coordvec{v}{\calV})$ for all $v \in V$. In particular, $\coordvec{v}{\calW} = \basischangemat{\calW}{\calV} \cdot \coordvec{v}{\calV}$.
+
+        \item \label{enum:basis-change-identity-map} $\basischange{\calV}{\calV}$ is the identity map. In particular, $\basischangemat{\calV}{\calV}$ is the identity matrix.
+
+        \item $\basischange{\calU}{\calW} \circ \basischange{\calW}{\calV} = \basischange{\calU}{\calV}$. In particular, $\basischangemat{\calU}{\calW} \cdot \basischangemat{\calW}{\calV} = \basischangemat{\calU}{\calV}$.
+
+        \item $\basischange{\calW}{\calV}$ (resp. $\basischangemat{\calW}{\calV}$) is invertible with inverse $\basischange{\calV}{\calW}$ (resp. $\basischangemat{\calV}{\calW}$).
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    All claims about change of basis matrices follow by \cref{prop:smr-properties} from the corresponding claims about change of basis operators.
+
+    The claim \subcref{enum:basis-change-coordvec} follows by commutativity of the diagram \cref{eq:change-of-basis-diagram}, i.e.
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calV} (\coordvec{v}{\calV})
+            = (\coordmap{\calW} \circ \coordmap{\calV}\inv) \circ \coordmap{\calV}(v)
+            = \coordmap{\calW}(v)
+            = \coordvec{v}{\calW}.
+    \end{equation*}
+    %
+    Claim \subcref{enum:basis-change-identity-map} is an immediate consequence of the definition of $\basischange{\calV}{\calV}$. The remaining claims are proved similarly to \subcref{enum:basis-change-coordvec}.
+\end{proof}
+
+Next consider a linear map $T \colon V \to W$. If $\calV \in V^n$ and $\calW \in W^m$ are bases for $V$ and $W$ respectively, then the diagram
+%
+\begin{equation*}
+    \begin{tikzcd}
+        V
+            \ar[d, "T", swap]
+            \ar[r, "\coordmap{\calV}"]
+        & \field^n
+            \ar[d, "\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv"] \\
+        W
+            \ar[r, "\coordmap{\calW}", swap]
+        & \field^n
+    \end{tikzcd}
+\end{equation*}
+%
+commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \emph{basis representation of $T$} with respect to the bases $\calV$ and $\calW$. We show below that this is a linear map $\field^n \to \field^m$, so it has a standard matrix, which we denote $\mr{\calW}{T}{\calV}$. This is called the \emph{matrix representation} of $T$ with respect to the bases $\calV$ and $\calW$.
+
+\begin{proposition}
+    \label{prop:mr-properties}
+    Let $V$ and $W$ be finite-dimensional $\field$-vector spaces with bases $\calV \in V^n$ and $\calW \in W^m$, respectively. The map
+    %
+    \begin{align*}
+        \mr{\calW}{\,\cdot\,}{\calV} \colon \lin(V,W) &\to \mat{m,n}{\field}, \\
+        T &\mapsto \mr{\calW}{T}{\calV},
+    \end{align*}
+    %
+    is a linear isomorphism. Let $T \colon V \to W$ and $S \colon W \to U$ be linear maps, and let $\calU \in U^l$ be a basis for $U$. Then
+    %
+    \begin{enumprop}
+        \item \label{enum:mr-vector-multiplication} $\coordvec{Tv}{\calW} = \mr{\calW}{T}{\calV} \cdot \coordvec{v}{\calV}$ for all $v \in V$.
+
+        \item \label{enum:mr-of-identity-map} If $\calV'$ is another basis for $V$, then $\mr{\calV'}{\id_V}{\calV} = \basischangemat{\calV'}{\calV}$.
+
+        \item \label{enum:mr-multiplicative} $\mr{\calU}{S \circ T}{\calV} = \mr{\calU}{S}{\calW} \cdot \mr{\calW}{T}{\calV}$.
+
+        \item \label{enum:mr-invertibility} $T$ is invertible if and only if $\mr{\calW}{T}{\calV}$ is invertible, in which case $\mr{\calV}{T\inv}{\calW} = \mr{\calW}{T}{\calV}\inv$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    For the first claim, notice that the map $T \mapsto \coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is a linear isomorphism, since pre- and postcomposition with linear isomorphisms are themselves linear isomorphisms. Composing this map with $\calM$ yields $\mr{\calW}{\,\cdot\,}{\calV}$, so this is a linear isomorphism by \cref{prop:smr-properties}.
+    %
+    \begin{proofsec}
+        \item[Proof of \subcref{enum:mr-vector-multiplication}]
+        Notice that
+        %
+        \begin{align*}
+            \coordvec{Tv}{\calW}
+                &= (\coordmap{\calW} \circ T)(v) \\
+                &= (\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv) \circ \coordmap{\calV}(v) \\
+                &= (\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv)(\coordvec{v}{\calV}) \\
+                &= \mr{\calW}{T}{\calV} \cdot \coordvec{v}{\calV}.
+        \end{align*}
+        %
+        where the last equality follows from \cref{enum:smr-vector-multiplication}.
+
+        \item[Proof of \subcref{enum:mr-of-identity-map}]
+        This is obvious from the definitions of $\mr{\calV'}{\id_V}{\calV}$ and $\basischangemat{\calV'}{\calV}$
+
+        \item[Proof of \subcref{enum:mr-multiplicative}]
+        Notice that
+        %
+        \begin{equation*}
+            \coordmap{\calU} \circ (S \circ T) \circ \coordmap{\calV}\inv
+                = (\coordmap{\calU} \circ S \circ \coordmap{\calW}\inv) \circ (\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv)
+        \end{equation*}
+        %
+        The claim then follows from \cref{enum:smr-multiplicative}.
+
+        \item[Proof of \subcref{enum:mr-invertibility}]
+        This is an immediate consequence of either \subcref{enum:mr-multiplicative} or of \cref{enum:smr-invertibility}.
+    \end{proofsec}
+\end{proof}
+
+
+\begin{proposition}
+    Let $\calV = (v_1, \ldots, v_n)$ be a basis for an $\field$-vector space $V$, and let $T \colon V \to V$ be a linear isomorphism. Let $\calW = (w_1, \ldots, w_n)$ where $w_i = Tv_i$. Then $\calW$ is a basis for $V$ and
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calV}
+            = \coordmap{\calV} \circ T\inv \circ \coordmap{\calV}\inv,
+        \quad \text{or} \quad
+        \basischangemat{\calW}{\calV}
+            = \mr{\calV}{T\inv}{\calV}.
+    \end{equation*}
+    %
+    In particular, if $V = \field^n$ and $\calV$ is the standard basis $\calE$, then
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calE}
+            = T\inv,
+        \quad \text{or} \quad
+        \basischangemat{\calW}{\calE}
+            = \smr{T\inv}.
+    \end{equation*}
+\end{proposition}
+%
+We think of this result as follows: If we change basis by applying an invertible linear transformation $T$, we obtain the coordinate vectors corresponding to the transformed basis by applying $T\inv$ (in the old basis). This says that if we perform a \emph{passive transformation}, i.e. a change of basis while keeping vectors themselves fixed, the coordinates change by the inverse of said transformation.
+
+\begin{proof}
+    Let $v \in V$ and write $v = \sum_{i=1}^n \alpha_i v_i$. Then
+    %
+    \begin{equation*}
+        Tv
+            = \sum_{i=1}^n \alpha_i Tv_i
+            = \sum_{i=1}^n \alpha_i w_i
+            = \coordmap{\calW}\inv \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \coordmap{\calW}\inv \circ \coordmap{\calV}(v),
+    \end{equation*}
+    %
+    implying that
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calV}
+            = \coordmap{\calW} \circ \coordmap{\calV}\inv
+            = (T \circ \coordmap{\calV}\inv)\inv \circ \coordmap{\calV}\inv
+            = \coordmap{\calV} \circ T\inv \circ \coordmap{\calV}\inv
+    \end{equation*}
+    %
+    as claimed.
 \end{proof}
 
 
