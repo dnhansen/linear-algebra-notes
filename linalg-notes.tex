@@ -327,9 +327,9 @@ For $A \in \mat{m,n}{\field}$ we define the map $M_A \colon \field^n \to \field^
     \end{proofsec}
 \end{proof}
 
-Let $V$ be a finite-dimensional $\field$-vector space. If $\calV = (v_1, \ldots, v_n)$ is a basis for $V$, then for every $v \in V$ there are unique $\alpha_1, \ldots, \alpha_n \in \field$ such that $v = \sum_{i=1}^n \alpha_i v_i$. Hence the map $\coordmap{\calV} \colon V \to \field^n$ given by $\coordmap{\calV}(v) = (\alpha_1, \ldots, \alpha_n)$ is well-defined. Furthermore, it is clearly linear, and since $\calV$ is a basis it is also bijective, hence a linear isomorphism. The map $\coordmap{\calV}$ is called the \emph{coordinate map} with respect to $\calV$, and the vector $\coordvec{v}{\calV} = \coordmap{\calV}(v)$ is called the \emph{coordinate vector} of $v$ with respect to $\calV$.
+Let $V$ be a finite-dimensional $\field$-vector space. If $\calV = (v_1, \ldots, v_n)$ is an ordered basis for $V$, then for every $v \in V$ there are unique $\alpha_1, \ldots, \alpha_n \in \field$ such that $v = \sum_{i=1}^n \alpha_i v_i$. Hence the map $\coordmap{\calV} \colon V \to \field^n$ given by $\coordmap{\calV}(v) = (\alpha_1, \ldots, \alpha_n)$ is well-defined. Furthermore, it is clearly linear, and since $\calV$ is a basis it is also bijective, hence a linear isomorphism. The map $\coordmap{\calV}$ is called the \emph{coordinate map} with respect to $\calV$, and the vector $\coordvec{v}{\calV} = \coordmap{\calV}(v)$ is called the \emph{coordinate vector} of $v$ with respect to $\calV$.
 
-Now let $\calW$ be another basis for $V$. The composition $\basischange{\calW}{\calV} = \coordmap{\calW} \circ \coordmap{\calV}\inv$ is called the \emph{change of basis operator} from $\calV$ to $\calW$, and this makes the diagram
+Now let $\calW$ be another ordered basis for $V$. The composition $\basischange{\calW}{\calV} = \coordmap{\calW} \circ \coordmap{\calV}\inv$ is called the \emph{change of basis operator} from $\calV$ to $\calW$, and this makes the diagram
 %
 \begin{equation}
     \label{eq:change-of-basis-diagram}
@@ -346,7 +346,7 @@ Now let $\calW$ be another basis for $V$. The composition $\basischange{\calW}{\
 commute. Its standard matrix is denoted $\basischangemat{\calW}{\calV}$. This has the expected properties:
 
 \begin{proposition}
-    Let $\calV$, $\calW$ and $\calU$ be bases for a finite-dimensional $\field$-vector space $V$. Then
+    Let $\calV$, $\calW$ and $\calU$ be ordered bases for a finite-dimensional $\field$-vector space $V$. Then
     %
     \begin{enumprop}
         \item \label{enum:basis-change-coordvec} $\coordvec{v}{\calW} = \basischange{\calW}{\calV} (\coordvec{v}{\calV})$ for all $v \in V$. In particular, $\coordvec{v}{\calW} = \basischangemat{\calW}{\calV} \cdot \coordvec{v}{\calV}$.
@@ -393,14 +393,14 @@ commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \
 
 \begin{proposition}
     \label{prop:mr-properties}
-    Let $V$ and $W$ be finite-dimensional $\field$-vector spaces with bases $\calV \in V^n$ and $\calW \in W^m$, respectively. The map
+    Let $V$ and $W$ be finite-dimensional $\field$-vector spaces with ordered bases $\calV \in V^n$ and $\calW \in W^m$, respectively. The map
     %
     \begin{align*}
         \mr{\calW}{\,\cdot\,}{\calV} \colon \lin(V,W) &\to \mat{m,n}{\field}, \\
         T &\mapsto \mr{\calW}{T}{\calV},
     \end{align*}
     %
-    is a linear isomorphism. Let $T \colon V \to W$ and $S \colon W \to U$ be linear maps, and let $\calU \in U^l$ be a basis for $U$. Then
+    is a linear isomorphism. Let $T \colon V \to W$ and $S \colon W \to U$ be linear maps, and let $\calU \in U^l$ be an ordered basis for $U$. Then
     %
     \begin{enumprop}
         \item \label{enum:mr-vector-multiplication} $\coordvec{Tv}{\calW} = \mr{\calW}{T}{\calV} \cdot \coordvec{v}{\calV}$ for all $v \in V$.
@@ -450,7 +450,7 @@ commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \
 
 
 \begin{proposition}
-    Let $\calV = (v_1, \ldots, v_n)$ be a basis for an $\field$-vector space $V$, and let $T \colon V \to V$ be a linear isomorphism. Let $\calW = (w_1, \ldots, w_n)$ where $w_i = Tv_i$. Then $\calW$ is a basis for $V$ and
+    Let $\calV = (v_1, \ldots, v_n)$ be an ordered basis for an $\field$-vector space $V$, and let $T \colon V \to V$ be a linear isomorphism. Let $\calW = (w_1, \ldots, w_n)$ where $w_i = Tv_i$. Then $\calW$ is an ordered basis for $V$ and
     %
     \begin{equation*}
         \basischange{\calW}{\calV}
@@ -495,6 +495,8 @@ We think of this result as follows: If we change basis by applying an invertible
     %
     as claimed.
 \end{proof}
+
+[TODO] Recall that two matrices $A,B \in \mat{n}{\field}$ are \emph{similar} if there exists an invertible matrix $P \in \mat{n}{\field}$ such that $A = PBP\inv$. 
 
 
 \chapter{Determinants}
@@ -574,13 +576,13 @@ We shall not use the converse direction of \cref{enum:alternating-implies-skew-s
     \end{proofsec}
 \end{proof}
 
-\begin{definition}
+\begin{definition}[Determinant functions]
     If $n$ be a positive integer, a \emph{determinant function} is a map $\phi \colon \mat{n}{R} \to R$ that is $n$-linear, alternating, and which satisfies $\phi(I_n) = 1$.
 \end{definition}
 %
 If $A \in \mat{n}{R}$ with $n > 1$ and $1 \leq i,j \leq n$, denote by $M(A)_{i,j}$ the matrix in $\mat{n-1}{R}$ obtained by removing the the $i$th row and the $j$th column of $A$. This is called the \emph{$(i,j)$-th minor} of $A$. If $\phi \colon \mat{n-1}{R} \to R$ is an $(n-1)$-linear function and $A \in \mat{n}{R}$, then we write $\phi_{i,j}(A) = \phi(M(A)_{i,j})$. Then $\phi_{i,j} \colon \mat{n}{R} \to R$ is clearly linear in all rows except row $i$, and is independent of row $i$.
 
-\begin{theorem}
+\begin{theorem}[Construction of determinants]
     \label{thm:determinant-recursive-definition}
     Let $n > 1$, and let $\phi \colon \mat{n-1}{R} \to R$ be alternating and $(n-1)$-linear. For $j = 1, \ldots, n$ define a map $\psi_j \colon \mat{n}{R} \to R$ by
     %
@@ -618,7 +620,7 @@ If $A \in \mat{n}{R}$ with $n > 1$ and $1 \leq i,j \leq n$, denote by $M(A)_{i,j
 \end{proof}
 
 
-\begin{corollary}
+\begin{corollary}[Existence of determinants]
     For every positive integer $n$, there exists a determinant function $\mat{n}{R} \to R$.
 \end{corollary}
 
@@ -629,7 +631,7 @@ If $A \in \mat{n}{R}$ with $n > 1$ and $1 \leq i,j \leq n$, denote by $M(A)_{i,j
 
 \section{Uniqueness of determinants}
 
-\begin{theorem}
+\begin{theorem}[Uniqueness of determinants]
     \label{thm:determinant-uniqueness}
     Let $n$ be a positive integer. There is precisely one determinant function on $\mat{n}{R}$, namely the function $\det \colon \mat{n}{R} \to R$ given by
     %
@@ -677,6 +679,7 @@ We use the notation $\det$ for the unique determinant on $\mat{n}{R}$ for all $n
 \section{Properties of determinants}
 
 \begin{theorem}
+    \label{thm:determinant-multiplicative}
     Let $A,B \in \mat{n}{R}$. Then
     %
     \begin{equation*}
@@ -692,6 +695,25 @@ We use the notation $\det$ for the unique determinant on $\mat{n}{R}$ for all $n
 
     Furthermore, if $A$ is invertible, then $1 = \det I = (\det A) (\det A\inv)$. Thus $\det A \in R^*$, so $\det$ is a group homomorphism as claimed.
 \end{proof}
+
+
+\begin{corollary}
+    \label{cor:determinant-similar-matrices}
+    If $A,B \in \mat{n}{\field}$ are similar matrices, then $\det A = \det B$.
+\end{corollary}
+
+\begin{proof}
+    Let $P \in \mat{n}{\field}$ be such that $A = PBP\inv$. \Cref{thm:determinant-multiplicative} then implies that
+    %
+    \begin{equation*}
+        \det A
+            = (\det P)(\det B)(\det P\inv)
+            = (\det B)(\det PP\inv)
+            = \det B.
+    \end{equation*}
+\end{proof}
+
+\Cref{cor:determinant-similar-matrices} allows us to define the determinant of a general linear operator $T \colon V \to V$ on a finite-dimensional $\field$-vector space. If $\calV$ and $\calW$ are bases for $V$, then the matrix representations $\mr{\calV}{T}{\calV}$ and $\mr{\calW}{T}{\calW}$ are similar. This allows us to define the determinant $\det T$ of $T$ as the matrix representation $\mr{\calV}{T}{\calV}$ for any basis $\calV$.
 
 
 \begin{proposition}
@@ -874,17 +896,33 @@ so $\adj A\trans = (\adj A)\trans$. We have the following:
 
 
 \begin{corollary}
-    Let $A \in \mat{n}{R}$. Then $A$ is a unit in $\mat{n}{R}$ if and only if $\det A$ is a unit in $R$.
+    Let $A \in \mat{n}{R}$. The following are equivalent:
+    %
+    \begin{enumcor}
+        \item $A$ is a (two-sided) unit in $\mat{n}{R}$.
+        \item $A$ is a left- or right-unit in $\mat{n}{R}$.
+        \item $\det A$ is a unit in $R$.
+    \end{enumcor}
 \end{corollary}
 
 \begin{proof}
-    This follows directly from \cref{thm:adjoint-matrix-product}.
+    If $A$ is e.g. a left-unit, then \cref{thm:determinant-multiplicative} implies that
+    %
+    \begin{equation*}
+        1
+            = \det I_n
+            = (\det A)(\det A\inv),
+    \end{equation*}
+    %
+    so $\det A$ is a unit in $R$. Conversely, if $\det A$ is a unit then \cref{thm:adjoint-matrix-product} implies that $(\det A)\inv(\adj A)$ is a two-sided inverse of $A$.
 \end{proof}
+
+Notice that this gives us a second proof of the fact that a matrix is invertible just when it has either a left- or right-inverse. In fact, we see that this holds for matrices with entries in any commutative ring.
 
 
 \section{Determinants and eigenvalues}
 
-Let $V$ be a vector space of dimension $n < \infty$. If $T \in \calL(V)$, then recall that an \emph{eigenvalue} of $T$ is an element $\lambda \in F$ such that there is a nonzero vector $v \in V$ with $Tv = \lambda v$. The set of eigenvalues of $T$ is called the \emph{spectrum} of $T$ and is denoted $\spec T$. Clearly $\lambda \in \spec T$ if and only if $\lambda I - T$ is not injective, i.e. if $\det(\lambda I - T) = 0$. This motivates the definition of the \emph{characteristic polynomial} $p_T(t) \in F[t]$ of $T$, given by $p_T(t) = \det(tI - T)$. The eigenvalues of $T$ are then precisely the roots of $p_T(t)$.
+Let $V$ be a vector space of dimension $n < \infty$. If $T \in \calL(V)$, then recall that an \emph{eigenvalue} of $T$ is an element $\lambda \in \field$ such that there is a nonzero vector $v \in V$ with $Tv = \lambda v$. The set of eigenvalues of $T$ is called the \emph{spectrum} of $T$ and is denoted $\spec T$. Clearly $\lambda \in \spec T$ if and only if $\lambda I - T$ is not injective, i.e. if $\det(\lambda I - T) = 0$. This motivates the definition of the \emph{characteristic polynomial} $p_T(t) \in \field[t]$ of $T$, given by $p_T(t) = \det(tI - T)$. The eigenvalues of $T$ are then precisely the roots of $p_T(t)$.
 
 \begin{proposition}
     Let $T \in \calL(V)$.
@@ -895,7 +933,7 @@ Let $V$ be a vector space of dimension $n < \infty$. If $T \in \calL(V)$, then r
         \item The coefficient of $t^{n-1}$ in $p_T(t)$ equals $-\trace T$.
     \end{enumprop}
     %
-    Assume further that $p_T(t)$ splits over $F$. Then:
+    Assume further that $p_T(t)$ splits over $\field$. Then:
     %
     \begin{enumprop}[resume]
         \item $T$ has an eigenvalue.
@@ -904,12 +942,12 @@ Let $V$ be a vector space of dimension $n < \infty$. If $T \in \calL(V)$, then r
     \end{enumprop}
 \end{proposition}
 %
-The condition that $p_T(t)$ splits over $F$ means that $p_T(t)$ decomposes into a product of linear factors on the form $t - a \in F[t]$ (up to multiplication by a constant). This is in particular the case if $F$ is algebraically closed.
+The condition that $p_T(t)$ splits over $\field$ means that $p_T(t)$ decomposes into a product of linear factors on the form $t - a \in \field[t]$ (up to multiplication by a constant). This is in particular the case if $\field$ is algebraically closed.
 
 \begin{proof}
 \begin{proofsec}
     \item[(i)]
-    Let $A = (a_{ij}) \in \mat{n}{F}$ be a matrix representation of $T$. The $(i,j)$-th entry of $tI - A$ is then $t\delta_{ij} - a_{ij}$, so
+    Let $A = (a_{ij}) \in \mat{n}{\field}$ be a matrix representation of $T$. The $(i,j)$-th entry of $tI - A$ is then $t\delta_{ij} - a_{ij}$, so
     %
     \begin{equation}
         \label{eq:characteristic-polynomial-Leibniz}
@@ -924,7 +962,7 @@ The condition that $p_T(t)$ splits over $F$ means that $p_T(t)$ decomposes into 
         (t-a_{11})(t-a_{22}) \cdots (t-a_{nn}),
     \end{equation}
     %
-    and multiplying out we see that the only resulting term containing $t^n$ is $t^n$ itself. Hence $p_T(t)$ is monic and of degree $n$. Thus we may write $p_T(t) = \sum_{i=0}^n c_i t^i$ for appropriate $c_0, \ldots, c_n \in F$.
+    and multiplying out we see that the only resulting term containing $t^n$ is $t^n$ itself. Hence $p_T(t)$ is monic and of degree $n$. Thus we may write $p_T(t) = \sum_{i=0}^n c_i t^i$ for appropriate $c_0, \ldots, c_n \in \field$.
 
     \item[(ii)]
     Simply notice that
@@ -950,7 +988,7 @@ The condition that $p_T(t)$ splits over $F$ means that $p_T(t)$ decomposes into 
     as claimed.
 
     \item[(iv)]
-    Now assume that $p_T(t)$ splits over $F$. Then some linear factor $t-\lambda \in F[t]$ divides $p_T(t)$, which implies that $\lambda \in F$ is an eigenvalue of $T$.
+    Now assume that $p_T(t)$ splits over $\field$. Then some linear factor $t-\lambda \in \field[t]$ divides $p_T(t)$, which implies that $\lambda \in \field$ is an eigenvalue of $T$.
     
     \item[(v)]
     Since $p_T(t)$ is monic we have
@@ -960,7 +998,7 @@ The condition that $p_T(t)$ splits over $F$ means that $p_T(t)$ decomposes into 
             = (t - \lambda_1) (t - \lambda_2) \cdots (t - \lambda_n)
     \end{equation*}
     %
-    for appropriate $\lambda_1, \ldots, \lambda_n \in F$. These are then the (not necessarily distinct) eigenvalues of $T$. Thus $p_T(0) = (-1)^n \lambda_1 \cdots \lambda_n$, and the claim follows from (ii).
+    for appropriate $\lambda_1, \ldots, \lambda_n \in \field$. These are then the (not necessarily distinct) eigenvalues of $T$. Thus $p_T(0) = (-1)^n \lambda_1 \cdots \lambda_n$, and the claim follows from (ii).
 
     \item[(vi)]
     We similarly find that $c_{n-1} = -(\lambda_1 + \cdots + \lambda_n)$, so the final claim follows from (iii).
@@ -999,9 +1037,9 @@ The condition that $p_T(t)$ splits over $F$ means that $p_T(t)$ decomposes into 
 
 \newcommand{\ev}{\mathrm{ev}}
 
-Assume that $F$ is algebraically closed, and consider $T \in \calL(V)$. For $d \in \naturals$, let $F[t]_d$ denote the vector space of polynomials in $F[t]$ with degree strictly less than $d$, such that $\dim F[t]_d = d$. Consider the map $\ev_T \colon F[t]_{n^2+1} \to \calL(V)$ given by $\ev_T(p) = p(T)$. This cannot be injective, so there is some nonzero $p(t) \in F[t]_{n^2+1}$ such that $p(T) = 0$. Note that $p(t)$ cannot be constant.
+Assume that $\field$ is algebraically closed, and consider $T \in \calL(V)$. For $d \in \naturals$, let $\field[t]_d$ denote the vector space of polynomials in $\field[t]$ with degree strictly less than $d$, such that $\dim \field[t]_d = d$. Consider the map $\ev_T \colon \field[t]_{n^2+1} \to \calL(V)$ given by $\ev_T(p) = p(T)$. This cannot be injective, so there is some nonzero $p(t) \in \field[t]_{n^2+1}$ such that $p(T) = 0$. Note that $p(t)$ cannot be constant.
 
-Since $F$ is algebraically closed, there exist $c, \lambda_1, \ldots, \lambda_m \in F$ such that $p(t) = c \bigprod_{i=1}^m (t - \lambda_i)$. But then
+Since $\field$ is algebraically closed, there exist $c, \lambda_1, \ldots, \lambda_m \in \field$ such that $p(t) = c \bigprod_{i=1}^m (t - \lambda_i)$. But then
 %
 \begin{equation*}
     0
@@ -1018,11 +1056,11 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 
 
 \begin{corollary}
-    Let $F$ be algebraically closed, and let $T \in \calL(V)$. Then the sum of the eigenvalues of $T$ is $\trace T$.
+    Let $\field$ be algebraically closed, and let $T \in \calL(V)$. Then the sum of the eigenvalues of $T$ is $\trace T$.
 \end{corollary}
 
 \begin{proof}
-    Let $A \in \mat{n}{F}$ be an upper triangular matrix for $T$. The diagonal elements of $A$ are the eigenvalues, and the trace of $T$ is just the sum of these elements.
+    Let $A \in \mat{n}{\field}$ be an upper triangular matrix [TODO reference to later, perhaps move things around.] for $T$. The diagonal elements of $A$ are the eigenvalues, and the trace of $T$ is just the sum of these elements.
 \end{proof}
 
 
@@ -1030,8 +1068,13 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 
 \section{Triangularisation}
 
+Recall that a matrix $A = (a_{ij}) \in \mat{n}{R}$ is called \emph{upper triangular} if $a_{ij} = 0$ whenever $i > j$. If $V$ is an $n$-dimensional $\field$-vector space and $\calV$ is an ordered basis for $V$, then we say that the operator $T \in \calL(V)$ is \emph{upper triangular with respect to $\calV$} if the matrix representation $\mr{\calV}{T}{\calV}$ is upper triangular.
+
+A subspace $U$ of a vector space $V$ is said to be \emph{invariant under $T \in \calL(T)$} if $T(U) \subseteq U$.
+
 \begin{proposition}
-    Let $V$ be an $F$-vector space with $n = \dim V < \infty$, and let $\calV = (v_1, \ldots, v_n)$ be an ordered basis for $V$. The matrix of an operator $T \in \calL(V)$ is upper triangular with respect to $\calV$ if and only if $\Span(v_1, \ldots, v_i)$ is invariant under $T$ for all $i \in \{1, \ldots, n\}$.
+    \label{prop:upper-triangular-criterion}
+    Let $V$ be an $\field$-vector space with $n = \dim V < \infty$, and let $\calV = (v_1, \ldots, v_n)$ be an ordered basis for $V$. An operator $T \in \calL(V)$ is upper triangular with respect to $\calV$ if and only if $\Span(v_1, \ldots, v_i)$ is invariant under $T$ for all $i \in \{1, \ldots, n\}$.
 \end{proposition}
 
 \begin{proof}
@@ -1040,7 +1083,7 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 
 
 \begin{lemma}
-    Let $V$ be an $F$-vector space, and let $T \in \calL(V)$ be an isomorphism. If $U$ is a finite-dimensional subspace of $V$ that is invariant under $T$, then $U$ is also invariant under $T\inv$.
+    Let $V$ be an $\field$-vector space, and let $T \in \calL(V)$ be an isomorphism. If $U$ is a finite-dimensional subspace of $V$ that is invariant under $T$, then $U$ is also invariant under $T\inv$.
 \end{lemma}
 
 \begin{proof}
@@ -1058,9 +1101,9 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 
 
 \begin{proposition}
-    Let $V$ be a finite-dimensional $F$-vector space, and let $\calV$ be an ordered basis for $V$. If $T \in \calL(V)$ is an isomorphism that is upper triangular with respect to $\calV$, then $T\inv$ is also upper triangular with respect to $\calV$.
+    Let $V$ be a finite-dimensional $\field$-vector space, and let $\calV$ be an ordered basis for $V$. If $T \in \calL(V)$ is an isomorphism that is upper triangular with respect to $\calV$, then $T\inv$ is also upper triangular with respect to $\calV$.
 
-    In particular, the subset of $\matGL{n}{F}$ consisting of upper triangular matrices is a subgroup.
+    In particular, the subset of $\matGL{n}{\field}$ consisting of upper triangular matrices is a subgroup.
 \end{proposition}
 
 \begin{proof}
@@ -1069,45 +1112,47 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 
 
 \begin{lemma}
-    Let $A \in \mat{n}{F}$ be upper triangular. Then $A$ is invertible if and only if all its diagonal elements are nonzero.
+    \label{lem:upper-triangular-invertible}
+    Let $A \in \mat{n}{\field}$ be upper triangular. Then $A$ is invertible if and only if all its diagonal elements are nonzero.
 \end{lemma}
 
 \begin{proof}
-    Denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$, and let $e_1, \ldots, e_n$ denote the standard basis of $F^n$. First assume that the diagonal elements are nonzero. Then notice that $e_1 \in R(A)$, and that
+    Denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$, and let $(e_1, \ldots, e_n)$ be the standard basis of $\field^n$. First assume that the diagonal elements are nonzero. Then notice that $e_1 \in R(A)$, and that
     %
     \begin{equation*}
         A e_i
             = a_1 e_1 + \cdots + a_{i-1} e_{i-1} + \lambda_i e_i
     \end{equation*}
     %
-    for appropriate $a_1, \ldots, a_{i-1} \in F$. By induction we then have $e_i \in R(A)$. Since $(e_1, \ldots, e_n)$ is a basis, this implies that $R(A) = F^n$.
+    for appropriate $a_1, \ldots, a_{i-1} \in \field$. By induction we then have $e_i \in R(A)$. Since $(e_1, \ldots, e_n)$ is a basis, this implies that $R(A) = \field^n$.
 
-    Conversely, assume that some diagonal element $\lambda_i$ is zero. If $i = 1$, then $Ae_1 = 0$ so $A$ is singular. If $i > 0$, then
+    Conversely, assume that some diagonal element $\lambda_i$ is zero. Then
     %
     \begin{equation*}
         A \Span(e_1, \ldots, e_i)
             \subseteq \Span(e_1, \ldots, e_{i-1}),
     \end{equation*}
     %
-    so again $A$ is singular.
+    so the null-space of $A$ is nontrivial, and hence $A$ is singular.
 \end{proof}
 
 
 \begin{lemma}
-    Let $A \in \mat{n}{F}$ be upper triangular. Then the eigenvalues of $A$ are its diagonal elements.
+    Let $A \in \mat{n}{\field}$ be upper triangular. Then the eigenvalues of $A$ are its diagonal elements.
 \end{lemma}
 
 \begin{proof}
-    Let $\lambda \in F$, and denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$. By [lemma], the matrix $\lambda I - A$ is singular if and only if $\lambda - \lambda_i = 0$ for some $i$, and hence $\lambda_1, \ldots, \lambda_n$ are the eigenvalues of $A$.
+    Let $\lambda \in \field$, and denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$. By \cref{lem:upper-triangular-invertible}, the matrix $\lambda I - A$ is singular if and only if $\lambda - \lambda_i = 0$ for some $i$, and hence $\lambda_1, \ldots, \lambda_n$ are the eigenvalues of $A$.
 \end{proof}
 
 
 \begin{proposition}
-    Let $F$ be algebraically closed, and let $V$ be a finite-dimensional $F$-vector space. If $T \in \calL(V)$, then $V$ has an ordered basis with respect to which the matrix of $T$ is upper triangular.
+    \label{prop:upper-triangular-basis-exists}
+    Let $\field$ be algebraically closed, and let $V$ be a finite-dimensional $\field$-vector space. If $T \in \calL(V)$, then $V$ has an ordered basis with respect to which $T$ is upper triangular.
 \end{proposition}
 
 \begin{proof}
-    This is obvious if $\dim V = 1$, so assume that $n = \dim V > 1$, and assume that the claim is true for $F$-vector spaces of dimension $n-1$. Let $v_1 \in V$ be an eigenvector for $T$, and let $U = \Span(v_1)$. Since $U$ is invariant under $T$, we may define a linear operator\footnote{The operator $\tilde T$ may arise as follows: Let $\pi \colon V \to V/U$ be the quotient map. Then $U \subseteq \ker (\pi \circ T)$ since $U$ is invariant under $T$, so $\pi \circ T$ descends to a linear map $\tilde T \colon V/U \to V/U$.} $\tilde T \in \calL(V/U)$ by $\tilde T(v + U) = Tv + U$. Since $\dim V/U = n-1$, by induction there is a basis $v_2 + U, \ldots, v_n + U$ of $V/U$ with respect to which the matrix of $\tilde T$ is upper triangular. It is easy to show that the collection $v_1, \ldots, v_n$ is linearly independent, hence a basis for $V$.
+    This is obvious if $\dim V = 1$, so assume that $n = \dim V > 1$, and assume that the claim is true for $\field$-vector spaces of dimension $n-1$. Since $\field$ is algebraically closed, $T$ has an eigenvector $v_1 \in V$. Then $U = \Span(v_1)$ is invariant under $T$, so we may define a linear operator\footnote{The operator $\tilde T$ may arise as follows: Let $\pi \colon V \to V/U$ be the quotient map. Then $U \subseteq \ker (\pi \circ T)$ since $U$ is invariant under $T$, so $\pi \circ T$ descends to a linear map $\tilde T \colon V/U \to V/U$.} $\tilde T \in \calL(V/U)$ by $\tilde T(v + U) = Tv + U$. Since $\dim V/U = n-1$, by induction there is a basis $v_2 + U, \ldots, v_n + U$ of $V/U$ with respect to which the matrix of $\tilde T$ is upper triangular. It is easy to show that the collection $v_1, \ldots, v_n$ is linearly independent, hence a basis for $V$.
 
     Now notice that
     %
@@ -1117,7 +1162,7 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
             \in \Span(v_2 + U, \ldots, v_i + U)
     \end{equation*}
     %
-    for $i \in \{2, \ldots, n\}$. That is, there exist $a_2, \ldots, a_i \in F$ such that
+    for $i \in \{2, \ldots, n\}$. That is, there exist $a_2, \ldots, a_i \in \field$ such that
     %
     \begin{equation*}
         Tv_i + U
@@ -1129,24 +1174,125 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 
 
 \begin{theorem}[Schur's Theorem]
-    Let $F$ be algebraically closed, and let $V$ be a finite-dimensional inner product space over $F$. If $T \in \calL(V)$, then $V$ has an ordered orthonormal basis with respect to which the matrix of $T$ is upper triangular.
+    Let $V$ be a finite-dimensional complex inner product space. If $T \in \calL(V)$, then $V$ has an ordered orthonormal basis with respect to which $T$ is upper triangular.
 \end{theorem}
 
 \begin{proof}
-    By [proposition] $V$ has an ordered basis $\calV = (v_1, \ldots, v_n)$ with respect to which the matrix of $T$ is upper triangular. Now apply the Gram--Schmidt procedure to $\calV$ and obtain an orthonormal basis $\calE = (e_1, \ldots, e_n)$ for $V$ such that
+    By \cref{prop:upper-triangular-basis-exists} $V$ has an ordered basis $\calV = (v_1, \ldots, v_n)$ with respect to which $\mr{\calV}{T}{\calV}$ is upper triangular. Now apply the Gram--Schmidt procedure to $\calV$ and obtain an orthonormal basis $\calU = (u_1, \ldots, u_n)$ for $V$ such that
     %
     \begin{equation*}
-        \Span(e_1, \ldots, e_i)
+        \Span(u_1, \ldots, u_i)
             = \Span(v_1, \ldots, v_i)
     \end{equation*}
     %
-    for all $i \in \{1, \ldots, n\}$. Then [proposition with invariant subspaces] shows that the matrix of $T$ with respect to $\calE$ is also upper triangular, proving the claim.
+    for all $i \in \{1, \ldots, n\}$. Then \cref{prop:upper-triangular-criterion} shows that $\mr{\calU}{T}{\calU}$ is also upper triangular, proving the claim.
 \end{proof}
 
 
 \section{Orthonormal diagonalisation}
 
-Let $T \colon V \to V$ is an operator on an $F$-vector space $V$, and let $U$ be a subspace of $V$ that is invariant under $T$. Say that $W$ is a complement of $V$, i.e. that $V = U \oplus W$, then $W$ is not necessarily invariant under $T$. However, we have the following:
+Let $V$ and $W$ be finite-dimensional inner product spaces, and let $T \in \calL(V,W)$. Recall that the \emph{adjoint of $T$} is the operator $T^* \in \calL(W,V)$ with the property that
+%
+\begin{equation}
+    \label{eq:adjoint-defining-property}
+    \inner{T^*w}{v}_V = \inner{w}{Tv}_W
+\end{equation}
+%
+for all $v \in V$ and $w \in W$. There first of all exists such $L^*w \in V$ since, if $(v_1, \ldots, v_n)$ is an orthonormal basis for $V$, then
+%
+\begin{align*}
+    \inner{w}{Tv}_W
+        &= \inner[\bigg]{w}{\sum_{i=1}^n \inner{v}{v_i}_V Tv_i}_W \\
+        &= \sum_{i=1}^n \inner{v_i}{v}_V \inner{w}{Tv_i}_W \\
+        &= \inner[\bigg]{ \sum_{i=1}^n \inner{w}{Tv_i}_W v_i }{v}_V.
+\end{align*}
+%
+Hence we may choose $T^*w = \sum_{i=1}^n \inner{w}{Tv_i}_W v_i$. Furthermore, this vector is unique since \cref{eq:adjoint-defining-property} implies that
+%
+\begin{equation*}
+    T^*w
+        = \sum_{i=1}^n \inner{T^*w}{v_i}_V
+        = \sum_{i=1}^n \inner{w}{Tv_i}_W.
+\end{equation*}
+%
+In particular, $T^*w$ does not depend on a choice of basis for $V$. Notice that taking complex conjugates in \cref{eq:adjoint-defining-property} we find that $T^{**} = T$.
+
+In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that $T$ is \emph{self-adjoint} if $T^* = T$. Clearly a self-adjoint operator is normal.
+
+\begin{proposition}
+    Let $T \in \calL(V)$ be a normal operator.
+    %
+    \begin{enumprop}
+        \item $\norm{Tv} = \norm{T^*v}$ for all $v \in V$. In particular, $\norm{T} = \norm{T^*}$.
+        
+        \item If $\lambda \in \mathbb{K}$ is an eigenvalue of $T$, then $\conj{\lambda}$ is an eigenvalue of $T^*$ with the same eigenvectors.
+
+        \item If $\mu \in \mathbb{K}$ is another eigenvalue of $T$ distinct from $\lambda$, then $E_\lambda(T)$ and $E_\mu(T)$ are orthogonal.
+
+        \item If $T$ is self-adjoint, then it has an eigenvalue and all its eigenvalues are real.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+\begin{proofsec}
+    \item[(i)]
+    Notice that
+    %
+    \begin{equation*}
+        \norm{Tv}^2
+            = \inner{Tv}{Tv}
+            = \inner{T^*Tv}{v}
+            = \inner{TT^*v}{v}
+            = \inner{T^*v}{T^*v}
+            = \norm{T^*v}^2.
+    \end{equation*}
+
+    \item[(ii)]
+    If $T$ is normal then so is $\lambda \id_V - T$, so (i) implies that
+    %
+    \begin{equation*}
+        \norm{(\lambda \id_V - T)v}
+            = \norm{(\conj{\lambda} \id_V - T^*)v},
+    \end{equation*}
+    %
+    so $v \in V$ is an eigenvector for $T$ with eigenvalue $\lambda$ if and only if $v$ is an eigenvector for $T^*$ with eigenvalue $\conj{\lambda}$.
+
+    \item[(iii)]
+    Let $v \in E_\lambda(T)$ and $w \in E_\mu(T)$. Since $w$ is also an eigenvector for $T^*$ with eigenvalue $\conj{\mu}$, we have
+    %
+    \begin{equation*}
+        \lambda \inner{v}{w}
+            = \inner{Tv}{w}
+            = \inner{v}{T^*w}
+            = \mu \inner{v}{w}.
+    \end{equation*}
+    %
+    Since $\lambda \neq \mu$ we must have $\inner{v}{w} = 0$ as claimed.
+
+    \item[(iv)]
+    If $T$ is self-adjoint and $v \in V$ is an eigenvector for $T$ with $\lambda \in \mathbb{K}$, then
+    %
+    \begin{equation*}
+        \lambda \inner{v}{v}
+            = \inner{Tv}{v}
+            = \inner{v}{Tv}
+            = \conj{\lambda} \inner{v}{v},
+    \end{equation*}
+    %
+    and since $v \neq 0$ we must have $\lambda = \conj{\lambda}$. Hence $\lambda$ is real.
+
+    If $\mathbb{K} = \complex$ then $V$ has a complex eigenvalue, which is real by the above argument. If instead $\mathbb{K} = \reals$, then let $\calV$ be an orthonormal basis for $V$ and consider the matrix representation $\mr{\calV}{T}{\calV}$. This is a real symmetric matrix, in particular a matrix with \emph{complex} entries, i.e. an operator $\complex^n \to \complex^n$. Hence it has a complex eigenvalue $\lambda$, which is real by the above. This means that $\lambda I - \mr{\calV}{T}{\calV}$ is singular when considered as an operator $\complex^n \to \complex^n$. But then it is clearly singular as an operator $\reals^n \to \reals^n$ since an inverse in $\calL(\reals^n)$ would also be an inverse in $\calL(\complex^n)$, so $\lambda$ is an eigenvalue of $T$.
+\end{proofsec}
+\end{proof}
+
+
+
+
+
+
+
+
+Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $U$ be a subspace of $V$ that is invariant under $T$. If $W$ is a complement of $V$, i.e. $V = U \oplus W$, then $W$ is not necessarily invariant under $T$. However, we have the following:
 
 \begin{lemma}
     \label{thm:adjoint-invariant-subspace}
@@ -1166,16 +1312,16 @@ Let $T \colon V \to V$ is an operator on an $F$-vector space $V$, and let $U$ be
 \end{proof}
 
 \begin{theorem}[The spectral theorem]
-    Let $F$ be either the real or the complex numbers, let $V$ be a finite-dimensional inner product space over $F$, and consider $T \in \calL(V)$. Then $T$ is orthogonally diagonalisable if and only if
+    Let $\field$ be either the real or the complex numbers, let $V$ be a finite-dimensional inner product space over $\field$, and consider $T \in \calL(V)$. Then $T$ is orthogonally diagonalisable if and only if
     %
     \begin{enumthm}
-        \item $F = \reals$ and $T$ is self-adjoint, or
-        \item $F = \complex$ and $T$ is normal.
+        \item $\field = \reals$ and $T$ is self-adjoint, or
+        \item $\field = \complex$ and $T$ is normal.
     \end{enumthm}
 \end{theorem}
 
 \begin{proof}
-    Assume that either $F = \reals$ and $T$ is self-adjoint, or that $F = \complex$ and $T$ is normal. We prove by induction in $n = \dim V$ that $T$ is orthogonally diagonalisable. If $n = 1$ then this follows since $T$ has an eigenvalue, so assume that the claim is proved for operators on spaces of dimension strictly less than $n$.
+    Assume that either $\field = \reals$ and $T$ is self-adjoint, or that $\field = \complex$ and $T$ is normal. We prove by induction in $n = \dim V$ that $T$ is orthogonally diagonalisable. If $n = 1$ then this follows since $T$ has an eigenvalue, so assume that the claim is proved for operators on spaces of dimension strictly less than $n$.
 
     Let $\lambda \in \spec T$, and consider the corresponding eigenspace $E_T(\lambda)$. If $d = \dim E_T(\lambda) = n$, then any orthonormal basis of $E_T(\lambda)$ will suffice. Assume therefore that $0 < d < n$.
 
@@ -1190,7 +1336,7 @@ Let $T \colon V \to V$ is an operator on an $F$-vector space $V$, and let $U$ be
     %
     so we also have $T^*(w) \in E_T(\lambda)$. It follows from \cref{thm:adjoint-invariant-subspace} that $E_T(\lambda)^\perp$ is also invariant under both $T$ and $T^*$. We furthermore have $\dim E_T(\lambda)^\perp = n-d$ and $0 < n-d < n$. Let $T_\parallel \in \calL(E_T(\lambda))$ and $T_\perp \in \calL(E_T(\lambda)^\perp)$ denote the restrictions of $T$ to $E_T(\lambda)$ and $E_T(\lambda)^\perp$ respectively. Both these operators are also self-adjoint or normal, depending on the hypothesis, so the induction hypothesis furnishes orthonormal bases $\calU$ and $\calW$ for $E_T(\lambda)$ and $E_T(\lambda)^\perp$ consisting of eigenvectors of $T$. But then $\calV = \calU \union \calW$ is an orthonormal basis for $V$ as desired.
 
-    Conversely, assume that $\calV$ is an orthonormal basis of $V$ consisting of eigenvectors for $T$, and let $A \in \mat{n}{F}$ be the matrix of $T$ with respect to $\calV$. Then $A$ is diagonal with the eigenvalues of $T$ on its diagonal. If $F = \reals$ then the eigenvalues of $T$ are real, so $A$ is a real symmetric matrix, and hence $T$ is self-adjoint. If instead $F = \complex$, then since $A$ is diagonal we have $A^*A = AA^*$, which implies that $T$ is normal.
+    Conversely, assume that $\calV$ is an orthonormal basis of $V$ consisting of eigenvectors for $T$, and let $A \in \mat{n}{\field}$ be the matrix of $T$ with respect to $\calV$. Then $A$ is diagonal with the eigenvalues of $T$ on its diagonal. If $\field = \reals$ then the eigenvalues of $T$ are real, so $A$ is a real symmetric matrix, and hence $T$ is self-adjoint. If instead $\field = \complex$, then since $A$ is diagonal we have $A^*A = AA^*$, which implies that $T$ is normal.
 \end{proof}
 
 
