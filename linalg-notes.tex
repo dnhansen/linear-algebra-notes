@@ -389,7 +389,7 @@ Next consider a linear map $T \colon V \to W$. If $\calV \in V^n$ and $\calW \in
     \end{tikzcd}
 \end{equation*}
 %
-commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \emph{basis representation of $T$} with respect to the bases $\calV$ and $\calW$. We show below that this is a linear map $\field^n \to \field^m$, so it has a standard matrix, which we denote $\mr{\calW}{T}{\calV}$. This is called the \emph{matrix representation} of $T$ with respect to the bases $\calV$ and $\calW$.
+commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \emph{basis representation of $T$} with respect to the bases $\calV$ and $\calW$. This is a linear map $\field^n \to \field^m$, so it has a standard matrix which we denote $\mr{\calW}{T}{\calV}$. This is called the \emph{matrix representation} of $T$ with respect to the bases $\calV$ and $\calW$.
 
 \begin{proposition}
     \label{prop:mr-properties}
@@ -431,7 +431,7 @@ commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \
         where the last equality follows from \cref{enum:smr-vector-multiplication}.
 
         \item[Proof of \subcref{enum:mr-of-identity-map}]
-        This is obvious from the definitions of $\mr{\calV'}{\id_V}{\calV}$ and $\basischangemat{\calV'}{\calV}$
+        This is obvious from the definitions of $\mr{\calV'}{\id_V}{\calV}$ and $\basischangemat{\calV'}{\calV}$.
 
         \item[Proof of \subcref{enum:mr-multiplicative}]
         Notice that
@@ -1064,6 +1064,179 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 \end{proof}
 
 
+\chapter{Complexification}
+
+If $W$ is a complex vector space, then we may restrict the scalar multiplication $\complex \prod W \to W$ to a map $\reals \prod W \to W$. When we equip $W$ with this restricted scalar multiplication instead of the original one, we call the resulting space the \emph{real version of $W$} and denote it by $W_\reals$.
+
+Conversely, if $V$ is a real vector space then we define the \emph{complexification of $V$} as the vector space $V^\complex$ whose underlying set is $V \prod V$, and which is equipped with componentwise addition and the complex scalar multiplication
+%
+\begin{equation*}
+    (a + \iu b)(v,u)
+        = (av - bu, au + bv),
+\end{equation*}
+%
+for $a,b \in \reals$ and $v,u \in V$. We denote the vector $(v,u)$ by $v + \iu u$.
+
+% \newcommand{\cpx}{\mathrm{cpx}}
+
+% We define the \emph{complexification map} $\cpx \colon V \to V^\complex$ by $\cpx(v) = v + \iu 0$. This is clearly real-linear and injective, so it induces a real-linear isomorphism between $V$ and its image in $V^\complex$. More precisely, a linear isomorphism between $V$ and a subspace of the real version $(V^\complex)_\reals$ of $V^\complex$.
+
+If $T \colon V \to W$ is a linear map between real vector spaces, then we define the complexification of $T$ by
+%
+\begin{align*}
+    T^\complex \colon V^\complex &\to W^\complex, \\
+    v + \iu u &\mapsto Tv + \iu Tu.
+\end{align*}
+%
+That is, $T^\complex$ is just the product map $T \prod T$. This is easily seen to be complex-linear.
+
+If $V$ is a real inner product space, then we define an inner product by
+%
+\begin{equation*}
+    \inner{v + \iu u}{x + \iu y}
+        = \inner{v}{x}
+          + \inner{u}{y}
+          + \iu (\inner{u}{x} - \inner{v}{y}).
+\end{equation*}
+%
+Notice that this identity holds in any \emph{complex} inner product space, where the notation $v + \iu u$ instead means the sum of $v$ and the scalar product of $\iu$ and $u$ (in justifying this claim, the reader will recall that the inner product on a complex space is \emph{sesqui}linear).
+
+
+\chapter{Operator adjoints}
+
+\begin{definition}[Operator adjoints]
+    Let $V$ and $W$ be $\field$-vector spaces, and let $T \colon V \to W$ be a linear map. The \emph{(operator) adjoint} of $T$ is the pullback
+    %
+    \begin{align*}
+        T^* \colon W^* &\to V^*, \\
+        \phi &\mapsto \phi \circ T.
+    \end{align*}
+\end{definition}
+%
+Note that this is just the action of the dual functor on maps in the category of $\field$-vector spaces. Hence it already satisfies $\id_V^* = \id_{V^*}$ and $(ST)^* = T^* S^*$, so that in particular $(T\inv)^* = (T^*)\inv$ when $T$ is invertible. Furthermore, it is easy to show that the map $T \mapsto T^*$ is linear.
+
+\newcommand{\im}{\operatorname{im}}
+
+\begin{proposition}
+    Let $T \in \calL(V,W)$.
+    %
+    \begin{enumprop}
+        \item $\ker T^* = (\im T)^0$.
+        \item $\im T^* = (\ker T)^0$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    \textcite[Theorem~3.19]{romanlinalg}.
+\end{proof}
+
+\newcommand{\rank}{\operatorname{rank}}
+
+\begin{corollary}
+    If $T \in \calL(V,W)$ with $V$ and $W$ finite-dimensional, then $\rank T^* = \rank T$.
+\end{corollary}
+
+\begin{proof}
+    Recall that the dimension of $(\ker T)^0$ equals the codimension of $\ker T$, which is just $\dim V - \dim \ker T$ when $V$ is finite-dimensional (cf. \cite[Theorem~3.15]{romanlinalg}). We then have
+    %
+    \begin{equation*}
+        \rank T^*
+            = \dim \im T^*
+            = \dim (\ker T)^0
+            = \dim V - \dim \ker T
+            = \dim \im T
+            = \rank T,
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+Note that if $\calV = (v_1, \ldots, v_n)$ is an ordered basis for $V$, $\calV^*$ the corresponding dual basis, and $\calV^{**}$ the double dual basis, then for $\phi = \phi_1 v_1^* + \cdots + \phi_n v_n^*$ we have
+%
+\begin{equation*}
+    v_i^{**}(\phi)
+        = \phi_i
+        = \phi(v_i),
+\end{equation*}
+%
+since both $v_i^*(v_j) = \delta_{ij}$ and $v_i^{**}(v_j^*) = \delta_{ij}$, by definition of the dual basis.
+
+\begin{proposition}
+    If $T \in \calL(V,W)$ is a linear map between finite-dimensional vector spaces, and $\calV$ and $\calW$ are ordered bases for $V$ and $W$ respectively, then
+    %
+    \begin{equation*}
+        \mr{\calV^*}{T^*}{\calW^*}
+            = (\mr{\calW}{T}{\calV})\trans.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    Write $\calV = (v_1, \ldots, v_n)$ and $\calW = (w_1, \ldots, w_m)$. Then
+    %
+    \begin{equation*}
+        (\mr{\calW}{T}{\calV})_{ij}
+            = (\coordvec{Tv_j}{\calW})_i
+            = w_i^*(Tv_j),
+    \end{equation*}
+    %
+    and
+    %
+    \begin{equation*}
+        (\mr{\calV^*}{T^*}{\calW^*})_{ij}
+            = (\coordvec{T^* w_j^*}{\calV^*})_i
+            = v_i^{**}(T^* w_j^*)
+            = T^* w_j^*(v_i)
+            = w_j^*(Tv_i).
+    \end{equation*}
+    %
+    These expressions are the same, but with $i$ and $j$ switched.
+\end{proof}
+
+
+If $V$ is a finite-dimensional inner product space, for $v \in V$ let $\phi_v$ denote the element in $V^*$ given by $\phi_v(w) = \inner{v}{w}$. Further, let $\Phi_V \colon V \to V^*$ denote the (conjugate-)linear isomorphism $v \mapsto \phi_v$.
+
+\begin{theorem}
+    Let $V$ and $W$ be finite-dimensional inner product spaces, and let $T \in \calL(V,W)$. Denoting the Hilbert space adjoint of $T$ by $T^\dagger \colon W \to V$ we have
+    %
+    \begin{equation*}
+        T^*
+            = \Phi_V \circ T^\dagger \circ \Phi_W\inv,
+    \end{equation*}
+    %
+    i.e. the diagram
+    %
+    \begin{equation*}
+        \begin{tikzcd}
+            V
+                \ar[r, "T", shift left]
+                \ar[d, "\Phi_V", swap]
+            & W
+                \ar[l, "T^\dagger", shift left]
+                \ar[d, "\Phi_W"] \\
+            V^*
+            & W^*
+                \ar[l, "T^*", swap]
+        \end{tikzcd}
+    \end{equation*}
+    %
+    commutes. [TODO also commutes when $T$ is there?]
+\end{theorem}
+
+\begin{proof}
+    Simply notice that, for $v \in V$ and $\phi \in W^*$, we have
+    %
+    \begin{equation*}
+        T^*\phi(v)
+            = \phi(Tv)
+            = \inner{Tv}{\Phi_W\inv(\phi)}
+            = \inner{v}{T^\dagger \Phi_W\inv(\phi)}
+            = \Phi_V\bigl( T^\dagger \Phi_W\inv(\phi) \bigr)(v),
+    \end{equation*}
+    %
+    which implies the claim.
+\end{proof}
+
+
 \chapter{Triangularisation and diagonalisation}
 
 \section{Triangularisation}
@@ -1198,7 +1371,7 @@ Let $V$ and $W$ be finite-dimensional inner product spaces, and let $T \in \calL
     \inner{T^*w}{v}_V = \inner{w}{Tv}_W
 \end{equation}
 %
-for all $v \in V$ and $w \in W$. There first of all exists such $L^*w \in V$ since, if $(v_1, \ldots, v_n)$ is an orthonormal basis for $V$, then
+for all $v \in V$ and $w \in W$. There first of all exist such $L^*w \in V$ since, if $(v_1, \ldots, v_n)$ is an orthonormal basis for $V$, then
 %
 \begin{align*}
     \inner{w}{Tv}_W
@@ -1211,23 +1384,218 @@ Hence we may choose $T^*w = \sum_{i=1}^n \inner{w}{Tv_i}_W v_i$. Furthermore, th
 %
 \begin{equation*}
     T^*w
-        = \sum_{i=1}^n \inner{T^*w}{v_i}_V
-        = \sum_{i=1}^n \inner{w}{Tv_i}_W.
+        = \sum_{i=1}^n \inner{T^*w}{v_i}_V v_i
+        = \sum_{i=1}^n \inner{w}{Tv_i}_W v_i.
 \end{equation*}
 %
 In particular, $T^*w$ does not depend on a choice of basis for $V$. Notice that taking complex conjugates in \cref{eq:adjoint-defining-property} we find that $T^{**} = T$.
 
+
+\begin{lemma}
+    \label{lem:coordinate-map-isometry}
+    Let $V$ and $W$ be finite-dimensional inner product spaces, and let $\calV$ and $\calW$ be ordered orthonormal bases for $V$ and $W$.
+    %
+    \begin{enumlem}
+        \item The coordinate map $\coordmap{\calV}$ is unitary, i.e.
+        %
+        \begin{equation}
+            \label{eq:coordinate-map-isometry}
+            \inner{\coordvec{v}{\calV}}{\coordvec{w}{\calV}}
+                = \inner{v}{w}
+        \end{equation}
+        %
+        for all $v,w \in V$.
+    \end{enumlem}
+    %
+    Let further $T \colon V \to W$ be a linear map, and let $A \in \mat{m,n}{\mathbb{K}}$.
+    %
+    \begin{enumlem}[resume]
+        \item $(M_A)^* = M_{A^*}$. In particular, if $V = \mathbb{K}^n$ and $W = \mathbb{K}^m$ then $\smr{T^*} = \smr{T}^*$.
+        \item $(\mr{\calW}{T}{\calV})^* = \mr{\calV}{T^*}{\calW}$.
+    \end{enumlem}
+\end{lemma}
+
+\begin{proof}
+\begin{proofsec}
+    \item[(i)]
+    By bi- or sesquilinearity of the inner product it suffices to prove \cref{eq:coordinate-map-isometry} for a basis for $V$. And writing $\calV = (v_1, \ldots, v_n)$ we find that
+    %
+    \begin{equation*}
+        \inner{\coordvec{v_i}{\calV}}{\coordvec{v_j}{\calV}}
+            = \inner{e_i}{e_j}
+            = \delta_{ij}
+            = \inner{v_i}{v_j}
+    \end{equation*}
+    %
+    for $1 \leq i,j \leq n$.
+
+    \item[(ii)]
+    Notice that
+    %
+    \begin{equation*}
+        \inner{M_{A^*} w}{v}
+            = \inner{A^* w}{v}
+            = v^* (A^* w)
+            = (Av)^* w
+            = \inner{w}{Av}
+            = \inner{w}{M_A v}
+    \end{equation*}
+    %
+    for all $v \in \mathbb{K}^n$ and $w \in \mathbb{K}^m$. By uniqueness of the adjoint operator, it follows that $(M_A)^* = M_{A^*}$. Furthermore, we have
+    %
+    \begin{equation*}
+        M_{\smr{T^*}}
+            = T^*
+            = (M_{\smr{T}})^*
+            = M_{\smr{T}^*}.
+    \end{equation*}
+    %
+    It follows that $\smr{T^*} = \smr{T}^*$.
+
+    \item[(iii)]
+    Notice that
+    %
+    \begin{equation*}
+        (\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv)^*
+            = (\coordmap{\calW} \circ T \circ \coordmap{\calV}^*)^*
+            = \coordmap{\calV} \circ T^* \circ \coordmap{\calW}^*
+            = \coordmap{\calV} \circ T^* \circ \coordmap{\calW}\inv,
+    \end{equation*}
+    %
+    and taking standard matrix representations, it follows from (iii) that $(\mr{\calW}{T}{\calV})^* = \mr{\calV}{T^*}{\calW}$.
+\end{proofsec}
+\end{proof}
+
+
+\begin{proposition}
+    Let $V$ be a finite-dimensional inner product space, and let $T \in \calL(V)$ and $\lambda \in \mathbb{K}$. Then $\lambda \id_V - T$ is invertible if and only if $\conj{\lambda} \id_V - T^*$ is invertible. In other words, $\lambda$ is an eigenvalue of $T$ if and only if $\conj{\lambda}$ is an eigenvalue of $T^*$.
+\end{proposition}
+
+\begin{proof}
+    Since the map $T \mapsto T^*$ is idempotent it suffices to prove one implication, so assume that $\lambda \id_V - T$ is invertible. Then there exists an $S \in \calL(V)$ such that
+    %
+    \begin{equation*}
+        S(\lambda \id_V - T)
+            = (\lambda \id_V - T)S
+            = \id_V,
+    \end{equation*}
+    %
+    and taking adjoints we find that
+    %
+    \begin{equation*}
+        (\conj{\lambda} \id_V - T^*)S^*
+            = S^*(\conj{\lambda} \id_V - T^*)
+            = \id_V.
+    \end{equation*}
+    %
+    That is, $\conj{\lambda} \id_V - T^*$ is invertible as claimed.
+\end{proof}
+
+\begin{remark}
+    Note that this does \emph{not} say that $v \in V$ is an eigenvector of $T^*$ if it is an eigenvector of $T$. A counterexample is given by the matrix
+    %
+    \begin{equation*}
+        A =
+        \begin{pmatrix}
+            1 & 1 \\
+            0 & 0
+        \end{pmatrix},
+    \end{equation*}
+    %
+    which has the eigenvector $(1,0)$ with eigenvalue $1$. However, while $1$ is also an eigenvalue of the transpose $A\trans$ (with eigenvector $(1,1)$), $(1,0)$ is not an eigenvector of $A\trans$.
+
+    While this does not hold in general, in \cref{enum:normal-adjoint-eigenvalues} we will see that it holds for \emph{normal} operators.
+\end{remark}
+
+
 In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that $T$ is \emph{self-adjoint} if $T^* = T$. Clearly a self-adjoint operator is normal.
+
+\begin{proposition}
+    \label{prop:complexification-adjoint}
+    Let $V$ and $W$ be real inner product spaces, and let $T \in \calL(V,W)$. Then we have
+    %
+    \begin{equation*}
+        (T^\complex)^*
+            = (T^*)^\complex,
+    \end{equation*}
+    %
+    i.e., the adjoint of the complexification of $T$ is the complexification of the adjoint of $T$. In particular
+    %
+    \begin{enumprop}
+        \item $T$ is normal if and only if $T^\complex$ is normal, and
+        \item $T$ is self-adjoint if and only if $T^\complex$ is self-adjoint.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    For $v,u,x,y \in V$ we have
+    %
+    \begin{align*}
+        \inner{(T^*)^\complex(x + \iu y)}{v + \iu u}
+            &= \inner{ T^*x + \iu T^*y }{v + \iu u} \\
+            &= \inner{T^*x}{v}
+                + \inner{T^*y}{u}
+                + \iu ( \inner{T^*y}{u} - \inner{T^*x}{v} ) \\
+            &= \inner{x}{Tv}
+                + \inner{y}{Tu}
+                + \iu ( \inner{y}{Tu} - \inner{x}{Tv} ) \\
+            &= \inner{x + \iu y}{Tv + \iu Tu} \\
+            &= \inner{x + \iu y}{T^\complex(v + \iu u)}.
+    \end{align*}
+    %
+    Uniqueness of adjoints thus yields the claim.
+
+    Assume that $T$ is normal. Then
+    %
+    \begin{equation*}
+        T^\complex (T^\complex)^*
+            = T^\complex (T^*)^\complex
+            = (TT^*)^\complex
+            = (T^*T)^\complex
+            = (T^*)^\complex T^\complex
+            = (T^\complex)^* T^\complex,
+    \end{equation*}
+    %
+    so $T^\complex$ is normal. The converse follows similarly. If $T$ is self-adjoint, then
+    %
+    \begin{equation*}
+        (T^\complex)^*
+            = (T^*)^\complex
+            = T^\complex,
+    \end{equation*}
+    %
+    and similarly if $T^\complex$ is self-adjoint.
+\end{proof}
+
+
+\begin{lemma}
+    \label{lem:complexification-eigenvalue}
+    Let $V$ be a real vector space, and let $T \in \calL(V)$. If $\lambda \in \reals$ is an eigenvalue of the complexification $T^\complex$ of $T$, then $\lambda$ is also an eigenvalue of $T$.
+\end{lemma}
+
+\begin{proof}
+    Let $v + \iu u \in V^\complex$ be an eigenvector of $T^\complex$ corresponding to $\lambda$. Then
+    %
+    \begin{equation*}
+        Tv + \iu Tu
+            = T^\complex (v + \iu u)
+            = \lambda(v + \iu u)
+            = \lambda v + \iu \lambda u.
+    \end{equation*}
+    %
+    It follows that $Tv = \lambda v$ as desired.
+\end{proof}
+
 
 \begin{proposition}
     Let $T \in \calL(V)$ be a normal operator.
     %
     \begin{enumprop}
-        \item $\norm{Tv} = \norm{T^*v}$ for all $v \in V$. In particular, $\norm{T} = \norm{T^*}$.
+        \item $\norm{Tv} = \norm{T^*v}$ for all $v \in V$.
         
-        \item If $\lambda \in \mathbb{K}$ is an eigenvalue of $T$, then $\conj{\lambda}$ is an eigenvalue of $T^*$ with the same eigenvectors.
+        \item \label{enum:normal-adjoint-eigenvalues} If $\lambda \in \mathbb{K}$ is an eigenvalue of $T$, then $\conj{\lambda}$ is an eigenvalue of $T^*$ with the same eigenvectors. In other words, $E_T(\lambda) = E_{T^*}(\conj{\lambda})$.
 
-        \item If $\mu \in \mathbb{K}$ is another eigenvalue of $T$ distinct from $\lambda$, then $E_\lambda(T)$ and $E_\mu(T)$ are orthogonal.
+        \item \label{enum:normal-orthogonal-eigenspaces} If $\mu \in \mathbb{K}$ is another eigenvalue of $T$ distinct from $\lambda$, then $E_T(\lambda)$ and $E_T(\mu)$ are orthogonal.
 
         \item If $T$ is self-adjoint, then it has an eigenvalue and all its eigenvalues are real.
     \end{enumprop}
@@ -1258,7 +1626,7 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
     so $v \in V$ is an eigenvector for $T$ with eigenvalue $\lambda$ if and only if $v$ is an eigenvector for $T^*$ with eigenvalue $\conj{\lambda}$.
 
     \item[(iii)]
-    Let $v \in E_\lambda(T)$ and $w \in E_\mu(T)$. Since $w$ is also an eigenvector for $T^*$ with eigenvalue $\conj{\mu}$, we have
+    Let $v \in E_T(\lambda)$ and $w \in E_T(\mu)$. Since $w$ is also an eigenvector for $T^*$ with eigenvalue $\conj{\mu}$, we have
     %
     \begin{equation*}
         \lambda \inner{v}{w}
@@ -1281,15 +1649,11 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
     %
     and since $v \neq 0$ we must have $\lambda = \conj{\lambda}$. Hence $\lambda$ is real.
 
-    If $\mathbb{K} = \complex$ then $V$ has a complex eigenvalue, which is real by the above argument. If instead $\mathbb{K} = \reals$, then let $\calV$ be an orthonormal basis for $V$ and consider the matrix representation $\mr{\calV}{T}{\calV}$. This is a real symmetric matrix, in particular a matrix with \emph{complex} entries, i.e. an operator $\complex^n \to \complex^n$. Hence it has a complex eigenvalue $\lambda$, which is real by the above. This means that $\lambda I - \mr{\calV}{T}{\calV}$ is singular when considered as an operator $\complex^n \to \complex^n$. But then it is clearly singular as an operator $\reals^n \to \reals^n$ since an inverse in $\calL(\reals^n)$ would also be an inverse in $\calL(\complex^n)$, so $\lambda$ is an eigenvalue of $T$.
+    If $\mathbb{K} = \complex$ then $V$ has a complex eigenvalue, which is real by the above argument. Assume instead that $\mathbb{K} = \reals$. We give two arguments for the claim. First, consider the complexification $T^\complex$ of $T$. This is self-adjoint by \cref{prop:complexification-adjoint}, so it has a real eigenvalue by the above. But then \cref{lem:complexification-eigenvalue} implies that this also is an eigenvalue of $T$.
+    
+    Alternatively, let $\calV$ be an orthonormal basis for $V$ and consider the matrix representation $\mr{\calV}{T}{\calV}$. This is a real symmetric matrix, in particular a matrix with \emph{complex} entries, i.e. an operator $\complex^n \to \complex^n$. Hence it has a complex eigenvalue $\lambda$, which is real by the above. This means that $\lambda I - \mr{\calV}{T}{\calV}$ is singular when considered as an operator $\complex^n \to \complex^n$. But then it is clearly singular as an operator $\reals^n \to \reals^n$ since an inverse in $\calL(\reals^n)$ would also be an inverse in $\calL(\complex^n)$, so $\lambda$ is an eigenvalue of $T$.
 \end{proofsec}
 \end{proof}
-
-
-
-
-
-
 
 
 Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $U$ be a subspace of $V$ that is invariant under $T$. If $W$ is a complement of $V$, i.e. $V = U \oplus W$, then $W$ is not necessarily invariant under $T$. However, we have the following:
@@ -1303,7 +1667,7 @@ Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $
     Let $v \in U^\perp$. For $u \in U$ we have $Tu \in U$, so
     %
     \begin{equation*}
-        \inner{T^*v}{u}.
+        \inner{T^*v}{u}
             = \inner{v}{Tu}
             = 0.
     \end{equation*}
@@ -1311,32 +1675,129 @@ Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $
     Since this holds for all $u \in U$, it follows that $T^*v \in U^\perp$ as desired.
 \end{proof}
 
-\begin{theorem}[The spectral theorem]
-    Let $\field$ be either the real or the complex numbers, let $V$ be a finite-dimensional inner product space over $\field$, and consider $T \in \calL(V)$. Then $T$ is orthogonally diagonalisable if and only if
+\begin{lemma}
+    \label{lem:spectral-lemma}
+    $V$ be a finite-dimensional inner product space over $\mathbb{K}$, and consider $T \in \calL(V)$. If either
     %
     \begin{enumthm}
-        \item $\field = \reals$ and $T$ is self-adjoint, or
-        \item $\field = \complex$ and $T$ is normal.
+        \item $\mathbb{K} = \reals$ and $T$ is self-adjoint, or
+        \item $\mathbb{K} = \complex$ and $T$ is normal,
+    \end{enumthm}
+    %
+    then $T$ is orthogonally diagonalisable.
+\end{lemma}
+
+\begin{proof}
+    Assume that either $\mathbb{K} = \reals$ and $T$ is self-adjoint, or that $\mathbb{K} = \complex$ and $T$ is normal. We prove by induction in $n = \dim V$ that $T$ is orthogonally diagonalisable. If $n = 1$ then this follows since $T$ has an eigenvalue, so assume that the claim is proved for operators on spaces of dimension strictly less than $n$.
+
+    Let $\lambda \in \spec T$, and consider the corresponding eigenspace $E_T(\lambda)$. If $d \defn \dim E_T(\lambda) = n$, then any orthonormal basis of $E_T(\lambda)$ will suffice. Assume therefore that $0 < d < n$.
+
+    The space $E_T(\lambda) = E_{T^*}(\conj{\lambda})$ is clearly invariant under both $T$ and $T^*$. It follows from \cref{thm:adjoint-invariant-subspace} that $E_T(\lambda)^\perp$ is also invariant under both $T$ and $T^*$. We furthermore have $\dim E_T(\lambda)^\perp = n-d$ and $0 < n-d < n$. Let $T_\parallel \in \calL(E_T(\lambda))$ and $T_\perp \in \calL(E_T(\lambda)^\perp)$ denote the restrictions of $T$ to $E_T(\lambda)$ and $E_T(\lambda)^\perp$ respectively. Both $T_\parallel$ and $T_\perp$ are also self-adjoint or normal, depending on the hypothesis, so the induction hypothesis furnishes orthonormal bases $\calU$ and $\calW$ for $E_T(\lambda)$ and $E_T(\lambda)^\perp$ consisting of eigenvectors of $T$. But then $\calV = \calU \union \calW$ is an orthonormal basis for $V$ as desired.
+\end{proof}
+
+
+\begin{theorem}[The spectral theorem]
+    Let $V$ be a finite-dimensional inner product space over $\mathbb{K}$, and let $T \in \calL(V)$. Then the following are equivalent:
+    %
+    \begin{enumthm}
+        \item \label{enum:spectral-selfadjoint-normal} $\mathbb{K} = \reals$ and $T$ is self-adjoint, or $\mathbb{K} = \complex$ and $T$ is normal.
+        
+        \item \label{enum:spectral-orthogonally-diagonalisable} $T$ is orthogonally diagonalisable.
+
+        \item \label{enum:spectral-operator-decomposition} If $P_\lambda$ is the orthogonal projection onto the eigenspace $E_T(\lambda)$ for $\lambda \in \spec T$, then
+        %
+        \begin{equation*}
+            P_\lambda P_\mu = 0 \text{ for } \lambda \neq \mu,
+            \quad
+            \id_V
+                = \sum_{\lambda \in \spec T} P_\lambda,
+            \quad \text{and} \quad
+            T
+                = \sum_{\lambda \in \spec T} \lambda P_\lambda.
+        \end{equation*}
+        %
+        In particular, $V$ is an orthogonal direct sum of the eigenspaces of $T$, i.e.
+        %
+        \begin{equation*}
+            V
+                = \bigodot_{\lambda \in \spec T} E_T(\lambda).
+        \end{equation*}
+
+        \item \label{enum:spectral-multiplication-operator} $T$ is unitarily (when $\mathbb{K} = \complex$) or orthogonally (when $\mathbb{K} = \reals$) equivalent to a multiplication operator $M_A \in \calL(\mathbb{K}^n)$ where $A$ is a diagonal matrix. If $\calV$ is an orthonormal basis for $V$ consisting of eigenvectors for $T$, then we may choose $A = \mr{\calV}{T}{\calV}$ and
+        %
+        \begin{equation*}
+            T
+                = \coordmap{\calV}\inv \circ M_A \circ \coordmap{\calV},
+        \end{equation*}
+        %
+        with $\coordmap{\calV}$ unitary.
     \end{enumthm}
 \end{theorem}
 
 \begin{proof}
-    Assume that either $\field = \reals$ and $T$ is self-adjoint, or that $\field = \complex$ and $T$ is normal. We prove by induction in $n = \dim V$ that $T$ is orthogonally diagonalisable. If $n = 1$ then this follows since $T$ has an eigenvalue, so assume that the claim is proved for operators on spaces of dimension strictly less than $n$.
+\begin{proofsec}
+    \item[\subcref{enum:spectral-selfadjoint-normal} $\implies$ \subcref{enum:spectral-orthogonally-diagonalisable}]
+    This is just \cref{lem:spectral-lemma}.
 
-    Let $\lambda \in \spec T$, and consider the corresponding eigenspace $E_T(\lambda)$. If $d = \dim E_T(\lambda) = n$, then any orthonormal basis of $E_T(\lambda)$ will suffice. Assume therefore that $0 < d < n$.
-
-    Clearly $E_T(\lambda)$ is invariant under $T$, and we claim that it is also invariant under $T^*$. If $T$ is self-adjoint this is obvious, and if $T$ is normal then for all $w \in E_T(\lambda)$,
+    \item[\subcref{enum:spectral-selfadjoint-normal} \& \subcref{enum:spectral-orthogonally-diagonalisable} $\implies$ \subcref{enum:spectral-operator-decomposition}]
+    The first claim says that distinct eigenspaces are orthogonal, which is just a restatement of \cref{enum:normal-orthogonal-eigenspaces}. To prove the second, let $\calV = (v_1, \ldots, v_n)$ be an orthonormal basis for $V$ consisting of eigenvectors for $T$, and let $\lambda_1, \ldots, \lambda_n$ be the corresponding eigenvalues. Then for any $v = \alpha_1 v_1 + \cdots + \alpha_n v_n$ we have $P_{\lambda_i} v = \alpha_i v_i$, so
     %
     \begin{equation*}
-        TT^*w
-            = T^*Tw
-            = T^*(\lambda w)
-            = \lambda T^* w,
+        \biggl( \sum_{\lambda \in \spec T} P_\lambda \biggr) v
+            = \sum_{\lambda \in \spec T} P_\lambda v
+            = \sum_{i=1}^n \alpha_i v_i
+            = v.
     \end{equation*}
     %
-    so we also have $T^*(w) \in E_T(\lambda)$. It follows from \cref{thm:adjoint-invariant-subspace} that $E_T(\lambda)^\perp$ is also invariant under both $T$ and $T^*$. We furthermore have $\dim E_T(\lambda)^\perp = n-d$ and $0 < n-d < n$. Let $T_\parallel \in \calL(E_T(\lambda))$ and $T_\perp \in \calL(E_T(\lambda)^\perp)$ denote the restrictions of $T$ to $E_T(\lambda)$ and $E_T(\lambda)^\perp$ respectively. Both these operators are also self-adjoint or normal, depending on the hypothesis, so the induction hypothesis furnishes orthonormal bases $\calU$ and $\calW$ for $E_T(\lambda)$ and $E_T(\lambda)^\perp$ consisting of eigenvectors of $T$. But then $\calV = \calU \union \calW$ is an orthonormal basis for $V$ as desired.
+    For the third claim, notice that
+    %
+    \begin{equation*}
+        \biggl( \sum_{\lambda \in \spec T} \lambda P_\lambda \biggr) v
+            = \sum_{\lambda \in \spec T} \lambda P_\lambda v
+            = \sum_{i=1}^n \lambda_i \alpha_i v_i
+            = \sum_{i=1}^n \alpha_i Tv_i
+            = Tv.
+    \end{equation*}
+    %
+    The final claim follows from the first two.
 
-    Conversely, assume that $\calV$ is an orthonormal basis of $V$ consisting of eigenvectors for $T$, and let $A \in \mat{n}{\field}$ be the matrix of $T$ with respect to $\calV$. Then $A$ is diagonal with the eigenvalues of $T$ on its diagonal. If $\field = \reals$ then the eigenvalues of $T$ are real, so $A$ is a real symmetric matrix, and hence $T$ is self-adjoint. If instead $\field = \complex$, then since $A$ is diagonal we have $A^*A = AA^*$, which implies that $T$ is normal.
+    \item[\subcref{enum:spectral-operator-decomposition} $\implies$ \subcref{enum:spectral-orthogonally-diagonalisable}]
+    This follows from the decomposition of $V$ into an orthogonal sum of eigenspaces, by constructing an orthonormal basis for each eigenspace.
+
+    \item[\subcref{enum:spectral-orthogonally-diagonalisable} $\implies$ \subcref{enum:spectral-multiplication-operator}]
+    Let $\calV = (v_1, \ldots, v_n)$ be an ordered orthonormal basis for $\calV$ consisting of eigenvectors for $T$ with corresponding eigenvalues $\lambda_1, \ldots, \lambda_n$, and consider the matrix representation $\mr{\calV}{T}{\calV}$. If $(e_1, \ldots, e_n)$ is the standard basis on $\mathbb{K}^n$, then $\coordvec{v_i}{\calV} = e_i$, and so
+    %
+    \begin{equation*}
+        \mr{\calV}{T}{\calV} \cdot e_i
+            = \mr{\calV}{T}{\calV} \cdot \coordvec{v_i}{\calV}
+            = \coordvec{Tv_i}{\calV}
+            = \lambda_i \coordvec{v_i}{\calV}
+            = \lambda_i e_i.
+    \end{equation*}
+    %
+    Hence $\mr{\calV}{T}{\calV}$ is diagonal, so the basis representation $\coordmap{\calV} \circ T \circ \coordmap{\calV}\inv$ is multiplication by a diagonal matrix. Next notice that
+    %
+    \begin{equation*}
+        T
+            = \coordmap{\calV}\inv \circ (\coordmap{\calV} \circ T \circ \coordmap{\calV}\inv) \circ \coordmap{\calV},
+    \end{equation*}
+    %
+    so it suffices to show that $\coordmap{\calV}$ is unitary (orthogonal). But this follows by \cref{lem:coordinate-map-isometry}.
+
+    \item[\subcref{enum:spectral-multiplication-operator} $\implies$ \subcref{enum:spectral-selfadjoint-normal}]
+    First assume that $\mathbb{K} = \complex$. Since $\coordmap{\calV}$ is unitary we have $\coordmap{\calV}\inv = \coordmap{\calV}^*$, so
+    %
+    \begin{equation*}
+        T^*
+            = (\coordmap{\calV}^* \circ M_A \circ \coordmap{\calV})^*
+            = \coordmap{\calV}^* \circ M_A^* \circ \coordmap{\calV}
+            = \coordmap{\calV}\inv \circ M_{A^*} \circ \coordmap{\calV}.
+    \end{equation*}
+    %
+    Since $A$ is diagonal, $T$ clearly commutes with $T^*$, hence is normal.
+
+    If instead $\mathbb{K} = \reals$, the same argument shows that $T^* = \coordmap{\calV}\inv \circ M_{A\trans} \circ \coordmap{\calV}$, but since $A$ is diagonal this is just $T$, so $T$ is self-adjoint.
+\end{proofsec}
 \end{proof}
 
 
