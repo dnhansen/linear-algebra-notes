@@ -57,7 +57,7 @@
 
 % Lists
 \usepackage{enumitem}
-\setenumerate[0]{label=\normalfont(\arabic*)}
+\setenumerate[0]{label=\normalfont(\alph*)}
 
 % Bibliography
 \usepackage[backend=biber, style=authoryear, maxcitenames=2, useprefix]{biblatex}
@@ -182,6 +182,216 @@
     Let $\calB$ be a basis for $S$. Then this is linearly independent as a subset of $V$, hence is contained in a basis $\calB'$ for $V$ by Theorem~1.9. Then $\calB \subseteq \calB'$, so it follows that $\dim S \leq \dim V$.
 
     Now assume that $\dim S = \dim V < \infty$. Then $\card{\calB} = \card{\calB'}$, but since each basis is finite and one is contained in the other, we must have $\calB = \calB'$. Hence $S = V$.
+\end{solution}
+
+
+\begin{exerciseframed}[1.12]
+    Suppose that $V = U \oplus S_1 = U \oplus S_2$. What can you say about the relationship between $S_1$ and $S_2$? What can you say if $S_1 \subseteq S_2$?
+\end{exerciseframed}
+
+\begin{solution}
+    By Theorem~3.6, all complements of $U$ are isomorphic, so we always have $S_1 \cong S_2$. Assume that $S_1 \subseteq S_2$, and let $s \in S_2$. Then $s = u + s'$ for some $u \in U$ and $s' \in S_1$. But then $s'$ also lies in $S_2$, so since the sum $U \oplus S_2$ is direct we have $u = 0$.
+\end{solution}
+
+
+\chapter{Linear Transformations}
+
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\calL}{\mathcal{L}}
+
+\begin{exerciseframed}[2.15]
+    Suppose that $T \in \calL(V,W)$.
+    %
+    \begin{enumerate}
+        \item Given $L \in \calL(U,W)$, show that there exists an $R \in \calL(V,U)$ with $T = LR$ if and only if $\im T \subseteq \im L$:
+        %
+        \begin{equation*}
+            \begin{tikzcd}
+                V
+                    \ar[rr, "T", bend left]
+                    \ar[r, "R", dashed, swap]
+                & U
+                    \ar[r, "L", swap]
+                & W
+            \end{tikzcd}
+        \end{equation*}
+
+        \item Given $R \in \calL(V,U)$, show that there exists an $L \in \calL(U,W)$ with $T = LR$ if and only if $\ker R \subseteq \ker T$:
+        %
+        \begin{equation*}
+            \begin{tikzcd}
+                V
+                    \ar[rr, "T", bend left]
+                    \ar[r, "R", swap]
+                & U
+                    \ar[r, "L", dashed, swap]
+                & W
+            \end{tikzcd}
+        \end{equation*}
+    \end{enumerate}
+    %
+    In particular, both monomorphisms and epimorphisms split.
+\end{exerciseframed}
+
+\begin{solution}
+\begin{solutionsec}
+    \item Write $W = \ker L \oplus M$ for some subspace $M \subseteq W$. Then the restriction $L|_M \colon M \to \im L$ is bijective, so let $R = (L|_M)\inv T$, which is well-defined since $\im T \subseteq \im L$.
+    
+    \item Write $V = \ker R \oplus M$ for some subspace $M \subseteq V$. Then $R|_M \colon M \to \im R$ is bijective. Writing $U = \im R \oplus N$ for some subspace $N \subseteq U$, let $L = T \circ [(R|_M)\inv, 0]$. For $v \in \ker R \subseteq \ker T$ we have
+    %
+    \begin{equation*}
+        LRv
+            = L(0)
+            = 0
+            = Tv,
+    \end{equation*}
+    %
+    and for $v \in M$ we have
+    %
+    \begin{equation*}
+        LRv
+            = T(R|_M)\inv Rv
+            = Tv,
+    \end{equation*}
+    as required.
+\end{solutionsec}
+\end{solution}
+
+\newcommand{\field}{\mathbb{F}}
+
+\begin{exerciseframed}[2.22]
+    Let $T \in \calL(V)$. If $TS = ST$ for all $S \in \calL(V)$, show that $T = \alpha \id_V$ for some $\alpha \in \field$. I.e., the centre of the ring $\calL(V)$, with multiplication given by function composition, is the subspace $\langle \id_V \rangle$.
+\end{exerciseframed}
+
+\begin{solution}
+    This is obvious if $\dim V \in \{0,1\}$, so assume that $\dim V \geq 2$.
+
+    First let $v \in V \setminus \{0\}$ and write $V = \langle v \rangle \oplus U$ for some subspace $U$, and define $S \in \calL(V)$ by letting $Sv = v$ and $Su = 0$ for $u \in U$. If $T$ and $S$ commute, then
+    %
+    \begin{equation*}
+        STv
+            = TSv
+            = Tv.
+    \end{equation*}
+    %
+    Hence $Tv \in \langle v \rangle$ (which includes the possibility that $Tv = 0$).
+
+    Next assume that $v,w \in V$ are linearly independent, write $V = \langle v, w \rangle \oplus U_2$ for some subspace $U_2$, and define $S$ by letting $Sv = w$, $Sw = v$ and $Su = 0$. Let $\alpha \in \field$ be such that $Tv = \alpha v$. Then
+    %
+    \begin{equation*}
+        Tw
+            = TSv
+            = STv
+            = \alpha Sv
+            = \alpha w.
+    \end{equation*}
+    %
+    Hence $Tv = \alpha v$ for all $v \in V$ as desired.
+\end{solution}
+
+
+\chapter{The Isomorphism Theorems}
+
+\begin{exerciseframed}[3.18]
+    Let $S$ be a subspace of $V$. Prove that $(V/S)^* \cong S^0$.
+\end{exerciseframed}
+
+\begin{solution}
+    Let $\pi \colon V \to V/S$ be the quotient map, such that for every $\phi \in (V/S)^*$ we have
+    %
+    \begin{equation*}
+        \begin{tikzcd}[column sep=tiny]
+            V
+                \ar[rr, "\phi \circ \pi"]
+                \ar[rd, "\pi", swap]
+            && \field \\
+            & V/S
+                \ar[ru, "\phi", swap]
+        \end{tikzcd}
+    \end{equation*}
+    %
+    Consider the map $(V/S)^* \to V^*$ given by $\phi \mapsto \phi \circ \pi$. This is injective by the universal property of quotients. Also by this property, a functional $\psi \in V^*$ factors through $\pi$ if and only if $S \subseteq \ker \psi$, i.e. if $\psi \in S^0$. Hence the image of the above map is precisely $S^0$.
+\end{solution}
+
+
+\addtocounter{chapter}{4}
+\chapter{Eigenvalues and Eigenvectors}
+
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\mr}[3]{{}_{#1}[#2]_{#3}}
+\newcommand{\spec}{\operatorname{Spec}}
+
+\begin{exerciseframed}[8.21]
+    A pair of linear operators $T,S \in \calL(V)$ (with $\dim V < \infty$) is \emph{simultaneously diagonalisable} if there is an ordered basis $\calV$ for $V$ such that $\mr{\calV}{T}{\calV}$ and $\mr{\calV}{S}{\calV}$ are both diagonal. Prove that two diagonalisable operators $T$ and $S$ are simultaneously diagonalisable if and only if they commute.
+\end{exerciseframed}
+
+\newenvironment{displaytheorem}{%
+	\begin{displayquote}\itshape%
+}{%
+	\end{displayquote}%
+}
+
+\begin{solution}
+    First assume that $T$ and $S$ are simultaneously diagonalisable, and write $\calV = (v_1, \ldots, v_n)$. Then each $v_i$ is an eigenvector for both $T$ and $S$, so let $Tv_i = \lambda_i v_i$ and $Sv_i = \mu_i v_i$. Then
+    %
+    \begin{equation*}
+        TSv_i
+            = \mu_i Tv_i
+            = \mu_i \lambda_i v_i
+            = \lambda_i \mu_i v_i
+            = \lambda_i Sv_i
+            = STv_i,
+    \end{equation*}
+    %
+    so $T$ and $S$ commute. Alternatively, we may simply notice that the matrix representations of $T$ and $S$ commute (since they are diagonal), so
+    %
+    \begin{equation*}
+        \mr{\calV}{TS}{\calV}
+            = \mr{\calV}{T}{\calV} \cdot \mr{\calV}{S}{\calV}
+            = \mr{\calV}{S}{\calV} \cdot \mr{\calV}{T}{\calV}
+            = \mr{\calV}{ST}{\calV},
+    \end{equation*}
+    %
+    and hence $TS = ST$.
+
+    In order to prove the converse we will need a couple of lemmas, starting with:
+    %
+    \begin{displaytheorem}
+        Assume that the subspace $U$ is invariant under $T \in \calL(V)$. If $v_1, \ldots, v_k \in V$ are eigenvectors of $T$ corresponding to distinct eigenvalues and $v_1 + \cdots + v_k \in U$, then all $v_i$ lie in $U$.
+    \end{displaytheorem}
+    %
+    We prove this claim by induction. For $k = 1$ this is obvious, so assume that it holds for $k-1$. Then let $\lambda_i$ be the eigenvalue corresponding to $v_i$, and put $u = v_1 + \cdots + v_k$. Notice that
+    %
+    \begin{equation*}
+        Tu - \lambda_1 u
+            = (\lambda_2 - \lambda_1)v_2 + \cdots + (\lambda_k - \lambda_1)v_k.
+    \end{equation*}
+    %
+    The left-hand side lies in $U$. Hence each summand on the right-hand side lies in $U$ by induction, and since the eigenvalues are distinct so do $v_2, \ldots, v_k$. Since $U$ is a subspace, $v_1$ does as well.
+    
+    \begin{displaytheorem}
+        If $T \in \calL(V)$ is diagonalisable and the subspace $U$ is invariant under $T$, then $T|_U \in \calL(U)$ is also diagonalisable.
+    \end{displaytheorem}
+    %
+    Each $u \in U$ is a finite sum of eigenvectors of $T$ corresponding to distinct eigenvalues. Hence each eigenvector also lies in $U$, so
+    %
+    \begin{equation*}
+        U
+            = \bigoplus_{\lambda \in \spec T} U \intersect E_T(\lambda)
+            = \bigoplus_{\lambda \in \spec T|_U} E_{T|_U}(\lambda),
+    \end{equation*}
+    %
+    where the last equality follows since $U \intersect E_T(\lambda)$ is precisely the set of eigenvectors of $T$ corresponding to $\lambda$ that lie in $U$, i.e. the eigenvectors of $T|_U$ corresponding to $\lambda$. 
+    
+    Finally assume that $TS = ST$. If $v \in E_T(\lambda)$, then
+    %
+    \begin{equation*}
+        TSv
+            = STv
+            = \lambda Sv,
+    \end{equation*}
+    %
+    so also $Sv \in E_T(\lambda)$. In other words, every eigenspace of $T$ is invariant under $S$. By the lemma above, $S$ restricted to $E_T(\lambda)$ is thus diagonalisable, hence has a basis $\calV_\lambda$ of eigenvectors of $S$. But these are also eigenvectors of $T$. Then $\calV = \bigunion_{\lambda \in \spec T} \calV_\lambda$ is a basis for $V$ consisting of simultaneous eigenvectors of $T$ and $S$.
 \end{solution}
 
 \end{document}
