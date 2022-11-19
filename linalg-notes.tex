@@ -104,9 +104,12 @@
 \newcommand{\field}{\mathbb{F}}
 \DeclareMathOperator{\chr}{char}
 
+% Break
+\usepackage{adforn}
+\newcommand\fleuronbreak{\fancybreak{\textcolor{linkcolor}{\adfhangingflatleafleft}}}
 
 
-%%%%%%%%%%%%%%%% Gray codes
+%%%%%%%%%%%%%%%% Gray codes TODO
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
 
 \makeatother
@@ -215,7 +218,7 @@ Notice that elementary matrices are invertible, since elementary row operations 
 \begin{proof}
 \begin{proofsec}
     \item[\subcref{enum:lemma-A-invertible} $\Leftrightarrow$ \subcref{enum:lemma-A-equivalent-to-I}]
-    Let $H \in \mat{n}{\field}$ be a row-reduced echelon matrix that is row-equivalent to $A$. Then $H = PA$, where $P \in \mat{n}{\field}$ is a product of elementary matrices. Then $A = P\inv H$, so $A$ is invertible if and only if $H$ is. But the only invertible row-reduced echelon matrix is the identity matrix, so (i) and (ii) are equivalent.
+    Let $H \in \mat{n}{\field}$ be a row-reduced echelon matrix that is row-equivalent to $A$. Then $H = PA$, where $P \in \mat{n}{\field}$ is a product of elementary matrices. Then $A = P\inv H$, so $A$ is invertible if and only if $H$ is. But the only invertible row-reduced echelon matrix is the identity matrix, so \subcref{enum:lemma-A-invertible} and \subcref{enum:lemma-A-equivalent-to-I} are equivalent.
     
     \item[\subcref{enum:lemma-A-equivalent-to-I} $\implies$ \subcref{enum:lemma-A-elementary-matrix-product}]
     As above, there exists a product $P$ of elementary matrices such that $I_n = PA$, so $A = P\inv$.
@@ -830,7 +833,9 @@ We use the notation $\det$ for the unique determinant on $\mat{n}{R}$ for all $n
     and since $\sigma \mapsto \sigma\inv$ is a bijection on $S_n$, it follows that $\det A\trans = \det A$ as desired.
 \end{proof}
 
-Let $A \in \mat{n}{R}$. For $1 \leq i,j \leq n$, the \emph{$(i,j)$-th cofactor} of $A$ is the number $A_{i,j} = (-1)^{i+j} \det M(A)_{i,j}$, where we recall that $M(A)_{i,j}$ is the $(i,j)$-th minor of $A$. The \emph{adjoint matrix} of $A$ is the matrix $\adj A \in \mat{n}{R}$ whose $(i,j)$-th entry is the cofactor $A_{j,i}$. Note that
+\newcommand{\cof}{\operatorname{cof}}
+
+Let $A \in \mat{n}{R}$. For $1 \leq i,j \leq n$, the \emph{$(i,j)$-th cofactor} of $A$ is the number $A_{i,j} = (-1)^{i+j} \det M(A)_{i,j}$, where we recall that $M(A)_{i,j}$ is the $(i,j)$-th minor of $A$. The \emph{cofactor matrix} of $A$ is the matrix $\cof A \in \mat{n}{R}$ whose $(i,j)$-th entry is the cofactor $A_{i,j}$. Note that
 %
 \begin{equation*}
     (A\trans)_{i,j}
@@ -839,7 +844,16 @@ Let $A \in \mat{n}{R}$. For $1 \leq i,j \leq n$, the \emph{$(i,j)$-th cofactor} 
         = A_{j,i},
 \end{equation*}
 %
-so $\adj A\trans = (\adj A)\trans$. We have the following:
+so $\cof A\trans = (\cof A)\trans$. Of greater importance than the cofactor matrix is the \emph{adjoint matrix} of $A$, written $\adj A$, which is just the transpose of $\cof A$. That is, the $(i,j)$-th entry of $\adj A$ is the cofactor $A_{j,i}$. Similar to the cofactor matrix we have
+%
+\begin{equation*}
+    \adj A\trans
+        = (\cof A\trans)\trans
+        = \cof A
+        = (\adj A)\trans.
+\end{equation*}
+%
+We have the following:
 
 \begin{proposition}
     \label{thm:adjoint-matrix-product}
@@ -1064,6 +1078,309 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 \end{proof}
 
 
+\section{Cross products}
+
+\begin{definition}[Cross products]
+    Let $v = (\alpha_1, \alpha_2, \alpha_3)$ and $w = (\beta_1, \beta_2, \beta_3)$ be vectors in $\reals^3$. The \emph{cross product} of $v$ and $w$ is the vector
+    %
+    \begin{equation*}
+        v \crossp w =
+        \begin{pmatrix}
+            \alpha_2 \beta_3 - \alpha_3 \beta_2 \\
+            \alpha_3 \beta_1 - \alpha_1 \beta_3 \\
+            \alpha_1 \beta_2 - \alpha_2 \beta_1
+        \end{pmatrix}.
+    \end{equation*}
+\end{definition}
+%
+Denote the standard basis on $\reals^3$ by $\calE = (e_1, e_2, e_3)$. We easily see that $e_i \crossp e_j = e_k$ when $(i,j,k)$ is a cyclic permutation of $(1,2,3)$.
+
+
+\begin{lemma}
+    \label{lem:cross-product-determinant}
+    Let $v,w,u \in \reals^3$. Then
+    %
+    \begin{equation*}
+        \inner{u}{v \crossp w}
+            = \det(u,v,w).
+    \end{equation*}
+\end{lemma}
+
+\begin{proof}
+    By multilinearity of the inner product and of determinants, it suffices to prove the lemma when $u$ is a basis vector. But it is clear that
+    %
+    \begin{equation*}
+        \inner{e_i}{v \crossp w}
+            = \det(e_i,v,w),
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+
+The product $\inner{u}{v \crossp w}$ is called the \emph{(scalar) triple product} of $u$, $v$ and $w$, and is denoted $[u,v,w]$. We call it the \emph{scalar} triple product to distinguish it from the \emph{vector} triple product $u \crossp (v \crossp w)$, whose properties we will examine in \cref{cor:vector-triple-product}. The scalar triple product has some very nice properties summarised in the following proposition:
+
+\begin{proposition}
+    Let $u,v,w \in \reals^3$.
+    %
+    \begin{enumprop}
+        \item The cross product map $(v,w) \mapsto v \crossp w$ is bilinear.
+
+        \item $v \crossp w = - w \crossp v$.
+
+        \item The triple product $[u,v,w]$ is invariant under cyclic permutations, i.e.
+        %
+        \begin{equation*}
+            [u,v,w]
+                = [v,w,u]
+                = [w,u,v]
+        \end{equation*}
+        %
+        and invariant under interchange of inner product and cross product, i.e.
+        %
+        \begin{equation*}
+            \inner{u}{v \crossp w}
+                = [u,v,w]
+                = \inner{u \crossp v}{w}.
+        \end{equation*}
+
+        \item $v \crossp w = 0$ if and only if $v$ and $w$ are linearly dependent.
+
+        \item $v \crossp w$ is orthogonal to both $v$ and $w$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    The first three claims follow from \cref{lem:cross-product-determinant} since the determinant is multilinear and alternating (hence skew-symmetric).
+    
+    For the fourth claim, if $v$ and $w$ are linearly dependent then $\det(u,v,w) = 0$ for all $u \in \reals^3$, so $v \crossp w = 0$. Conversely, if $v$ and $w$ are linearly independent, then extending to a basis $(u,v,w)$ for $\reals^3$ we have $\det(u,v,w) \neq 0$, implying that $v \crossp w \neq 0$.
+
+    To prove the final claim, notice that
+    %
+    \begin{equation*}
+        [v,v,w]
+            = \det(v,v,w)
+            = 0,
+    \end{equation*}
+    %
+    and similarly for $w$.
+\end{proof}
+
+
+\begin{proposition}
+    Let $a,b,v,w \in \reals^3$. Then
+    %
+    \begin{equation*}
+        \inner{a \crossp b}{v \crossp w}
+            = \det
+            \begin{pmatrix}
+                \inner{a}{v} & \inner{b}{v} \\
+                \inner{a}{w} & \inner{b}{w}
+            \end{pmatrix}.
+    \end{equation*}
+    %
+    In particular,
+    %
+    \begin{equation*}
+        \norm{v \crossp w}^2
+            = \det
+            \begin{pmatrix}
+                \norm{v}^2 & \inner{v}{w} \\
+                \inner{v}{w} & \norm{w}^2
+            \end{pmatrix}.
+    \end{equation*}
+\end{proposition}
+%
+The latter identity is just Lagrange's identity in three dimensions. If $\theta$ is the angle between $v$ and $w$, then $\inner{v}{w} = \norm{v} \, \norm{w} \cos\theta$, so
+%
+\begin{equation*}
+    \norm{v \crossp w}^2
+        = \norm{v}^2 \norm{w}^2 - \inner{v}{w}^2
+        = \norm{v}^2 \norm{w}^2 (1 - \cos^2 \theta)
+        = \norm{v}^2 \norm{w}^2 \sin^2 \theta.
+\end{equation*}
+%
+Hence $\norm{v \crossp w} = \norm{v} \, \norm{w} \, \abs{\sin \theta}$, which is the area of the parallelogram spanned by $v$ and $w$. If $u \in \reals^3$ is another vector and $\phi$ is the angle between $u$ and the normal of the plane spanned by $v$ and $w$ (e.g. $v \crossp w$), then
+%
+\begin{equation*}
+    \abs[\big]{[u,v,w]}
+        = \abs{\inner{u}{v \crossp w}}
+        = \norm{u} \, \norm{v \crossp w} \, \abs{\cos\phi}
+        = \norm{u} \, \norm{v} \, \norm{w} \, \abs{\sin\theta \cos\phi}.
+\end{equation*}
+%
+But this is the volume of the parallelepiped spanned by $u$, $v$ and $w$. This gives a geometric interpretation (or \enquote{proof}) of the invariance of the scalar triple product.
+
+\begin{proof}
+    By linearity it suffices to prove the identity when the four vectors are basis vectors. If $a = b$ or $v = w$ then both sides are zero, so we may assume that $a = e_i$, $b = e_j$, $v = e_k$ and $v = e_l$ with $i \neq j$ and $k \neq l$. By potentially swapping $a$ and $b$ and/or $v$ and $w$ we may assume that $e_i \crossp e_j = e_p$ and $e_k \crossp e_l = e_q$ for some $p,q \in \{1,2,3\}$.
+
+    If $p = q$ then $i = k$ and $j = l$, so both sides equal $1$. If instead $p \neq q$, then the two cross products on the left-hand side are orthogonal, so the inner product is zero. Furthermore, either $k$ or $l$ equals $p$, so one of the rows in the right-hand side matrix is zero, and hence the determinant is zero.
+\end{proof}
+
+
+\begin{corollary}
+    \label{cor:vector-triple-product}
+    Let $u,v,w \in \reals^3$. Then
+    %
+    \begin{equation}
+        \label{eq:bac-cab}
+        u \crossp (v \crossp w)
+            = v\inner{u}{w} - w\inner{u}{v}.
+    \end{equation}
+    %
+    In particular, the cross product satisfies the \emph{Jacobi identity}
+    %
+    \begin{equation}
+        \label{eq:cross-product-Jacobi}
+        u \crossp (v \crossp w)
+            + v \crossp (w \crossp u)
+            + w \crossp (u \crossp v)
+            = 0.
+    \end{equation}
+\end{corollary}
+%
+The identity \cref{eq:bac-cab} is sometimes called the \enquote{bac-cab rule}, a name that would have been self-explanatory had we used the names $a$, $b$ and $c$ instead of $u$, $v$ and $w$. Note that to conform to this rule we need to write the vectors before the scalars.
+
+\begin{proof}
+    For $x \in \reals^3$ we have
+    %
+    \begin{align*}
+        \inner{x}{u \crossp (v \crossp w)}
+            &= [x, u, v \crossp w] \\
+            &= \inner{x \crossp u}{v \crossp w} \\
+            &= \det \begin{pmatrix}
+                \inner{x}{v} & \inner{u}{v} \\
+                \inner{x}{w} & \inner{u}{w}
+            \end{pmatrix} \\
+            &= \inner{x}{v} \inner{u}{w} - \inner{u}{v} \inner{x}{w} \\
+            &= \inner[\big]{x}{ v\inner{u}{w} - w\inner{u}{v} }.
+    \end{align*}
+    %
+    The claim then follows since $x$ was arbitrary.
+\end{proof}
+
+
+\begin{lemma}
+    \label{lem:approximate-singular-matrix-with-invertible}
+    Let $A \in \mat{d}{\reals}$. Every neighbourhood of $A$ contains an invertible matrix different from $A$. In particular, there exists a sequence $(A_n)_{n \in \naturals}$ of invertible matrices different from $A$ such that $A_n \to A$ for $n \to \infty$.
+\end{lemma}
+%
+Since $\mat{d}{\reals}$ is a finite-dimensional vector space, it has a unique vector space topology. More concretely, all norms on $\mat{d}{\reals}$ are Lipschitz equivalent, so we may choose whatever norm we wish. We choose the Euclidean norm, identifying $\mat{d}{\reals}$ with $\reals^{d^2}$.
+
+\begin{proof}
+    Let $t \in \reals \setminus \{0\}$. Then $A - tI$ is invertible if and only if $\det(A - tI) = 0$, but $\det(A - tI)$ is a polynomial in $t$, so it has finitely many roots. Hence the nonzero roots of $\det(A - tI)$ are bounded away from zero, so since $A - tI \to A$ as $t \to 0$, the claim follows.
+\end{proof}
+
+
+\begin{proposition}[Transformation of cross products]
+    Let $u,v,w \in \reals^3$, and let $A \in \mat{3}{\reals}$. Then we have the following:
+    %
+    \begin{enumprop}
+        \item $[Au, Av, Aw] = (\det A) [u,v,w]$.
+        
+        \item $Av \crossp Aw = (\cof A)(v \crossp w) = (\adj A)\trans (v \crossp w)$.
+
+        \item \label{enum:cross-product-orthogonal-transformation} If $A$ is orthogonal, then $A(v \crossp w) = (\det A)(Av \crossp Aw)$.
+    \end{enumprop}
+\end{proposition}
+%
+This gives a geometric interpretation of the determinant. If $[u,v,w]$ is the signed volume of the parallelepiped spanned by $u$, $v$ and $w$, and $[Au,Av,Aw]$ is the signed volume of the parallelepiped spanned by $Au$, $Av$ and $Aw$, then $\det A$ is the factor by which this volume increasing when applying $A$ to each of $u$, $v$ and $w$. In particular, this explains why the determinant of $A$ is zero if and only if $A$ is singular: This means that $A$ sends a basis of $\reals^3$ to a linearly dependent set, and the parallelepiped spanned by such a set has zero volume.
+
+\begin{proof}
+\begin{proofsec}
+    \item[Proof of (i)]
+    Simply notice that
+    %
+    \begin{equation*}
+        [Au, Av, Aw]
+            = \det(Au, Av, Aw)
+            = (\det A) \det(u,v,w)
+            = (\det A) \inner{u}{v \crossp w},
+    \end{equation*}
+    %
+    where the second equality follows since $\det(Au, Av, Aw)$ is also the determinant of the matrix
+    %
+    \begin{equation*}
+        \bigl( Au \mid Av \mid Aw \bigr)
+            = A \bigl( u \mid v \mid w \bigr),
+    \end{equation*}
+    %
+    and the determinant is multiplicative.
+
+    \item[Proof of (ii)]
+    First assume that $A$ is invertible. Then replacing $u$ with $A\inv u$ in (i) we obtain
+    %
+    \begin{align*}
+        \inner{u}{Av \crossp Aw}
+            &= (\det A) \inner{A\inv u}{v \crossp w} \\
+            &= (\det A) \inner{u}{(A\inv)\trans (v \crossp w)} \\
+            &=  \inner{u}{(\cof A)(v \crossp w)},
+    \end{align*}
+    %
+    where the last equality follows from \cref{thm:adjoint-matrix-product}. Hence we obtain the desired identity when $A$ is invertible. Finally notice that both the maps $A \mapsto \cof A$ and $A \mapsto Av \crossp Aw$ are continuous. Hence the claim for general $A$ follows from \cref{lem:approximate-singular-matrix-with-invertible}.
+
+    \item[Proof of (iii)]
+    Notice that $A\inv = A\trans$, so this follows immediately from (ii).
+\end{proofsec}
+\end{proof}
+
+\fleuronbreak
+
+If $A$ is a proper rotation, i.e. if $A$ is orthogonal and $\det A = 1$, then \cref{enum:cross-product-orthogonal-transformation} implies that $A(v \crossp w) = Av \crossp Av$. This allows us to define a cross product on any three-dimensional inner product space, when this is equipped with an orientation.
+
+\newcommand{\calO}{\mathcal{O}}
+
+First, if $\calV$ and $\calW$ are ordered bases for any finite-dimensional real vector space $V$, then we say that $\calV$ and $\calW$ have the \emph{same orientation} if the change of basis operator $\basischange{\calW}{\calV}$ has positive determinant. It follows that orientation partitions the set of ordered bases for $V$ into two \emph{orientation classes}, each called an \emph{orientation} of $V$. If $V$ is equipped with an orientation $\calO$, then we call this class the \emph{positive orientation} of $V$, and the other class the \emph{negative orientation} of $V$. An ordered basis for $V$ is called \emph{positive} if it lies in $\calO$ and \emph{negative} if it does not.
+
+Returning to the case where $V$ is three-dimensional and equipped with an orientation, let $\calV$ and $\calW$ be positive ordered orthonormal bases for $V$. For vectors $v,w \in V$ we can then consider the cross products of their coordinate vectors, i.e.
+%
+\begin{equation*}
+    \coordvec{v}{\calV} \crossp \coordvec{w}{\calV}
+    \quad \text{and} \quad
+    \coordvec{v}{\calW} \crossp \coordvec{w}{\calW}.
+\end{equation*}
+%
+Since $\basischangemat{\calW}{\calV}$ is orthogonal with determinant $1$, we have
+%
+\begin{equation*}
+    \basischangemat{\calW}{\calV}(\coordvec{v}{\calV} \crossp \coordvec{w}{\calV})
+        = \basischangemat{\calW}{\calV} \cdot \coordvec{v}{\calV} \crossp \basischangemat{\calW}{\calV} \cdot \coordvec{w}{\calV}
+        = \coordvec{v}{\calW} \crossp \coordvec{w}{\calW}.
+\end{equation*}
+%
+Hence we have
+%
+\begin{equation*}
+    \coordmap{\calV}\inv(\coordvec{v}{\calV} \crossp \coordvec{w}{\calV})
+        = \coordmap{\calW}\inv(\coordvec{v}{\calW} \crossp \coordvec{w}{\calW}),
+\end{equation*}
+%
+so we may define the cross product of $v$ and $w$ as $v \crossp w = \coordmap{\calV}\inv(\coordvec{v}{\calV} \crossp \coordvec{w}{\calV})$ where $\calV$ is any positive ordered orthonormal basis for $V$. Notice that this means that $\coordvec{v \crossp w}{\calV} = \coordvec{v}{\calV} \crossp \coordvec{w}{\calV}$.
+
+This allows us to generalise most of the above results to general vector spaces. For instance, using that the coordinate map $\coordmap{\calV}$ is an isometry, the scalar triple product of $u,v,w \in V$ is given by
+%
+\begin{equation*}
+    [u,v,w]
+        = \inner{u}{v \crossp w}
+        = \inner{\coordvec{u}{\calV}}{\coordvec{v \crossp w}{\calV}}
+        = \inner{\coordvec{u}{\calV}}{\coordvec{v}{\calV} \crossp \coordvec{w}{\calV}}
+        = \bigl[ \coordvec{u}{\calV}, \coordvec{v}{\calV}, \coordvec{w}{\calV} \bigr],
+\end{equation*}
+%
+and hence it has all the properties of the scalar triple product on $\reals^3$, such as invariance under cyclic permutations. Notice also that it is indeed a \emph{scalar} quantity, in the sense that it is invariant under a change of basis. Similarly, the \enquote{bac-cab rule} \cref{eq:bac-cab} becomes
+%
+\begin{align*}
+    \coordvec{u \crossp (v \crossp w)}{\calV}
+        &= \coordvec{u}{\calV} \crossp \coordvec{v \crossp w}{\calV} \\
+        &= \coordvec{u}{\calV} \crossp (\coordvec{v}{\calV} \crossp \coordvec{w}{\calV}) \\
+        &= \coordvec{v}{\calV} \inner{\coordvec{u}{\calV}}{\coordvec{w}{\calV}} - \coordvec{w}{\calV} \inner{\coordvec{u}{\calV}}{\coordvec{v}{\calV}} \\
+        &= \coordvec{v}{\calV} \inner{u}{w} - \coordvec{w}{\calV} \inner{u}{v} \\
+        &= \coordvec{ v \inner{u}{w} - w \inner{u}{v} }{\calV}.
+\end{align*}
+%
+Hence $u \crossp (v \crossp w) = v \inner{u}{w} - w \inner{u}{v}$ since $\coordmap{\calV}$ is an isomorphism. In particular, the cross product on $V$ also satisfies the Jacobi identity \cref{eq:cross-product-Jacobi}, so $V$ becomes a Lie algebra whose Lie bracket is given by the cross product, i.e. $[v,w] = v \crossp w$.
+
+
 \chapter{Complexification}
 
 If $W$ is a complex vector space, then we may restrict the scalar multiplication $\complex \prod W \to W$ to a map $\reals \prod W \to W$. When we equip $W$ with this restricted scalar multiplication instead of the original one, we call the resulting space the \emph{real version of $W$} and denote it by $W_\reals$.
@@ -1113,7 +1430,7 @@ Notice that this identity holds in any \emph{complex} inner product space, where
     \end{align*}
 \end{definition}
 %
-Note that this is just the action of the dual functor on maps in the category of $\field$-vector spaces. Hence it already satisfies $\id_V^* = \id_{V^*}$ and $(ST)^* = T^* S^*$, so that in particular $(T\inv)^* = (T^*)\inv$ when $T$ is invertible. Furthermore, it is easy to show that the map $T \mapsto T^*$ is linear.
+Note that this is just the action of the dual functor on maps in the category of $\field$-vector spaces. Hence it already satisfies $\id_V^* = \id_{V^*}$ and $(ST)^* = T^* S^*$, so that in particular $(T\inv)^* = (T^*)\inv$ when $T$ is invertible. Furthermore, it is easy to show that the map $T \mapsto T^*$ is linear. It is also injective, since if $Tv \neq Sv$ then there is a $\phi \in W^*$ such that $\phi(Tv) \neq \phi(Sv)$. If $V$ and $W$ are finite-dimensional, it is therefore a linear isomorphism.
 
 \newcommand{\im}{\operatorname{im}}
 
@@ -1133,6 +1450,7 @@ Note that this is just the action of the dual functor on maps in the category of
 \newcommand{\rank}{\operatorname{rank}}
 
 \begin{corollary}
+    \label{cor:adjoint-rank}
     If $T \in \calL(V,W)$ with $V$ and $W$ finite-dimensional, then $\rank T^* = \rank T$.
 \end{corollary}
 
@@ -1162,6 +1480,7 @@ Note that if $\calV = (v_1, \ldots, v_n)$ is an ordered basis for $V$, $\calV^*$
 since both $v_i^*(v_j) = \delta_{ij}$ and $v_i^{**}(v_j^*) = \delta_{ij}$, by definition of the dual basis.
 
 \begin{proposition}
+    \label{prop:adjoint-mr}
     If $T \in \calL(V,W)$ is a linear map between finite-dimensional vector spaces, and $\calV$ and $\calW$ are ordered bases for $V$ and $W$ respectively, then
     %
     \begin{equation*}
@@ -1193,7 +1512,16 @@ since both $v_i^*(v_j) = \delta_{ij}$ and $v_i^{**}(v_j^*) = \delta_{ij}$, by de
 \end{proof}
 
 
-If $V$ is a finite-dimensional inner product space, for $v \in V$ let $\phi_v$ denote the element in $V^*$ given by $\phi_v(w) = \inner{v}{w}$. Further, let $\Phi_V \colon V \to V^*$ denote the (conjugate-)linear isomorphism $v \mapsto \phi_v$.
+\begin{corollary}
+    The row rank and the column rank of a matrix $A \in \mat{m,n}{\field}$ are equal.
+\end{corollary}
+
+\begin{proof}
+    The matrix representation of the multiplication operator $M_A$ with respect to the standard bases on $\field^n$ and $\field^m$ is just $A$ itself, and \cref{prop:adjoint-mr} then implies that the matrix representation of $(M_A)^*$ with respect to the dual bases is $A\trans$. But the rank of an operator equals the rank of any matrix representation of that operator, so \cref{cor:adjoint-rank} implies that $A$ and $A\trans$ have the same (column) rank. Finally, the column rank of $A\trans$ is the row rank of $A$, proving the claim.
+\end{proof}
+
+
+If $V$ is a finite-dimensional inner product space, for $v \in V$ let $\phi_v$ denote the element in $V^*$ given by $\phi_v(w) = \inner{w}{v}$. Further, let $\Phi_V \colon V \to V^*$ denote the (conjugate-)linear isomorphism $v \mapsto \phi_v$.
 
 \begin{theorem}
     Let $V$ and $W$ be finite-dimensional inner product spaces, and let $T \in \calL(V,W)$. Denoting the Hilbert space adjoint of $T$ by $T^\dagger \colon W \to V$ we have
@@ -1366,29 +1694,69 @@ A subspace $U$ of a vector space $V$ is said to be \emph{invariant under $T \in 
 
 Let $V$ and $W$ be finite-dimensional inner product spaces, and let $T \in \calL(V,W)$. Recall that the \emph{adjoint of $T$} is the operator $T^* \in \calL(W,V)$ with the property that
 %
-\begin{equation}
-    \label{eq:adjoint-defining-property}
-    \inner{T^*w}{v}_V = \inner{w}{Tv}_W
-\end{equation}
-%
-for all $v \in V$ and $w \in W$. There first of all exist such $L^*w \in V$ since, if $(v_1, \ldots, v_n)$ is an orthonormal basis for $V$, then
-%
-\begin{align*}
-    \inner{w}{Tv}_W
-        &= \inner[\bigg]{w}{\sum_{i=1}^n \inner{v}{v_i}_V Tv_i}_W \\
-        &= \sum_{i=1}^n \inner{v_i}{v}_V \inner{w}{Tv_i}_W \\
-        &= \inner[\bigg]{ \sum_{i=1}^n \inner{w}{Tv_i}_W v_i }{v}_V.
-\end{align*}
-%
-Hence we may choose $T^*w = \sum_{i=1}^n \inner{w}{Tv_i}_W v_i$. Furthermore, this vector is unique since \cref{eq:adjoint-defining-property} implies that
-%
 \begin{equation*}
-    T^*w
-        = \sum_{i=1}^n \inner{T^*w}{v_i}_V v_i
-        = \sum_{i=1}^n \inner{w}{Tv_i}_W v_i.
+    % \label{eq:adjoint-defining-property}
+    \inner{T^*w}{v}_V = \inner{w}{Tv}_W,
 \end{equation*}
 %
-In particular, $T^*w$ does not depend on a choice of basis for $V$. Notice that taking complex conjugates in \cref{eq:adjoint-defining-property} we find that $T^{**} = T$.
+or by complex conjugation equivalently
+%
+\begin{equation*}
+    \inner{Tv}{w}_W = \inner{v}{T^*w}_V,
+\end{equation*}
+%
+for all $v \in V$ and $w \in W$. An operator with this property is unique if it exists, since if $S \in \calL(W,V)$ is another such operator, then $\inner{v}{Sw}_V = \inner{v}{T^*w}_V$ for all $v$ and $w$, so $S = T^*$.
+
+For existence, for $w \in W$ define $\psi_w \in V^*$ by $\psi_w(v) = \inner{Tv}{w}$, and let $\Psi_W \colon W \to V^*$ be the map $\Psi_W(w) = \psi_w$. Then define $T^* = \Phi_V\inv \circ \Psi_W$. Both $\Phi_V$ and $\Psi_W$ are (conjugate-)linear, so $T^*$ is linear. Furthermore we have
+%
+\begin{equation*}
+    \inner{v}{T^*w}_V
+        = \inner{v}{\Phi_V\inv \circ \Psi_W(w)}_V
+        = \psi_w(v)
+        = \inner{Tv}{w}_W
+\end{equation*}
+%
+as required.
+
+\fleuronbreak
+
+An operator $U \colon V \to W$ is an \emph{isometry} if
+%
+\begin{equation*}
+    \inner{Uv}{Uu}_W
+        = \inner{v}{u}_V
+\end{equation*}
+%
+for all $v,u \in V$. Clearly $U$ is injective. If $U$ is also surjective (i.e. if $\dim V = \dim W < \infty$), then it is called \emph{unitary}. Notice that if $U$ is an isometry, then
+%
+\begin{equation*}
+    \inner{U^*Uv}{u}_V
+        = \inner{Uv}{Uu}_W
+        = \inner{v}{u}_V,
+\end{equation*}
+%
+implying that $U^*U = \id_V$, and the converse clearly also holds. If $U$ is also surjective, then it is an isomorphism and so also $UU^* = \id_W$ (an operator with this property is called a \emph{coisometry}). In this case $U^* = U\inv$.
+
+In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that $T$ is \emph{self-adjoint} if $T^* = T$. Clearly both self-adjoint and unitary operators (with $V = W$) are normal.
+
+% There first of all exist such $L^*w \in V$ since, if $(v_1, \ldots, v_n)$ is an orthonormal basis for $V$, then
+% %
+% \begin{align*}
+%     \inner{w}{Tv}_W
+%         &= \inner[\bigg]{w}{\sum_{i=1}^n \inner{v}{v_i}_V Tv_i}_W \\
+%         &= \sum_{i=1}^n \inner{v_i}{v}_V \inner{w}{Tv_i}_W \\
+%         &= \inner[\bigg]{ \sum_{i=1}^n \inner{w}{Tv_i}_W v_i }{v}_V.
+% \end{align*}
+% %
+% Hence we may choose $T^*w = \sum_{i=1}^n \inner{w}{Tv_i}_W v_i$. Furthermore, this vector is unique since \cref{eq:adjoint-defining-property} implies that
+% %
+% \begin{equation*}
+%     T^*w
+%         = \sum_{i=1}^n \inner{T^*w}{v_i}_V v_i
+%         = \sum_{i=1}^n \inner{w}{Tv_i}_W v_i.
+% \end{equation*}
+% %
+% In particular, $T^*w$ does not depend on a choice of basis for $V$. Notice that taking complex conjugates in \cref{eq:adjoint-defining-property} we find that $T^{**} = T$.
 
 
 \begin{lemma}
@@ -1400,11 +1768,11 @@ In particular, $T^*w$ does not depend on a choice of basis for $V$. Notice that 
         %
         \begin{equation}
             \label{eq:coordinate-map-isometry}
-            \inner{\coordvec{v}{\calV}}{\coordvec{w}{\calV}}
-                = \inner{v}{w}
+            \inner{\coordvec{v}{\calV}}{\coordvec{u}{\calV}}
+                = \inner{v}{u}
         \end{equation}
         %
-        for all $v,w \in V$.
+        for all $v,u \in V$.
     \end{enumlem}
     %
     Let further $T \colon V \to W$ be a linear map, and let $A \in \mat{m,n}{\mathbb{K}}$.
@@ -1508,7 +1876,6 @@ In particular, $T^*w$ does not depend on a choice of basis for $V$. Notice that 
 \end{remark}
 
 
-In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that $T$ is \emph{self-adjoint} if $T^* = T$. Clearly a self-adjoint operator is normal.
 
 \begin{proposition}
     \label{prop:complexification-adjoint}
@@ -1569,6 +1936,25 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
 
 
 \begin{lemma}
+    \label{lemma:mr-eigenvalues}
+    Let $V$ be a finite-dimensional vector space, let $T \in \calL(V)$, and let $\calV$ be an ordered basis for $V$. Then $v \in V$ is an eigenvector for $T$ if and only if $\coordvec{v}{\calV}$ is an eigenvector for $\mr{\calV}{T}{\calV}$ with the same eigenvalue.
+\end{lemma}
+
+\begin{proof}
+    Let $\lambda \in \field$ be the eigenvalue of $v$. Then
+    %
+    \begin{equation*}
+        \mr{\calV}{T}{\calV} \cdot \coordvec{v}{\calV}
+            = \coordvec{Tv}{\calV}
+            = \coordvec{\lambda v}{\calV}
+            = \lambda \coordvec{v}{\calV}.
+    \end{equation*}
+    %
+    For the converse, a similar calculation shows that  $\coordvec{Tv}{\calV} = \coordvec{\lambda v}{\calV}$. Since $\coordmap{\calV}$ is an isomorphism, it follows that $Tv = \lambda v$ as desired.
+\end{proof}
+
+
+\begin{lemma}
     \label{lem:complexification-eigenvalue}
     Let $V$ be a real vector space, and let $T \in \calL(V)$. If $\lambda \in \reals$ is an eigenvalue of the complexification $T^\complex$ of $T$, then $\lambda$ is also an eigenvalue of $T$.
 \end{lemma}
@@ -1591,19 +1977,23 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
     Let $T \in \calL(V)$ be a normal operator.
     %
     \begin{enumprop}
-        \item $\norm{Tv} = \norm{T^*v}$ for all $v \in V$.
+        \item \label{enum:normal-adjoint-norm} $\norm{Tv} = \norm{T^*v}$ for all $v \in V$.
         
         \item \label{enum:normal-adjoint-eigenvalues} If $\lambda \in \mathbb{K}$ is an eigenvalue of $T$, then $\conj{\lambda}$ is an eigenvalue of $T^*$ with the same eigenvectors. In other words, $E_T(\lambda) = E_{T^*}(\conj{\lambda})$.
 
         \item \label{enum:normal-orthogonal-eigenspaces} If $\mu \in \mathbb{K}$ is another eigenvalue of $T$ distinct from $\lambda$, then $E_T(\lambda)$ and $E_T(\mu)$ are orthogonal.
 
-        \item If $T$ is self-adjoint, then it has an eigenvalue and all its eigenvalues are real.
+        \item \label{enum:self-adjoint-eigenvalues-exists-and-real} If $T$ is self-adjoint, then it has an eigenvalue and all its eigenvalues are real.
+
+        \item \label{enum:unitary-eigenvalues-unit-circle} If $T$ is unitary, then all its eigenvalues lie on the unit circle $S^1 \subseteq \complex$.
     \end{enumprop}
 \end{proposition}
+%
+In \cref{cor:self-adjoint-unitary-eigenvalue-characterisation} we will prove the converses of \subcref{enum:self-adjoint-eigenvalues-exists-and-real} and \subcref{enum:unitary-eigenvalues-unit-circle} under the assumption that $T$ is normal, using the spectral theorem (cf. \cref{thm:spectral-theorem}). We will use \subcref{enum:self-adjoint-eigenvalues-exists-and-real} in the proof of the spectral theorem, and we have proved \subcref{enum:unitary-eigenvalues-unit-circle} already to make explicit that it does not depend on the spectral theorem.
 
 \begin{proof}
 \begin{proofsec}
-    \item[(i)]
+    \item[Proof of \subcref{enum:normal-adjoint-norm}]
     Notice that
     %
     \begin{equation*}
@@ -1615,8 +2005,8 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
             = \norm{T^*v}^2.
     \end{equation*}
 
-    \item[(ii)]
-    If $T$ is normal then so is $\lambda \id_V - T$, so (i) implies that
+    \item[Proof of \subcref{enum:normal-adjoint-eigenvalues}]
+    If $T$ is normal then so is $\lambda \id_V - T$, so \subcref{enum:normal-adjoint-norm} implies that
     %
     \begin{equation*}
         \norm{(\lambda \id_V - T)v}
@@ -1625,19 +2015,19 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
     %
     so $v \in V$ is an eigenvector for $T$ with eigenvalue $\lambda$ if and only if $v$ is an eigenvector for $T^*$ with eigenvalue $\conj{\lambda}$.
 
-    \item[(iii)]
-    Let $v \in E_T(\lambda)$ and $w \in E_T(\mu)$. Since $w$ is also an eigenvector for $T^*$ with eigenvalue $\conj{\mu}$, we have
+    \item[Proof of \subcref{enum:normal-orthogonal-eigenspaces}]
+    Let $v \in E_T(\lambda)$ and $u \in E_T(\mu)$. Since $w$ is also an eigenvector for $T^*$ with eigenvalue $\conj{\mu}$, we have
     %
     \begin{equation*}
-        \lambda \inner{v}{w}
-            = \inner{Tv}{w}
-            = \inner{v}{T^*w}
-            = \mu \inner{v}{w}.
+        \lambda \inner{v}{u}
+            = \inner{Tv}{u}
+            = \inner{v}{T^*u}
+            = \mu \inner{v}{u}.
     \end{equation*}
     %
-    Since $\lambda \neq \mu$ we must have $\inner{v}{w} = 0$ as claimed.
+    Since $\lambda \neq \mu$ we must have $\inner{v}{u} = 0$ as claimed.
 
-    \item[(iv)]
+    \item[Proof of \subcref{enum:self-adjoint-eigenvalues-exists-and-real}]
     If $T$ is self-adjoint and $v \in V$ is an eigenvector for $T$ with $\lambda \in \mathbb{K}$, then
     %
     \begin{equation*}
@@ -1649,9 +2039,22 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
     %
     and since $v \neq 0$ we must have $\lambda = \conj{\lambda}$. Hence $\lambda$ is real.
 
-    If $\mathbb{K} = \complex$ then $V$ has a complex eigenvalue, which is real by the above argument. Assume instead that $\mathbb{K} = \reals$. We give two arguments for the claim. First, consider the complexification $T^\complex$ of $T$. This is self-adjoint by \cref{prop:complexification-adjoint}, so it has a real eigenvalue by the above. But then \cref{lem:complexification-eigenvalue} implies that this also is an eigenvalue of $T$.
+    If $\mathbb{K} = \complex$ then $V$ has a complex eigenvalue, which is real by the above argument. Assume instead that $\mathbb{K} = \reals$ and consider the complexification $T^\complex$ of $T$. This is self-adjoint by \cref{prop:complexification-adjoint}, so it has a real eigenvalue by the above. But then \cref{lem:complexification-eigenvalue} implies that this also is an eigenvalue of $T$.
     
-    Alternatively, let $\calV$ be an orthonormal basis for $V$ and consider the matrix representation $\mr{\calV}{T}{\calV}$. This is a real symmetric matrix, in particular a matrix with \emph{complex} entries, i.e. an operator $\complex^n \to \complex^n$. Hence it has a complex eigenvalue $\lambda$, which is real by the above. This means that $\lambda I - \mr{\calV}{T}{\calV}$ is singular when considered as an operator $\complex^n \to \complex^n$. But then it is clearly singular as an operator $\reals^n \to \reals^n$ since an inverse in $\calL(\reals^n)$ would also be an inverse in $\calL(\complex^n)$, so $\lambda$ is an eigenvalue of $T$.
+    % Alternatively, let $\calV$ be an orthonormal basis for $V$ and consider the matrix representation $\mr{\calV}{T}{\calV}$. This is a real symmetric matrix, in particular a matrix with \emph{complex} entries, i.e. an operator $\complex^n \to \complex^n$. Hence it has a complex eigenvalue $\lambda$, which is real by the above. This means that $\lambda I - \mr{\calV}{T}{\calV}$ is singular when considered as an operator $\complex^n \to \complex^n$. But then it is clearly singular as an operator $\reals^n \to \reals^n$ since an inverse in $\calL(\reals^n)$ would also be an inverse in $\calL(\complex^n)$, so $\lambda$ is an eigenvalue of $T$.
+
+    \item[Proof of \subcref{enum:unitary-eigenvalues-unit-circle}]
+    Let $\lambda \in \mathbb{K}$ be an eigenvalue of $T$ with eigenvector $v$. Then
+    %
+    \begin{equation*}
+        \inner{v}{v}
+            = \inner{Tv}{Tv}
+            = \inner{\lambda v}{\lambda v}
+            = \lambda \conj{\lambda} \inner{v}{v}
+            = \abs{\lambda}^2 \inner{v}{v},
+    \end{equation*}
+    %
+    so $\abs{\lambda} = 1$.
 \end{proofsec}
 \end{proof}
 
@@ -1697,6 +2100,7 @@ Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $
 
 
 \begin{theorem}[The spectral theorem]
+    \label{thm:spectral-theorem}
     Let $V$ be a finite-dimensional inner product space over $\mathbb{K}$, and let $T \in \calL(V)$. Then the following are equivalent:
     %
     \begin{enumthm}
@@ -1704,26 +2108,21 @@ Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $
         
         \item \label{enum:spectral-orthogonally-diagonalisable} $T$ is orthogonally diagonalisable.
 
-        \item \label{enum:spectral-operator-decomposition} If $P_\lambda$ is the orthogonal projection onto the eigenspace $E_T(\lambda)$ for $\lambda \in \spec T$, then
+        \item \label{enum:spectral-operator-decomposition} $T$ has the orthogonal spectral resolution
         %
         \begin{equation*}
-            P_\lambda P_\mu = 0 \text{ for } \lambda \neq \mu,
-            \quad
-            \id_V
-                = \sum_{\lambda \in \spec T} P_\lambda,
-            \quad \text{and} \quad
             T
-                = \sum_{\lambda \in \spec T} \lambda P_\lambda.
+                = \sum_{\lambda \in \spec T} \lambda P_\lambda,
         \end{equation*}
         %
-        In particular, $V$ is an orthogonal direct sum of the eigenspaces of $T$, i.e.
+        where $P_\lambda$ is the orthogonal projection onto the eigenspace $E_T(\lambda)$. In particular, $V$ is an orthogonal direct sum of the eigenspaces of $T$, i.e.
         %
         \begin{equation*}
             V
                 = \bigodot_{\lambda \in \spec T} E_T(\lambda).
         \end{equation*}
 
-        \item \label{enum:spectral-multiplication-operator} $T$ is unitarily (when $\mathbb{K} = \complex$) or orthogonally (when $\mathbb{K} = \reals$) equivalent to a multiplication operator $M_A \in \calL(\mathbb{K}^n)$ where $A$ is a diagonal matrix. If $\calV$ is an orthonormal basis for $V$ consisting of eigenvectors for $T$, then we may choose $A = \mr{\calV}{T}{\calV}$ and
+        \item \label{enum:spectral-multiplication-operator} $T$ is unitarily (when $\mathbb{K} = \complex$) or orthogonally (when $\mathbb{K} = \reals$) equivalent to a multiplication operator $M_A \in \calL(\mathbb{K}^n)$ where $A$ is a diagonal matrix, and the diagonal of $A$ contains the eigenvalues of $T$ with multiplicity. If $\calV$ is an ordered orthonormal basis for $V$ consisting of eigenvectors for $T$, then we may choose $A = \mr{\calV}{T}{\calV}$ and
         %
         \begin{equation*}
             T
@@ -1733,6 +2132,15 @@ Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $
         with $\coordmap{\calV}$ unitary.
     \end{enumthm}
 \end{theorem}
+%
+Note that the first part of property \subcref{enum:spectral-operator-decomposition} means that
+%
+\begin{equation*}
+    \id_V
+        = \sum_{\lambda \in \spec T} P_\lambda
+\end{equation*}
+%
+is a resolution of the identity, i.e. that $P_\lambda P_\mu = 0$ for $\lambda \neq \mu$, and that this is composed of orthogonal projections.
 
 \begin{proof}
 \begin{proofsec}
@@ -1765,17 +2173,7 @@ Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $
     This follows from the decomposition of $V$ into an orthogonal sum of eigenspaces, by constructing an orthonormal basis for each eigenspace.
 
     \item[\subcref{enum:spectral-orthogonally-diagonalisable} $\implies$ \subcref{enum:spectral-multiplication-operator}]
-    Let $\calV = (v_1, \ldots, v_n)$ be an ordered orthonormal basis for $\calV$ consisting of eigenvectors for $T$ with corresponding eigenvalues $\lambda_1, \ldots, \lambda_n$, and consider the matrix representation $\mr{\calV}{T}{\calV}$. If $(e_1, \ldots, e_n)$ is the standard basis on $\mathbb{K}^n$, then $\coordvec{v_i}{\calV} = e_i$, and so
-    %
-    \begin{equation*}
-        \mr{\calV}{T}{\calV} \cdot e_i
-            = \mr{\calV}{T}{\calV} \cdot \coordvec{v_i}{\calV}
-            = \coordvec{Tv_i}{\calV}
-            = \lambda_i \coordvec{v_i}{\calV}
-            = \lambda_i e_i.
-    \end{equation*}
-    %
-    Hence $\mr{\calV}{T}{\calV}$ is diagonal, so the basis representation $\coordmap{\calV} \circ T \circ \coordmap{\calV}\inv$ is multiplication by a diagonal matrix. Next notice that
+    Let $\calV = (v_1, \ldots, v_n)$ be an ordered orthonormal basis for $\calV$ consisting of eigenvectors for $T$ with corresponding eigenvalues $\lambda_1, \ldots, \lambda_n$, and consider the matrix representation $\mr{\calV}{T}{\calV}$. If $(e_1, \ldots, e_n)$ is the standard basis on $\mathbb{K}^n$, then \cref{lemma:mr-eigenvalues} implies that the vectors $\coordvec{v_i}{\calV} = e_i$ are eigenvectors for $\mr{\calV}{T}{\calV}$. Hence $\mr{\calV}{T}{\calV}$ is diagonal, so the basis representation $\coordmap{\calV} \circ T \circ \coordmap{\calV}\inv$ is multiplication by a diagonal matrix. Next notice that
     %
     \begin{equation*}
         T
@@ -1797,6 +2195,57 @@ Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $
     Since $A$ is diagonal, $T$ clearly commutes with $T^*$, hence is normal.
 
     If instead $\mathbb{K} = \reals$, the same argument shows that $T^* = \coordmap{\calV}\inv \circ M_{A\trans} \circ \coordmap{\calV}$, but since $A$ is diagonal this is just $T$, so $T$ is self-adjoint.
+\end{proofsec}
+\end{proof}
+
+
+\begin{corollary}
+    \label{cor:self-adjoint-unitary-eigenvalue-characterisation}
+    Let $T \in \calL(V)$ be a normal operator.
+    %
+    \begin{enumcor}
+        \item \label{enum:self-adjoint-eigenvalue-characterisation} $T$ is self-adjoint if and only if $\spec T \subseteq \reals$.
+        \item \label{enum:unitary-eigenvalue-characterisation} $T$ is unitary if and only if $\spec T \subseteq S^1$.
+    \end{enumcor}
+\end{corollary}
+
+\begin{proof}
+\begin{proofsec}
+    \item[Proof of \subcref{enum:self-adjoint-eigenvalue-characterisation}]
+    The \enquote{only if} part follows from \cref{enum:self-adjoint-eigenvalues-exists-and-real}, so assume that $\spec T \subseteq \reals$ and notice that
+    %
+    \begin{equation*}
+        T^*
+            = \biggl( \sum_{\lambda \in \spec T} \lambda P_\lambda \biggr)^*
+            = \sum_{\lambda \in \spec T} \conj{\lambda} P_\lambda^*
+            = \sum_{\lambda \in \spec T} \lambda P_\lambda,
+    \end{equation*}
+    %
+    since each $\lambda \in \reals$, and each $P_\lambda$ is an orthogonal projection, hence self-adjoint.
+    
+    Alternatively, choose a diagonal matrix $A \in \mat{n}{\mathbb{K}}$ in accordance with \cref{enum:spectral-multiplication-operator}. Since the diagonal of $A$ contains the eigenvalues of $T$, we have $A^* = A$, and so it follows that $T^* = T$.
+
+    \item[Proof of \subcref{enum:unitary-eigenvalue-characterisation}]
+    Similarly, the \enquote{only if} part is just \cref{enum:unitary-eigenvalues-unit-circle}. Assume that $\spec T \subseteq S^1$ and notice that
+    %
+    \begin{equation*}
+        T^*
+            = \sum_{\lambda \in \spec T} \conj{\lambda} P_\lambda.
+    \end{equation*}
+    %
+    Since the projections $P_\lambda$ are pairwise orthogonal, we have
+    %
+    \begin{equation*}
+        T^*T
+            = \sum_{\lambda \in \spec T} \conj{\lambda} \lambda P_\lambda
+            = \sum_{\lambda \in \spec T} \abs{\lambda}^2 P_\lambda
+            = \sum_{\lambda \in \spec T} P_\lambda
+            = \id_V,
+    \end{equation*}
+    %
+    so $U$ is unitary.
+    
+    Alternatively, let $A$ be as above. Then all diagonal elements in $A$ are nonzero, so $A$ is invertible, and we clearly have $A^* A = I_n$. Hence also $T^* T = \id_V$, so $T$ is unitary.
 \end{proofsec}
 \end{proof}
 
