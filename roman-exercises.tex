@@ -321,6 +321,98 @@
 \newcommand{\mr}[3]{{}_{#1}[#2]_{#3}}
 \newcommand{\spec}{\operatorname{Spec}}
 
+\begin{exerciseframed}[8.6]
+    An operator $T \in \calL(V)$ is \emph{nilpotent} if $T^n = 0$ for some positive $n \in \naturals$.
+    %
+    \begin{enumerate}
+        \item Show that if $T$ is nilpotent, then the spectrum of $T$ is $\{0\}$.
+        
+        \item Find a non-nilpotent operator $T$ with spectrum $\{0\}$.
+    \end{enumerate}
+\end{exerciseframed}
+
+\begin{solution}
+\begin{solutionsec}
+    \item Let $\lambda \in \field$ be an eigenvalue of $T$, and let $v \in V$ be a corresponding eigenvector. Then
+    %
+    \begin{equation*}
+        0
+            = T^n v
+            = T^{n-1} Tv
+            = \lambda T^{n-1}v
+            = \cdots
+            = \lambda^n v.
+    \end{equation*}
+    %
+    Hence $\lambda^n = 0$, since otherwise $v = \lambda^{-n} 0 = 0$. But then $\lambda = 0$.
+
+    \item Let $S \in \calL(\reals^2)$ be rotation by $\pi/2$ radians, and let $0 \in \calL(\reals)$ be the trivial map. Then $T = S \oplus 0 \in \calL(\reals^3)$ has spectrum $\{0\}$ but is clearly not nilpotent.
+\end{solutionsec}
+\end{solution}
+
+
+\begin{exerciseframed}[8.9]
+    An \emph{involution} is a linear operator $S \in \calL(V)$ for which $S^2 = \id_V$. If $T$ is idempotent, what can you say about $2T - \id_V$? Construct a one-to-one correspondence between the set of idempotents on $V$ and the set of involutions.
+\end{exerciseframed}
+
+\begin{solution}
+    Note that by $2$ we mean $1+1$, where $1$ is the multiplicative identity of $\field$. Since $2^2 = (1+1)^2 = 1+1+1+1 = 4$, we have $(2T)^2 = 2^2 T^2 = 4T^2$ as expected.
+
+    Notice that
+    %
+    \begin{align*}
+        (2T - \id_V)^2
+            &= (2T)^2 + \id_V^2 - 2 \cdot 2T \id_V \\
+            &= 4T^2 + \id_V - 4T \\
+            &= 4T + \id_V - 4T \\
+            &= \id_V,
+    \end{align*}
+    %
+    since $T$ is idempotent. Hence the map $T \mapsto 2T - \id_V$ sends idempotents to involutions.
+
+    Let $2^{-1}$ be the multiplicative inverse of $2 = 1+1$ in $\field$, and similarly for $4^{-1}$. If $S \in \calL(V)$ is an involution, then
+    %
+    \begin{align*}
+        2^{-1}(S + \id_V) \circ 2^{-1}(S + \id_V)
+            &= 4^{-1} (S^2 + S + S + \id_V) \\
+            &= 4^{-1} (\id_V + S + S + \id_V) \\
+            &= 2^{-1} (S + \id_V),
+    \end{align*}
+    %
+    so $2^{-1}(S + \id_V)$ is idempotent. And the map $S \mapsto 2^{-1}(S + \id_V)$ is clearly an inverse to the above map, so these give a bijection between the idempotents and involutions on $\calV$.
+\end{solution}
+
+\newcommand{\trace}{\operatorname{tr}} % TODO add to .sty??
+
+\begin{exerciseframed}[8.20]
+    Let $T \colon \mat{n}{\field} \to \field$ be a function with the following properties: For all matrices $A,B \in \mat{n}{\field}$ and $\alpha \in \field$,
+    %
+    \begin{enumerate}
+        \item $T(\alpha A) = \alpha T(A)$,
+        \item $T(A + B) = T(A) + T(B)$, and
+        \item $T(AB) = T(BA)$.
+    \end{enumerate}
+    %
+    Show that there exists a $\beta \in \field$ such that $T = \beta \trace$.
+\end{exerciseframed}
+
+\begin{solution}
+    The first two properties say that $T$ is linear, so it suffices to prove the claim on a basis for $\mat{n}{\field}$. Furthermore, the third property implies that $T$ is invariant under similarity, in particular under change of basis.
+    
+    Let $E_{ij}$ be the matrix whose $(i,j)$-th entry is $1$ and all other entries are $0$. Notice that $E_{ij} e_k = \delta_{jk} e_i$, so that $E_{ij} E_{kl} = \delta_{jk} E_{il}$. The matrices $E_{ii}$ and $E_{jj}$ are similar, so $\beta \defn T(E_{ii}) = T(E_{jj})$. If $i \neq j$, then notice that $E_{ii} E_{ij} = E_{ij}$ but $E_{ij} E_{ii} = 0$. The third property thus implies that
+    %
+    \begin{equation*}
+        T(E_{ij})
+            = T(E_{ii} E_{ij})
+            = T(E_{ij} E_{ii})
+            = T(0)
+            = 0.
+    \end{equation*}
+    %
+    Hence $T(E_{ij}) = \beta \delta_{ij} = \beta \trace E_{ij}$ as desired.
+\end{solution}
+
+
 \begin{exerciseframed}[8.21]
     A pair of linear operators $T,S \in \calL(V)$ (with $\dim V < \infty$) is \emph{simultaneously diagonalisable} if there is an ordered basis $\calV$ for $V$ such that $\mr{\calV}{T}{\calV}$ and $\mr{\calV}{S}{\calV}$ are both diagonal. Prove that two diagonalisable operators $T$ and $S$ are simultaneously diagonalisable if and only if they commute.
 \end{exerciseframed}
@@ -393,5 +485,41 @@
     %
     so also $Sv \in E_T(\lambda)$. In other words, every eigenspace of $T$ is invariant under $S$. By the lemma above, $S$ restricted to $E_T(\lambda)$ is thus diagonalisable, hence has a basis $\calV_\lambda$ of eigenvectors of $S$. But these are also eigenvectors of $T$. Then $\calV = \bigunion_{\lambda \in \spec T} \calV_\lambda$ is a basis for $V$ consisting of simultaneous eigenvectors of $T$ and $S$.
 \end{solution}
+
+
+\addtocounter{chapter}{1}
+\chapter{Structure Theory for Normal Operators}
+
+\begin{exerciseframed}[10.5]
+    Prove that if $\norm{Tv} = \norm{T^*v}$ for all $v \in V$, where $V$ is complex, then $T$ is normal.
+\end{exerciseframed}
+
+\begin{solution}
+    The assumption implies that
+    %
+    \begin{equation*}
+        \inner{T^*Tv}{v}
+            = \inner{Tv}{Tv}
+            = \norm{Tv}^2
+            = \norm{T^*v}^2
+            = \inner{T^*v}{T^*v}
+            = \inner{TT^*v}{v},
+    \end{equation*}
+    %
+    so the claim follows from Theorem~9.2(2).
+
+    (In fact, this also holds if $V$ is real. For then
+    %
+    \begin{align*}
+        \norm{T^\complex(v + \iu u)}^2
+            &= \norm{Tv}^2 + \norm{Tu}^2 \\
+            &= \norm{T^*v}^2 + \norm{T^*u}^2 \\
+            &= \norm{(T^*)^\complex(v + \iu u)}^2 \\
+            &= \norm{(T^\complex)^*(v + \iu u)}^2,
+    \end{align*}
+    %
+    so $T^\complex$ is normal, and hence $T$ is normal.)
+\end{solution}
+
 
 \end{document}
