@@ -73,17 +73,21 @@
 \newcommand{\calW}{\mathcal{W}}
 \newcommand{\calU}{\mathcal{U}}
 \newcommand{\calE}{\mathcal{E}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
 \DeclareMathOperator{\sign}{sgn}
 \DeclareMathOperator{\adj}{adj}
 \DeclareMathOperator{\spec}{Spec}
 \DeclareMathOperator{\trace}{tr}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\chr}{char}
 
 
 \usepackage{listofitems}
 \setsepchar{,}
 
 \makeatletter
-
 \newcommand{\mat@dims}[1]{%
     \readlist*\@dims{#1}%
     \ifnum \@dimslen=1
@@ -94,6 +98,7 @@
     \@dimsout
 }
 
+
 \newcommand{\matgroup}[3]{\mathrm{#1}_{#2}(#3)}
 \newcommand{\matGL}[2]{\matgroup{GL}{#1}{#2}}
 \newcommand{\trans}{^{\top}}
@@ -102,17 +107,11 @@
 \newcommand{\matO}[1]{\mathrm{O}(#1)}
 \newcommand{\matSO}[1]{\mathrm{SO}(#1)}
 \newcommand{\field}{\mathbb{F}}
-\DeclareMathOperator{\chr}{char}
+\makeatother
 
 % Break
 \usepackage{adforn}
 \newcommand\fleuronbreak{\fancybreak{\textcolor{linkcolor}{\adfhangingflatleafleft}}}
-
-
-%%%%%%%%%%%%%%%% Gray codes TODO
-\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
-
-\makeatother
 
 
 \begin{document}
@@ -247,7 +246,79 @@ Notice that elementary matrices are invertible, since elementary row operations 
 \end{proof}
 
 
-\chapter{Coordinates}
+\chapter{Bases and coordinates}
+
+\section{Bases}
+
+Let $V$ be a vector space. A \emph{Hamel basis} for $V$ is a linearly independent set $\calV \subseteq V$ that spans $V$, i.e. for every $v \in V$ there exist unique (up to ordering) $v_1, \ldots, v_n \in \calV$ and $\alpha_1, \ldots, \alpha_n \in \field$ such that $v = \sum_{i=1}^n \alpha_i v_i$. In other words, a Hamel basis is a maximal linearly independent subset of $V$.
+
+If $V$ is an inner product space, a subset $\calO$ of $V$ is said to be \emph{orthogonal} if $v \neq w$ implies $v \perp w$ for $v,w \in \calO$. Furthermore, if every element of $\calO$ is a unit vector, then $\calO$ is called \emph{orthonormal}. If $\calV$ is a Hamel basis for $V$ that is also an orthogonal/orthonormal set, then $\calV$ is called an \emph{orthogonal/orthonormal Hamel basis}. If every vector in an orthogonal set $\calO$ is nonzero, then $\calO$ gives rise to an orthonormal set by dividing each vector by its norm. This clearly preserves the span of every subset of $\calO$; in particular, if $\calO$ is an orthogonal Hamel basis then this modification yields an orthonormal Hamel basis.
+
+There is also another notion of basis in an inner product space: A maximal orthonormal subset of $V$ is called a \emph{Hilbert basis}. An orthonormal Hamel basis is thus a Hilbert basis, but not vice-versa. For instance, the \enquote{standard basis} of $\reals^\naturals$ consisting of sequences $e_n = (0,\ldots,0,1,0,\ldots)$ with a $1$ in the $n$th place and zeros elsewhere is a Hilbert basis for the space $l^2$, but it is not a Hamel basis for $l^2$ since its linear span is the \emph{coproduct} $\reals^{\oplus\naturals}$, i.e. the subspace of $l^2$ of sequences with finitely many nonzero elements.
+
+Zorn's lemma can be used to show that every vector space has a Hamel basis, and that every inner product space has a Hilbert basis (every inner product space of course also has a Hamel basis). However, not every inner product space has an \emph{orthonormal} Hamel basis. For instance, let $\calH$ be an infinite-dimensional Hilbert space, let $\calO$ be an infinite orthonormal subset of $\calH$, and let $(e_n)_{n\in\naturals}$ be a sequence of distinct elements from $\calO$. Then the sum of the series $\sum_{n=1}^n e_n/n$ lies in $\calH$ by completeness, but this cannot be expressed as a finite linear combination of elements in $\calO$, since the terms in the sum become arbitrarily small.
+
+The argument above in particular shows that the (Hamel) dimension of an infinite-dimensional Hilbert space $\calH$ is uncountable. For if $\calI$ is any countable, linearly independent collection of elements from $\calH$, then the Gram--Schmidt process yields an orthonormal collection $\calO \subseteq \calH$ with $\Span \calO = \Span \calI$. But the above shows that $\calO$ cannot span $\calH$, so neither can $\calI$.
+
+\fleuronbreak
+
+Let $V$ be a vector space. A \emph{series} of subspaces $U_i$ of $V$ is a finite or infinite decreasing sequence
+%
+\begin{equation*}
+    V
+        = U_0
+        \supsetneq U_1
+        \supsetneq U_2
+        \supsetneq \cdots.
+\end{equation*}
+%
+If the sequence is finite, then the \emph{length} of the series is the number of strict inclusions. If the sequence is infinite, then we say that the length of the series is $\infty$. The maximal length of a series of subspaces of $V$ is denoted $l(V)$.
+
+In the proposition below, we write $\dim V = \infty$ if the dimension of $V$ is infinite.
+
+\begin{proposition}
+    Let $V$ be a vector space. Then $\dim V = l(V)$.
+\end{proposition}
+
+\begin{proof}
+    First assume that $V$ is finite-dimensional, and let $\calV = (v_1, \ldots, v_n)$ be a basis for $V$. Then there is a series
+    %
+    \begin{equation*}
+        V
+            = \Span(v_1, \ldots, v_n)
+            \supsetneq \Span(v_1, \ldots, v_{n-1})
+            \supsetneq \cdots
+            \supsetneq \Span(v_1)
+            \supsetneq 0
+    \end{equation*}
+    %
+    of subspaces of $V$, so $\dim V \leq l(V)$. Conversely, let
+    %
+    \begin{equation*}
+        V
+            = U_0
+            \supsetneq U_1
+            \supsetneq U_2
+            \supsetneq \cdots
+    \end{equation*}
+    %
+    be a series of subspaces of $V$. If the series ends with $0$, remove it. Hence all subspaces in the series are nontrivial. Then choose for each $i$ an element $v_i \in U_i \setminus U_{i+1}$, and collect them in a set $\calI$. It is clear that $\calI$ is linearly independent, hence finite. Thus the series is also finite with length $\card{\calI}-1$. Adding back $0$ to the series we obtain a series that is at least as long as the original sequence, and that is of length $\card{\calI} \leq \dim V$. Since the sequence was arbitrary, $l(V) \leq \dim V$.
+
+    Next assume that $V$ is infinite-dimensional. Then $V$ contains a sequence $(v_i)_{i\in\naturals}$ that is linearly independent, so the series
+    %
+    \begin{equation*}
+        V
+            \supseteq \Span \set{v_i}{i \in \naturals}
+            \supsetneq \Span \set{v_i}{i \geq 2}
+            \supsetneq \Span \set{v_i}{i \geq 3}
+            \supsetneq \cdots
+    \end{equation*}
+    %
+    is infinite, and $l(V) = \infty$. Conversely, assume that $V$ has an infinite series. As above we construct a linearly independent set $\calI$ whose size equals the length of the sequence. Thus $V$ contains an infinite linearly independent set, so $\dim V = \infty$.
+\end{proof}
+
+
+\section{Coordinate maps and matrices}
 
 \newcommand{\coordmap}[1]{\phi_{#1}}
 \newcommand{\coordvec}[2]{[#1]_{#2}}
@@ -1066,9 +1137,6 @@ so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eige
 
 \subsection{Trace is sum of eigenvalues}
 
-\newcommand{\Span}{\operatorname{span}}
-
-
 \begin{corollary}
     Let $\field$ be algebraically closed, and let $T \in \calL(V)$. Then the sum of the eigenvalues of $T$ is $\trace T$.
 \end{corollary}
@@ -1158,7 +1226,7 @@ The product $\inner{u}{v \crossp w}$ is called the \emph{(scalar) triple product
     To prove the final claim, notice that
     %
     \begin{equation*}
-        [v,v,w]
+        \inner{v}{v \crossp w}
             = \det(v,v,w)
             = 0,
     \end{equation*}
@@ -1327,8 +1395,6 @@ This gives a geometric interpretation of the determinant. If $[u,v,w]$ is the si
 \fleuronbreak
 
 If $A$ is a proper rotation, i.e. if $A$ is orthogonal and $\det A = 1$, then \cref{enum:cross-product-orthogonal-transformation} implies that $A(v \crossp w) = Av \crossp Av$. This allows us to define a cross product on any three-dimensional inner product space, when this is equipped with an orientation.
-
-\newcommand{\calO}{\mathcal{O}}
 
 First, if $\calV$ and $\calW$ are ordered bases for any finite-dimensional real vector space $V$, then we say that $\calV$ and $\calW$ have the \emph{same orientation} if the change of basis operator $\basischange{\calW}{\calV}$ has positive determinant. It follows that orientation partitions the set of ordered bases for $V$ into two \emph{orientation classes}, each called an \emph{orientation} of $V$. If $V$ is equipped with an orientation $\calO$, then we call this class the \emph{positive orientation} of $V$, and the other class the \emph{negative orientation} of $V$. An ordered basis for $V$ is called \emph{positive} if it lies in $\calO$ and \emph{negative} if it does not.
 
@@ -1830,7 +1896,7 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
             = \coordmap{\calV} \circ T^* \circ \coordmap{\calW}\inv,
     \end{equation*}
     %
-    and taking standard matrix representations, it follows from (iii) that $(\mr{\calW}{T}{\calV})^* = \mr{\calV}{T^*}{\calW}$.
+    and taking standard matrix representations, it follows from (ii) that $(\mr{\calW}{T}{\calV})^* = \mr{\calV}{T^*}{\calW}$.
 \end{proofsec}
 \end{proof}
 
@@ -2201,13 +2267,15 @@ is a resolution of the identity, i.e. that $P_\lambda P_\mu = 0$ for $\lambda \n
 
 \begin{corollary}
     \label{cor:self-adjoint-unitary-eigenvalue-characterisation}
-    Let $T \in \calL(V)$ be a normal operator.
+    Let $T \in \calL(V)$ be a normal operator on a complex vector space $V$.
     %
     \begin{enumcor}
         \item \label{enum:self-adjoint-eigenvalue-characterisation} $T$ is self-adjoint if and only if $\spec T \subseteq \reals$.
         \item \label{enum:unitary-eigenvalue-characterisation} $T$ is unitary if and only if $\spec T \subseteq S^1$.
     \end{enumcor}
 \end{corollary}
+%
+Note that this does not hold on a real vector space, since then a normal operator is not necessarily diagonalisable.
 
 \begin{proof}
 \begin{proofsec}
