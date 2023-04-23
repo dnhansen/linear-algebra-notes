@@ -2318,6 +2318,93 @@ Note that this does not hold on a real vector space, since then a normal operato
 \end{proof}
 
 
+\chapter{Projections}
+
+Let $V$ be an $\field$-vector space. A linear operator $P \colon V \to V$ is called a \emph{projection} if it is idempotent, i.e. if $P^2 = P$.
+
+\begin{proposition}
+    A linear map $P \colon V \to V$ is a projection if and only if there exist subspaces $U$ and $W$ of $V$ such that $V = U \oplus W$ and $P|_U = \iota_U$. In this case $U = \im P$ and $W = \ker P$.
+\end{proposition}
+%
+We say that $P$ is the projection onto $U$ along $W$.
+
+\begin{proof}
+    Assume that $P$ is a projection, and let $v \in \im P$. Then $v = Pu$ for some $u \in V$, and
+    %
+    \begin{equation*}
+        Pv
+            = P^2 u
+            = Pu
+            = v.
+    \end{equation*}
+    %
+    If also $v \in \ker P$, then $v = 0$. Furthermore, for any $v \in V$ we have $v = Pv + (v - Pv) \in \im P \oplus \ker P$, so $\im P$ and $\ker P$ are indeed complements in $V$.
+
+    The converse is obvious, and so is the characterisation of $U$ and $W$.
+\end{proof}
+
+Now let $V$ be a real finite-dimensional\footnote{Since projection operators are clearly bounded, the discussion below readily generalises to infinite-dimensional inner product spaces.} inner product space. A projection $P \colon V \to V$ is \emph{orthogonal} if $\im P$ and $\ker P$ are orthogonal subspaces of $V$.
+
+\begin{proposition}
+    A projection $P \colon V \to V$ is orthogonal if and only if $P$ is self-adjoint.
+\end{proposition}
+
+\begin{proof}
+    Say that $P$ is a projection onto $U$ along $W$. Assume that $P$ is orthogonal and let $v,w \in V$. Since then $Pv \in U$ and $v - Pv \in W$, and similarly for $w$, we get
+    %
+    \begin{equation*}
+        \inner{v - Pv}{Pw}
+            = 0
+            = \inner{Pv}{w - Pw}.
+    \end{equation*}
+    %
+    This implies that
+    %
+    \begin{equation*}
+        \inner{v}{Pw}
+            = \inner{Pv}{Pw}
+            = \inner{Pv}{w}
+            = \inner{v}{P^* w},
+    \end{equation*}
+    %
+    which shows that $P = P^*$.
+
+    Conversely assume that $P$ is self-adjoint. For $u \in U$ and $w \in W$ we then have
+    %
+    \begin{equation*}
+        \inner{u}{w}
+            = \inner{Pu}{w}
+            = \inner{u}{Pw}
+            = \inner{u}{0}
+            = 0,
+    \end{equation*}
+    %
+    so $U$ and $W$ are orthogonal.
+\end{proof}
+
+
+\begin{proposition}
+    Let $T \colon V \to W$ be an injective linear operator between real inner product spaces $V$ and $W$, and let $P$ be the orthogonal projection onto $\im T$. Then $P = T(T^* T)\inv T^*$.
+\end{proposition}
+
+\begin{proof}
+    First note that $T^* T$ is indeed injective (hence invertible) since $T$ is. This follows from the identity $\ker T^* = (\im T)^\perp$.
+
+    Next notice that the rank of $P$ is $\dim \im T$. But $T^*$ is surjective since $T$ is injective, so the rank of $T(T^* T)\inv T^*$ is also $\dim \im T$. It thus suffices to show that $P$ and $T(T^* T)\inv T^*$ agree on $\im T$, and writing $w = Tv$ we have
+    %
+    \begin{equation*}
+        T(T^* T)\inv T^* w
+            = T(T^* T)\inv (T^* T) v
+            = Tv
+            = w,
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+
+
+
 \nocite{*}
 
 \printbibliography
