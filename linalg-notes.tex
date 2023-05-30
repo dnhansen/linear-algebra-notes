@@ -118,6 +118,11 @@
 
 \maketitle
 
+\chapter{Introduction}
+
+These notes cover aspects of linear algebra that I have not found satisfactory expositions of elsewhere. We generally restrict ourselves to the finite-dimensional case, unless results can be generalised without significant effort. For instance, in the context of inner product spaces there is of course no loss in generality by restricting to the real or the complex numbers, and the elementary theory of Hilbert space adjoints is not simplified substantially by the assumption of finite dimension, so we make no such assumption. On the other hand, we only prove the spectral theorem for normal operators on finite-dimensional spaces.
+
+
 \chapter{Linear equations and matrices}
 
 \section{Linear equations}
@@ -467,7 +472,7 @@ commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \
 
 \begin{proposition}
     \label{prop:mr-properties}
-    Let $V$ and $W$ be finite-dimensional $\field$-vector spaces with ordered bases $\calV \in V^n$ and $\calW \in W^m$, respectively. The map
+    Let $V$ and $W$ be finite-dimensional $\field$-vector spaces with ordered bases $\calV = (v_1, \ldots, v_n) \in V^n$ and $\calW \in W^m$, respectively. The map
     %
     \begin{align*}
         \mr{\calW}{\,\cdot\,}{\calV} \colon \lin(V,W) &\to \mat{m,n}{\field}, \\
@@ -477,6 +482,8 @@ commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \
     is a linear isomorphism. Let $T \colon V \to W$ and $S \colon W \to U$ be linear maps, and let $\calU \in U^l$ be an ordered basis for $U$. Then
     %
     \begin{enumprop}
+        \item \label{enum:mr-explicit-formula} $\mr{\calW}{T}{\calV} = \bigl( \coordvec{Tv_1}{\calW} \mid \cdots \mid \coordvec{Tv_n}{\calW} \bigr)$.
+
         \item \label{enum:mr-vector-multiplication} $\coordvec{Tv}{\calW} = \mr{\calW}{T}{\calV} \cdot \coordvec{v}{\calV}$ for all $v \in V$.
 
         \item \label{enum:mr-of-identity-map} If $\calV'$ is another basis for $V$, then $\mr{\calV'}{\id_V}{\calV} = \basischangemat{\calV'}{\calV}$.
@@ -491,6 +498,19 @@ commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \
     For the first claim, notice that the map $T \mapsto \coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is a linear isomorphism, since pre- and postcomposition with linear isomorphisms are themselves linear isomorphisms. Composing this map with $\calM$ yields $\mr{\calW}{\,\cdot\,}{\calV}$, so this is a linear isomorphism by \cref{prop:smr-properties}.
     %
     \begin{proofsec}
+        \item[Proof of \subcref{enum:mr-explicit-formula}]
+        If $(e_1, \ldots, e_n)$ is the standard basis for $\field^n$, then the definition of the standard matrix representation yields that the $i$th column of $\mr{\calW}{T}{\calV}$ is given by
+        %
+        \begin{equation*}
+            \mr{\calW}{T}{\calV} \cdot e_i
+                = \smr{\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv} \cdot e_i
+                = (\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv) e_i
+                = \coordmap{\calW}(Tv_i)
+                = \coordvec{Tv_i}{\calW},
+        \end{equation*}
+        %
+        as claimed.
+
         \item[Proof of \subcref{enum:mr-vector-multiplication}]
         Notice that
         %
@@ -1454,17 +1474,41 @@ If $W$ is a complex vector space, then we may restrict the scalar multiplication
 Conversely, if $V$ is a real vector space then we define the \emph{complexification of $V$} as the vector space $V^\complex$ whose underlying set is $V \prod V$, and which is equipped with componentwise addition and the complex scalar multiplication
 %
 \begin{equation*}
-    (a + \iu b)(v,u)
-        = (av - bu, au + bv),
+    (\alpha + \iu \beta)(v,u)
+        = (\alpha v - \beta u, \alpha u + \beta v),
 \end{equation*}
 %
-for $a,b \in \reals$ and $v,u \in V$. We denote the vector $(v,u)$ by $v + \iu u$.
+for $\alpha,\beta \in \reals$ and $v,u \in V$. Notice that the map $v \mapsto (v,0)$ is injective (and real linear), that $(v,0) + (w,0) = (v+w,0)$, and that $\alpha(v,0) = (\alpha v,0)$ for $\alpha \in \reals$, so $V^\complex$ contains an isomorphic copy of $V$, and we may identify elements $v \in V$ with elements $(v,0) \in V^\complex$. Furthermore, notice that $(v,u) = (v,0) + \iu (u,0)$, so by the above identification we may write $(v,u) = v + \iu u$.
 
-% \newcommand{\cpx}{\mathrm{cpx}}
+We briefly study the relationship between a real vector space and its complexification.
 
-% We define the \emph{complexification map} $\cpx \colon V \to V^\complex$ by $\cpx(v) = v + \iu 0$. This is clearly real-linear and injective, so it induces a real-linear isomorphism between $V$ and its image in $V^\complex$. More precisely, a linear isomorphism between $V$ and a subspace of the real version $(V^\complex)_\reals$ of $V^\complex$.
+\newcommand{\calB}{\mathcal{B}}
 
-If $T \colon V \to W$ is a linear map between real vector spaces, then we define the complexification of $T$ by
+\begin{proposition}
+    If $\calB$ is a basis for $V$, then $\calB^\complex = \set{b + \iu 0}{b \in \calB}$ is a basis for $V^\complex$. In particular, $\dim_\reals V = \dim_\complex V^\complex$.
+\end{proposition}
+
+\begin{proof}
+    Let $v + \iu u \in V^\complex$. Then there are real numbers $\alpha_b$ and $\beta_b$ (finitely many nonzero) such that $v = \sum_{b \in \calB} \alpha_b b$ and $u = \sum_{b \in \calB} \beta_b b$. But then
+    %
+    \begin{equation*}
+        v + \iu u
+            = \sum_{b \in \calB} \alpha_b b
+                + \iu \sum_{b \in \calB} \beta_b b
+            = \sum_{b \in \calB} (\alpha_b + \iu \beta_b) b
+            = \sum_{b \in \calB} (\alpha_b + \iu \beta_b) (b + \iu 0),
+    \end{equation*}
+    %
+    so $\calB^\complex$ spans $V^\complex$. Furthermore, if $v + \iu u = 0$, then the previous computation shows that $\sum_{b \in \calB} \alpha_b b = 0 = \sum_{b \in \calB} \beta_b b$. Linear independence of $\calB$ then implies that $\alpha_b = \beta_b = 0$ for all $b \in \calB$.
+\end{proof}
+
+\begin{example}
+    Notice that $(\reals^n)^\complex \cong \complex^n$. The above proposition then implies that the standard basis for $\reals^n$ gives rise to a basis for $\complex^n$, and we notice that this is precisely the standard basis.
+\end{example}
+
+\fleuronbreak
+
+We now show how to extend linear maps defined between real vector spaces to the complexifications of those spaces. If $T \colon V \to W$ is a linear map between real vector spaces, then we define the complexification of $T$ by
 %
 \begin{align*}
     T^\complex \colon V^\complex &\to W^\complex, \\
@@ -1473,39 +1517,108 @@ If $T \colon V \to W$ is a linear map between real vector spaces, then we define
 %
 That is, $T^\complex$ is just the product map $T \prod T$. This is easily seen to be complex-linear.
 
-If $V$ is a real inner product space, then we define an inner product by
+
+\begin{proposition}
+    \label{prop:complexification-eigenvalue}
+    Let $V$ be a real vector space, and let $T \in \calL(V)$. If $\lambda \in \reals$ is an eigenvalue of the complexification $T^\complex$ of $T$, then $\lambda$ is also an eigenvalue of $T$. Furthermore, if $v + \iu u \in E_{T^\complex}(\lambda)$ then $v,u \in E_T(\lambda)$.
+\end{proposition}
 %
-\begin{equation*}
+Note that this does not mean that $v$ and $u$ are eigenvectors of $T$ since they might be zero. But if $v + \iu u$ is an eigenvector of $T^\complex$, then at least one of $v$ and $u$ is nonzero and hence an eigenvector of $T$.
+
+\begin{proof}
+    Let $v + \iu u \in V^\complex$ be an eigenvector of $T^\complex$ corresponding to $\lambda$. Then
+    %
+    \begin{equation*}
+        Tv + \iu Tu
+            = T^\complex (v + \iu u)
+            = \lambda(v + \iu u)
+            = \lambda v + \iu \lambda u.
+    \end{equation*}
+    %
+    It follows that $Tv = \lambda v$ and $Tu = \lambda u$ as desired.
+\end{proof}
+
+
+If $V$ is finite-dimensional and $\calV$ is an ordered basis for $V$, then $\calV^\complex$ carries the obvious ordering. Since $V$ and $V^\complex$ have the same dimension, the following result is not surprising:
+
+\begin{proposition}
+    Let $V$ and $W$ be a finite-dimensional real vector spaces, and consider $T \colon V \to W$. If $\calV = (v_1, \ldots, v_n)$ and $\calW$ are ordered bases of $V$ and $W$ respectively, then
+    %
+    \begin{equation*}
+        \mr{\calW^\complex}{T^\complex}{\calV^\complex}
+            = \mr{\calW}{T}{\calV}.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    By \cref{enum:mr-explicit-formula}, the $i$th column of $\mr{\calW^\complex}{T^\complex}{\calV^\complex}$ is given by
+    %
+    \begin{equation*}
+        \coordvec{T^\complex (v_i + \iu 0)}{\calW^\complex}
+            = \coordvec{Tv_i + \iu 0}{\calW^\complex}
+            = \coordvec{Tv_i}{\calW},
+    \end{equation*}
+    %
+    that is, the $i$th column of $\mr{\calW}{T}{\calV}$, which proves the claim.
+\end{proof}
+
+\fleuronbreak
+
+Finally, if $V$ is a real normed space, then we define a norm on $V^\complex$ by the equation
+%
+\begin{equation}
+    \label{eq:complexification-norm}
+    \norm{v + \iu u}^2
+        = \norm{v}^2 + \norm{u}^2.
+\end{equation}
+%
+Furthermore, if $V$ is an inner product space, then we define an inner product on $V^\complex$ by
+%
+\begin{equation}
+    \label{eq:complexification-inner-product}
     \inner{v + \iu u}{x + \iu y}
         = \inner{v}{x}
           + \inner{u}{y}
           + \iu (\inner{u}{x} - \inner{v}{y}).
-\end{equation*}
+\end{equation}
 %
-Notice that this identity holds in any \emph{complex} inner product space, where the notation $v + \iu u$ instead means the sum of $v$ and the scalar product of $\iu$ and $u$ (in justifying this claim, the reader will recall that the inner product on a complex space is \emph{sesqui}linear).
+The norm induced by this inner product agrees with the norm defined by \cref{eq:complexification-norm}. Notice that the identity \cref{eq:complexification-inner-product} holds in any \emph{complex} inner product space, where the notation $v + \iu u$ instead means the sum of $v$ and the scalar product of $\iu$ and $u$ (in justifying this claim, the reader will recall that the inner product on a complex space is \emph{sesqui}linear).
 
 
 \chapter{Operator adjoints}
+
+\newcommand{\calC}{\mathcal{C}}
+\renewcommand{\hom}[1][]{\mathrm{Hom}_{#1}}
+
+Let $\calC$ be a locally small category, and let $f \colon A \to B$ be an arrow in $\calC$. For every object $C$, precomposition with $f$ then induces an arrow
+%
+\begin{align*}
+    \hom[\calC](f,C) \colon \hom[\calC](B,C) &\to \hom[\calC](A,C), \\
+        g &\mapsto g \circ f.
+\end{align*}
+%
+This gives rise to a contravariant functor $\hom[\calC](-,C) \colon \calC \to \mathbf{Set}$. Specialising to the case where $\calC$ is the category $\field\text{-}\mathbf{Vect}$ and where $C$ is the field $\field$ (considered as a vector space), we obtain the functor $(-)^*$ sending a vector space $V$ to its (algebraic) dual $V^*$, and a linear map $T$ to its pullback. Since we will use the notation $T^*$ for the Hilbert space adjoint, we instead write $T^\dagger$ for the pullback of $T$, following \textcite{follandrealanalysis}. We also call this the \emph{operator adjoint} of $T$:
 
 \begin{definition}[Operator adjoints]
     Let $V$ and $W$ be $\field$-vector spaces, and let $T \colon V \to W$ be a linear map. The \emph{(operator) adjoint} of $T$ is the pullback
     %
     \begin{align*}
-        T^* \colon W^* &\to V^*, \\
+        T^\dagger \colon W^* &\to V^*, \\
         \phi &\mapsto \phi \circ T.
     \end{align*}
 \end{definition}
 %
-Note that this is just the action of the dual functor on maps in the category of $\field$-vector spaces. Hence it already satisfies $\id_V^* = \id_{V^*}$ and $(ST)^* = T^* S^*$, so that in particular $(T\inv)^* = (T^*)\inv$ when $T$ is invertible. Furthermore, it is easy to show that the map $T \mapsto T^*$ is linear. It is also injective, since if $Tv \neq Sv$ then there is a $\phi \in W^*$ such that $\phi(Tv) \neq \phi(Sv)$. If $V$ and $W$ are finite-dimensional, it is therefore a linear isomorphism.
+This already satisfies $\id_V^* = \id_{V^*}$ and $(ST)^\dagger = T^\dagger S^\dagger$ by functoriality, so that in particular $(T\inv)^\dagger = (T^\dagger)\inv$ when $T$ is invertible. Furthermore, it is easy to show that the map $T \mapsto T^\dagger$ is linear. It is also injective, since if $Tv \neq Sv$ then there is a $\phi \in W^*$ such that $\phi(Tv) \neq \phi(Sv)$. If $V$ and $W$ are finite-dimensional, it is therefore a linear isomorphism.
 
 \newcommand{\im}{\operatorname{im}}
 
 \begin{proposition}
+    \label{prop:operator-adjoint-kernel-image}
     Let $T \in \calL(V,W)$.
     %
     \begin{enumprop}
-        \item $\ker T^* = (\im T)^0$.
-        \item $\im T^* = (\ker T)^0$.
+        \item $\ker T^\dagger = (\im T)^0$.
+        \item $\im T^\dagger = (\ker T)^0$.
     \end{enumprop}
 \end{proposition}
 
@@ -1513,26 +1626,29 @@ Note that this is just the action of the dual functor on maps in the category of
     \textcite[Theorem~3.19]{romanlinalg}.
 \end{proof}
 
+
+\section{Finite-dimensional spaces}
+
 \newcommand{\rank}{\operatorname{rank}}
 
 \begin{corollary}
     \label{cor:adjoint-rank}
-    If $T \in \calL(V,W)$ with $V$ and $W$ finite-dimensional, then $\rank T^* = \rank T$.
+    If $T \in \calL(V,W)$ with $V$ and $W$ finite-dimensional, then $\rank T^\dagger = \rank T$.
 \end{corollary}
 
 \begin{proof}
     Recall that the dimension of $(\ker T)^0$ equals the codimension of $\ker T$, which is just $\dim V - \dim \ker T$ when $V$ is finite-dimensional (cf. \cite[Theorem~3.15]{romanlinalg}). We then have
     %
     \begin{equation*}
-        \rank T^*
-            = \dim \im T^*
+        \rank T^\dagger
+            = \dim \im T^\dagger
             = \dim (\ker T)^0
             = \dim V - \dim \ker T
             = \dim \im T
-            = \rank T,
+            = \rank T
     \end{equation*}
     %
-    as desired.
+    by \cref{prop:operator-adjoint-kernel-image}, as desired.
 \end{proof}
 
 Note that if $\calV = (v_1, \ldots, v_n)$ is an ordered basis for $V$, $\calV^*$ the corresponding dual basis, and $\calV^{**}$ the double dual basis, then for $\phi = \phi_1 v_1^* + \cdots + \phi_n v_n^*$ we have
@@ -1550,8 +1666,8 @@ since both $v_i^*(v_j) = \delta_{ij}$ and $v_i^{**}(v_j^*) = \delta_{ij}$, by de
     If $T \in \calL(V,W)$ is a linear map between finite-dimensional vector spaces, and $\calV$ and $\calW$ are ordered bases for $V$ and $W$ respectively, then
     %
     \begin{equation*}
-        \mr{\calV^*}{T^*}{\calW^*}
-            = (\mr{\calW}{T}{\calV})\trans.
+        \mr{\calV^*}{T^\dagger}{\calW^*}
+            = \bigl( \mr{\calW}{T}{\calV} \bigr)\trans.
     \end{equation*}
 \end{proposition}
 
@@ -1559,18 +1675,18 @@ since both $v_i^*(v_j) = \delta_{ij}$ and $v_i^{**}(v_j^*) = \delta_{ij}$, by de
     Write $\calV = (v_1, \ldots, v_n)$ and $\calW = (w_1, \ldots, w_m)$. Then
     %
     \begin{equation*}
-        (\mr{\calW}{T}{\calV})_{ij}
-            = (\coordvec{Tv_j}{\calW})_i
+        \bigl( \mr{\calW}{T}{\calV} \bigr)_{ij}
+            = \bigl( \coordvec{Tv_j}{\calW} \bigr)_i
             = w_i^*(Tv_j),
     \end{equation*}
     %
     and
     %
     \begin{equation*}
-        (\mr{\calV^*}{T^*}{\calW^*})_{ij}
-            = (\coordvec{T^* w_j^*}{\calV^*})_i
-            = v_i^{**}(T^* w_j^*)
-            = T^* w_j^*(v_i)
+        \bigl( \mr{\calV^*}{T^\dagger}{\calW^*} \bigr)_{ij}
+            = \bigl( \coordvec{T^\dagger w_j^*}{\calV^*} \bigr)_i
+            = v_i^{**}(T^\dagger w_j^*)
+            = T^\dagger w_j^*(v_i)
             = w_j^*(Tv_i).
     \end{equation*}
     %
@@ -1583,57 +1699,52 @@ since both $v_i^*(v_j) = \delta_{ij}$ and $v_i^{**}(v_j^*) = \delta_{ij}$, by de
 \end{corollary}
 
 \begin{proof}
-    The matrix representation of the multiplication operator $M_A$ with respect to the standard bases on $\field^n$ and $\field^m$ is just $A$ itself, and \cref{prop:adjoint-mr} then implies that the matrix representation of $(M_A)^*$ with respect to the dual bases is $A\trans$. But the rank of an operator equals the rank of any matrix representation of that operator, so \cref{cor:adjoint-rank} implies that $A$ and $A\trans$ have the same (column) rank. Finally, the column rank of $A\trans$ is the row rank of $A$, proving the claim.
+    The matrix representation of the multiplication operator $M_A$ with respect to the standard bases on $\field^n$ and $\field^m$ is just $A$ itself, and \cref{prop:adjoint-mr} then implies that the matrix representation of $(M_A)^\dagger$ with respect to the dual bases is $A\trans$. But the rank of an operator equals the rank of any matrix representation of that operator, so \cref{cor:adjoint-rank} implies that $A$ and $A\trans$ have the same (column) rank. Finally, the column rank of $A\trans$ is the row rank of $A$, proving the claim.
 \end{proof}
 
 
-If $V$ is a finite-dimensional inner product space, for $v \in V$ let $\phi_v$ denote the element in $V^*$ given by $\phi_v(w) = \inner{w}{v}$. Further, let $\Phi_V \colon V \to V^*$ denote the (conjugate-)linear isomorphism $v \mapsto \phi_v$.
+\section{Topological vector spaces}
 
-\begin{theorem}
-    Let $V$ and $W$ be finite-dimensional inner product spaces, and let $T \in \calL(V,W)$. Denoting the Hilbert space adjoint of $T$ by $T^\dagger \colon W \to V$ we have
+If $V$ and $W$ are topological vector spaces and $V^*$ and $W^*$ denote their respective \emph{continuous} dual spaces, then we may also consider the adjoint $T^\dagger$ of a \emph{continuous} linear map $T \colon V \to W$. It then turns out that $T^\dagger$ is also continuous:
+
+\begin{proposition}
+    Let $T \colon V \to W$ be a continuous linear map, and let $T^\dagger \colon W^* \to V^*$ be its adjoint.
     %
-    \begin{equation*}
-        T^*
-            = \Phi_V \circ T^\dagger \circ \Phi_W\inv,
-    \end{equation*}
-    %
-    i.e. the diagram
-    %
-    \begin{equation*}
-        \begin{tikzcd}
-            V
-                \ar[r, "T", shift left]
-                \ar[d, "\Phi_V", swap]
-            & W
-                \ar[l, "T^\dagger", shift left]
-                \ar[d, "\Phi_W"] \\
-            V^*
-            & W^*
-                \ar[l, "T^*", swap]
-        \end{tikzcd}
-    \end{equation*}
-    %
-    commutes. [TODO also commutes when $T$ is there?]
-\end{theorem}
+    \begin{enumprop}
+        \item $T^\dagger$ is continuous with respect to the weak$^*$-topologies on $W^*$ and $V^*$.
+
+        \item \label{enum:operator-adjoint-continuous-normed} If $V$ and $W$ are normed $\mathbb{K}$-vector spaces, then $T^\dagger$ is continuous with respect to the operator norms on $W^*$ and $V^*$, and $\norm{T^\dagger} = \norm{T}$.
+    \end{enumprop}
+\end{proposition}
 
 \begin{proof}
-    Simply notice that, for $v \in V$ and $\phi \in W^*$, we have
+    Let $(\phi_i)_{i \in I}$ be a net in $W^*$ that converges to some $\phi \in W^*$. That is, $\phi_i(w) \to \phi(w)$ for all $w \in W$, so in particular $\phi_i(Tv) \to \phi(Tv)$ for all $v \in V$. But then $T^\dagger \phi_i = \phi_i \circ T$ converges to $T^\dagger \phi = \phi \circ T$, so $T^\dagger$ is continuous as claimed.
+
+    If $V$ and $W$ are normed, then
     %
     \begin{equation*}
-        T^*\phi(v)
-            = \phi(Tv)
-            = \inner{Tv}{\Phi_W\inv(\phi)}
-            = \inner{v}{T^\dagger \Phi_W\inv(\phi)}
-            = \Phi_V\bigl( T^\dagger \Phi_W\inv(\phi) \bigr)(v),
+        \norm{T^\dagger \phi}
+            = \norm{\phi \circ T}
+            \leq \norm{\phi} \, \norm{T}
     \end{equation*}
     %
-    which implies the claim.
+    for all $\phi \in W^*$, implying that $T^\dagger$ is bounded with $\norm{T^\dagger} \leq \norm{T}$. If $T \neq 0$, then let $v \in V$ with $\norm{v} = 1$ such that $Tv \neq 0$. The Hahn--Banach theorem then furnishes a $\phi \in W^*$ with $\norm{\phi} = 1$ and $\phi(Tv) = \norm{Tv}$ (cf. \cite[Theorem~5.8(b)]{follandrealanalysis}). It follows that
+    %
+    \begin{equation*}
+        \norm{T^\dagger}
+            \geq \norm{T^\dagger \phi}
+            \geq \abs{(T^\dagger \phi)v}
+            = \abs{\phi(Tv)}
+            = \norm{Tv}.
+    \end{equation*}
+    %
+    This inequality then holds for all $v \in V$ with $\norm{v} = 1$, implying that $\norm{T^\dagger} \geq \norm{T}$.
 \end{proof}
 
+TODO: $T \mapsto T^\dagger$ not necessarily injective now?
 
-\chapter{Triangularisation and diagonalisation}
 
-\section{Triangularisation}
+\chapter{Triangularisation}
 
 Recall that a matrix $A = (a_{ij}) \in \mat{n}{R}$ is called \emph{upper triangular} if $a_{ij} = 0$ whenever $i > j$. If $V$ is an $n$-dimensional $\field$-vector space and $\calV$ is an ordered basis for $V$, then we say that the operator $T \in \calL(V)$ is \emph{upper triangular with respect to $\calV$} if the matrix representation $\mr{\calV}{T}{\calV}$ is upper triangular.
 
@@ -1756,33 +1867,96 @@ A subspace $U$ of a vector space $V$ is said to be \emph{invariant under $T \in 
 \end{proof}
 
 
-\section{Orthonormal diagonalisation}
+\chapter{Orthonormal diagonalisation}
 
-Let $V$ and $W$ be finite-dimensional inner product spaces, and let $T \in \calL(V,W)$. Recall that the \emph{adjoint of $T$} is the operator $T^* \in \calL(W,V)$ with the property that
+\section{Hilbert space adjoints}
+
+If $V$ is a Hilbert space, for $v \in V$ let $\phi_v$ denote the element in the continuous dual $V^*$ given by $\phi_v(u) = \inner{u}{v}$. Further, let $\Phi_V \colon V \to V^*$ denote the (conjugate-)linear isomorphism $v \mapsto \phi_v$. Then
 %
 \begin{equation*}
-    % \label{eq:adjoint-defining-property}
+    \abs{\phi_v(u)}
+        = \abs{\inner{u}{v}}
+        \leq \norm{u} \, \norm{v},
+\end{equation*}
+%
+implying that $\norm{\phi_v} \leq \norm{v}$. Furthermore,
+%
+\begin{equation*}
+    \abs{\phi_v(v)}
+        = \norm{v}^2,
+\end{equation*}
+%
+so in fact $\norm{\phi_v} = \norm{v}$. In other words, $\Phi_V$ is an isometry and in particular continuous.
+
+\begin{definition}[Hilbert space adjoints]
+    Let $V$ and $W$ be Hilbert spaces, and let $T \in \calB(V,W)$. The \emph{(Hilbert space) adjoint} of $T$ is the operator $T^* \colon W \to V$ given by
+    %
+    \begin{equation*}
+        T^*
+            = \Phi_V\inv \circ T^\dagger \circ \Phi_W.
+    \end{equation*}
+\end{definition}
+%
+Properties of the operator adjoint $T^\dagger$ are often inherited by the Hilbert space adjoint: By \cref{enum:operator-adjoint-continuous-normed} $T^\dagger$ is continuous, so $T^*$ is also continuous. And $\Phi_V$ and $\Phi_W$ are \emph{conjugate}-linear, so $T^*$ is linear. Furthermore, if $S \in \calB(W,U)$ then
+%
+\begin{align*}
+    (ST)^*
+        &= \Phi_V\inv \circ (ST)^\dagger \circ \Phi_U \\
+        &= \Phi_V\inv \circ T^\dagger \circ S^\dagger \circ \Phi_U \\
+        &= (\Phi_V\inv \circ T^\dagger \circ \Phi_W) \circ (\Phi_W\inv \circ S^\dagger \circ \Phi_U) \\
+        &= T^* S^*.
+\end{align*}
+%
+Finally, notice that
+%
+\begin{equation*}
+    \norm{T^*}
+        \leq \norm{\Phi_V\inv} \, \norm{T^\dagger} \, \norm{\Phi_W}
+        = \norm{T^\dagger},
+\end{equation*}
+%
+since $\Phi_V$ and $\Phi_W$ are isometric isomorphisms. The opposite inequality follows similarly, so in total $\norm{T^*} = \norm{T^\dagger} = \norm{T}$ by \cref{enum:operator-adjoint-continuous-normed}.
+
+\begin{proposition}
+    Let $V,W$ be Hilbert spaces, and let $T \in \calB(V,W)$. For all $w \in W$ we have $T^\dagger \phi_w = \phi_{T^* w}$. In particular, $T^*$ is the unique linear operator $W \to V$ with the property that
+    %
+    \begin{equation*}
+        \inner{v}{T^*w}_V = \inner{Tv}{w}_W,
+    \end{equation*}
+    %
+    for all $v \in V$ and $w \in W$. Furthermore, $T^{**} = T$, i.e. the map $T \mapsto T^*$ is an involution.
+\end{proposition}
+%
+The adjoint $T^*$ is equivalently characterised by the identity
+%
+\begin{equation*}
     \inner{T^*w}{v}_V = \inner{w}{Tv}_W,
 \end{equation*}
 %
-or by complex conjugation equivalently
-%
-\begin{equation*}
-    \inner{Tv}{w}_W = \inner{v}{T^*w}_V,
-\end{equation*}
-%
-for all $v \in V$ and $w \in W$. An operator with this property is unique if it exists, since if $S \in \calL(W,V)$ is another such operator, then $\inner{v}{Sw}_V = \inner{v}{T^*w}_V$ for all $v$ and $w$, so $S = T^*$.
+by complex conjugation. Note that either of these two identities is often taken as the definition of $T^*$, and existence is proved without appealing to the operator adjoint. In this case, many of the above properties are proved using the uniqueness part of this proposition.
 
-For existence, for $w \in W$ define $\psi_w \in V^*$ by $\psi_w(v) = \inner{Tv}{w}$, and let $\Psi_W \colon W \to V^*$ be the map $\Psi_W(w) = \psi_w$. Then define $T^* = \Phi_V\inv \circ \Psi_W$. Both $\Phi_V$ and $\Psi_W$ are (conjugate-)linear, so $T^*$ is linear. Furthermore we have
-%
-\begin{equation*}
-    \inner{v}{T^*w}_V
-        = \inner{v}{\Phi_V\inv \circ \Psi_W(w)}_V
-        = \psi_w(v)
-        = \inner{Tv}{w}_W
-\end{equation*}
-%
-as required.
+\begin{proof}
+    First notice that $T^*$ indeed has this property. For $w \in W$ we have
+    %
+    \begin{equation*}
+        \phi_{T^* w}
+            = \Phi_V (T^* w)
+            = (T^\dagger \circ \Phi_W)(w)
+            = T^\dagger \phi_w,
+    \end{equation*}
+    %
+    so for $v \in V$ it thus follows that
+    %
+    \begin{equation*}
+        \inner{v}{T^* w}_V
+            = \phi_{T^* w}(v)
+            = T^\dagger \phi_w (v)
+            = \phi_w(Tv)
+            = \inner{Tv}{w}_W,
+    \end{equation*}
+    %
+    as desired. Furthermore, if $S \colon W \to V$ is another such operator, then $\inner{v}{Sw}_V = \inner{v}{T^*w}_V$ for all $v$ and $w$, so $S = T^*$. The final claim that $T^{**} = T$ follows by uniqueness.
+\end{proof}
 
 \fleuronbreak
 
@@ -1793,7 +1967,7 @@ An operator $U \colon V \to W$ is an \emph{isometry} if
         = \inner{v}{u}_V
 \end{equation*}
 %
-for all $v,u \in V$. Clearly $U$ is injective. If $U$ is also surjective (i.e. if $\dim V = \dim W < \infty$), then it is called \emph{unitary}. Notice that if $U$ is an isometry, then
+for all $v,u \in V$. Clearly $U$ is injective. If $U$ is also surjective (e.g. if $\dim V = \dim W < \infty$), then it is called \emph{unitary}. Notice that if $U$ is an isometry, then
 %
 \begin{equation*}
     \inner{U^*Uv}{u}_V
@@ -1805,24 +1979,214 @@ implying that $U^*U = \id_V$, and the converse clearly also holds. If $U$ is als
 
 In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that $T$ is \emph{self-adjoint} if $T^* = T$. Clearly both self-adjoint and unitary operators (with $V = W$) are normal.
 
-% There first of all exist such $L^*w \in V$ since, if $(v_1, \ldots, v_n)$ is an orthonormal basis for $V$, then
-% %
-% \begin{align*}
-%     \inner{w}{Tv}_W
-%         &= \inner[\bigg]{w}{\sum_{i=1}^n \inner{v}{v_i}_V Tv_i}_W \\
-%         &= \sum_{i=1}^n \inner{v_i}{v}_V \inner{w}{Tv_i}_W \\
-%         &= \inner[\bigg]{ \sum_{i=1}^n \inner{w}{Tv_i}_W v_i }{v}_V.
-% \end{align*}
-% %
-% Hence we may choose $T^*w = \sum_{i=1}^n \inner{w}{Tv_i}_W v_i$. Furthermore, this vector is unique since \cref{eq:adjoint-defining-property} implies that
-% %
-% \begin{equation*}
-%     T^*w
-%         = \sum_{i=1}^n \inner{T^*w}{v_i}_V v_i
-%         = \sum_{i=1}^n \inner{w}{Tv_i}_W v_i.
-% \end{equation*}
-% %
-% In particular, $T^*w$ does not depend on a choice of basis for $V$. Notice that taking complex conjugates in \cref{eq:adjoint-defining-property} we find that $T^{**} = T$.
+
+\section{Properties of adjoints}
+
+\begin{proposition}
+    \label{prop:complexification-adjoint}
+    Let $V$ and $W$ be real Hilbert spaces, and let $T \in \calB(V,W)$. Then we have
+    %
+    \begin{equation*}
+        (T^\complex)^*
+            = (T^*)^\complex,
+    \end{equation*}
+    %
+    i.e., the adjoint of the complexification of $T$ is the complexification of the adjoint of $T$. In particular
+    %
+    \begin{enumprop}
+        \item $T$ is normal if and only if $T^\complex$ is normal, and
+        \item $T$ is self-adjoint if and only if $T^\complex$ is self-adjoint.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    For $v,u,x,y \in V$ we have
+    %
+    \begin{align*}
+        \inner{(T^*)^\complex(x + \iu y)}{v + \iu u}
+            &= \inner{ T^*x + \iu T^*y }{v + \iu u} \\
+            &= \inner{T^*x}{v}
+                + \inner{T^*y}{u}
+                + \iu ( \inner{T^*y}{u} - \inner{T^*x}{v} ) \\
+            &= \inner{x}{Tv}
+                + \inner{y}{Tu}
+                + \iu ( \inner{y}{Tu} - \inner{x}{Tv} ) \\
+            &= \inner{x + \iu y}{Tv + \iu Tu} \\
+            &= \inner{x + \iu y}{T^\complex(v + \iu u)}.
+    \end{align*}
+    %
+    Uniqueness of adjoints thus yields the claim.
+
+    Assume that $T$ is normal. Then
+    %
+    \begin{equation*}
+        T^\complex (T^\complex)^*
+            = T^\complex (T^*)^\complex
+            = (TT^*)^\complex
+            = (T^*T)^\complex
+            = (T^*)^\complex T^\complex
+            = (T^\complex)^* T^\complex,
+    \end{equation*}
+    %
+    so $T^\complex$ is normal. The converse follows similarly. If $T$ is self-adjoint, then
+    %
+    \begin{equation*}
+        (T^\complex)^*
+            = (T^*)^\complex
+            = T^\complex,
+    \end{equation*}
+    %
+    and similarly if $T^\complex$ is self-adjoint.
+\end{proof}
+
+
+\begin{proposition}
+    Let $V$ be a finite-dimensional inner product space, and let $T \in \calL(V)$ and $\lambda \in \mathbb{K}$. Then $\lambda \id_V - T$ is invertible if and only if $\conj{\lambda} \id_V - T^*$ is invertible. In other words, $\lambda$ is an eigenvalue of $T$ if and only if $\conj{\lambda}$ is an eigenvalue of $T^*$.
+\end{proposition} % TODO: Infinite dimension? Boundedly invertible?
+
+\begin{proof}
+    Since the map $T \mapsto T^*$ is an involution it suffices to prove one implication, so assume that $\lambda \id_V - T$ is invertible. Then there exists an $S \in \calL(V)$ such that
+    %
+    \begin{equation*}
+        S(\lambda \id_V - T)
+            = (\lambda \id_V - T)S
+            = \id_V,
+    \end{equation*}
+    %
+    and taking adjoints we find that
+    %
+    \begin{equation*}
+        (\conj{\lambda} \id_V - T^*)S^*
+            = S^*(\conj{\lambda} \id_V - T^*)
+            = \id_V.
+    \end{equation*}
+    %
+    That is, $\conj{\lambda} \id_V - T^*$ is invertible as claimed.
+\end{proof}
+
+\begin{remark}
+    Note that this does \emph{not} say that $v \in V$ is an eigenvector of $T^*$ if it is an eigenvector of $T$. A counterexample is given by the matrix
+    %
+    \begin{equation*}
+        A =
+        \begin{pmatrix}
+            1 & 1 \\
+            0 & 0
+        \end{pmatrix},
+    \end{equation*}
+    %
+    which has the eigenvector $(1,0)$ with eigenvalue $1$. However, while $1$ is also an eigenvalue of the transpose $A\trans$ (with eigenvector $(1,1)$), $(1,0)$ is not an eigenvector of $A\trans$.
+
+    While this does not hold in general, recall that in \cref{enum:normal-adjoint-eigenvalues} we saw that it holds for \emph{normal} operators.
+\end{remark}
+
+
+\begin{proposition}
+    Let $T \in \calB(V)$ be a normal operator.
+    %
+    \begin{enumprop}
+        \item \label{enum:normal-adjoint-norm} $\norm{Tv} = \norm{T^*v}$ for all $v \in V$.
+        
+        \item \label{enum:normal-adjoint-eigenvalues} If $\lambda \in \mathbb{K}$ is an eigenvalue of $T$, then $\conj{\lambda}$ is an eigenvalue of $T^*$ with the same eigenvectors. In other words, $E_T(\lambda) = E_{T^*}(\conj{\lambda})$.
+
+        \item \label{enum:normal-orthogonal-eigenspaces} If $\mu \in \mathbb{K}$ is another eigenvalue of $T$ distinct from $\lambda$, then $E_T(\lambda)$ and $E_T(\mu)$ are orthogonal.
+
+        \item \label{enum:self-adjoint-eigenvalues-exists-and-real} If $T$ is self-adjoint, then it has an eigenvalue and all its eigenvalues are real.
+
+        \item \label{enum:unitary-eigenvalues-unit-circle} If $T$ is unitary, then all its eigenvalues lie on the unit circle $S^1 \subseteq \complex$.
+    \end{enumprop}
+\end{proposition}
+%
+In \cref{cor:self-adjoint-unitary-eigenvalue-characterisation} we will prove the converses of \subcref{enum:self-adjoint-eigenvalues-exists-and-real} and \subcref{enum:unitary-eigenvalues-unit-circle} under the assumption that $V$ is finite-dimensional and that $T$ is normal, using the spectral theorem (cf. \cref{thm:spectral-theorem}). We will use \subcref{enum:self-adjoint-eigenvalues-exists-and-real} in the proof of the spectral theorem, and we have proved \subcref{enum:unitary-eigenvalues-unit-circle} already to make explicit that it does not depend on the spectral theorem, and that the proof does not require that $V$ is finite-dimensional.
+
+\begin{proof}
+\begin{proofsec}
+    \item[Proof of \subcref{enum:normal-adjoint-norm}]
+    Notice that
+    %
+    \begin{equation*}
+        \norm{Tv}^2
+            = \inner{Tv}{Tv}
+            = \inner{T^*Tv}{v}
+            = \inner{TT^*v}{v}
+            = \inner{T^*v}{T^*v}
+            = \norm{T^*v}^2.
+    \end{equation*}
+
+    \item[Proof of \subcref{enum:normal-adjoint-eigenvalues}]
+    If $T$ is normal then so is $\lambda \id_V - T$, so \subcref{enum:normal-adjoint-norm} implies that
+    %
+    \begin{equation*}
+        \norm{(\lambda \id_V - T)v}
+            = \norm{(\conj{\lambda} \id_V - T^*)v},
+    \end{equation*}
+    %
+    so $v \in V$ is an eigenvector for $T$ with eigenvalue $\lambda$ if and only if $v$ is an eigenvector for $T^*$ with eigenvalue $\conj{\lambda}$.
+
+    \item[Proof of \subcref{enum:normal-orthogonal-eigenspaces}]
+    Let $v \in E_T(\lambda)$ and $u \in E_T(\mu)$. Since $w$ is also an eigenvector for $T^*$ with eigenvalue $\conj{\mu}$, we have
+    %
+    \begin{equation*}
+        \lambda \inner{v}{u}
+            = \inner{Tv}{u}
+            = \inner{v}{T^*u}
+            = \mu \inner{v}{u}.
+    \end{equation*}
+    %
+    Since $\lambda \neq \mu$ we must have $\inner{v}{u} = 0$ as claimed.
+
+    \item[Proof of \subcref{enum:self-adjoint-eigenvalues-exists-and-real}]
+    If $T$ is self-adjoint and $v \in V$ is an eigenvector for $T$ with $\lambda \in \mathbb{K}$, then
+    %
+    \begin{equation*}
+        \lambda \inner{v}{v}
+            = \inner{Tv}{v}
+            = \inner{v}{Tv}
+            = \conj{\lambda} \inner{v}{v},
+    \end{equation*}
+    %
+    and since $v \neq 0$ we must have $\lambda = \conj{\lambda}$. Hence $\lambda$ is real.
+
+    If $\mathbb{K} = \complex$ then $V$ has a complex eigenvalue, which is real by the above argument. Assume instead that $\mathbb{K} = \reals$ and consider the complexification $T^\complex$ of $T$. This is self-adjoint by \cref{prop:complexification-adjoint}, so it has a real eigenvalue by the above. But then \cref{prop:complexification-eigenvalue} implies that this also is an eigenvalue of $T$.
+    
+    % Alternatively, let $\calV$ be an orthonormal basis for $V$ and consider the matrix representation $\mr{\calV}{T}{\calV}$. This is a real symmetric matrix, in particular a matrix with \emph{complex} entries, i.e. an operator $\complex^n \to \complex^n$. Hence it has a complex eigenvalue $\lambda$, which is real by the above. This means that $\lambda I - \mr{\calV}{T}{\calV}$ is singular when considered as an operator $\complex^n \to \complex^n$. But then it is clearly singular as an operator $\reals^n \to \reals^n$ since an inverse in $\calL(\reals^n)$ would also be an inverse in $\calL(\complex^n)$, so $\lambda$ is an eigenvalue of $T$.
+
+    \item[Proof of \subcref{enum:unitary-eigenvalues-unit-circle}]
+    Let $\lambda \in \mathbb{K}$ be an eigenvalue of $T$ with eigenvector $v$. Then
+    %
+    \begin{equation*}
+        \inner{v}{v}
+            = \inner{Tv}{Tv}
+            = \inner{\lambda v}{\lambda v}
+            = \lambda \conj{\lambda} \inner{v}{v}
+            = \abs{\lambda}^2 \inner{v}{v},
+    \end{equation*}
+    %
+    so $\abs{\lambda} = 1$.
+\end{proofsec}
+\end{proof}
+
+Let $T \colon V \to V$ be an operator on an $\field$-vector space $V$, and let $U$ be a subspace of $V$ that is invariant under $T$ (i.e., $T(U) \subseteq U$). If $W$ is a complement of $V$, i.e. $V = U \oplus W$, then $W$ is not necessarily invariant under $T$. However, we have the following:
+
+\begin{lemma}
+    \label{thm:adjoint-invariant-subspace}
+    Let $V$ be a Hilbert space and let $T \in \calB(V)$. If a subspace $U$ of $V$ is invariant under $T$, then $U^\perp$ is invariant under $T^*$.
+\end{lemma}
+
+\begin{proof}
+    Let $v \in U^\perp$. For $u \in U$ we have $Tu \in U$, so
+    %
+    \begin{equation*}
+        \inner{T^*v}{u}
+            = \inner{v}{Tu}
+            = 0.
+    \end{equation*}
+    %
+    Since this holds for all $u \in U$, it follows that $T^*v \in U^\perp$ as desired.
+\end{proof}
+
+
+\section{Adjoints and coordinates}
 
 
 \begin{lemma}
@@ -1901,106 +2265,6 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
 \end{proof}
 
 
-\begin{proposition}
-    Let $V$ be a finite-dimensional inner product space, and let $T \in \calL(V)$ and $\lambda \in \mathbb{K}$. Then $\lambda \id_V - T$ is invertible if and only if $\conj{\lambda} \id_V - T^*$ is invertible. In other words, $\lambda$ is an eigenvalue of $T$ if and only if $\conj{\lambda}$ is an eigenvalue of $T^*$.
-\end{proposition}
-
-\begin{proof}
-    Since the map $T \mapsto T^*$ is idempotent it suffices to prove one implication, so assume that $\lambda \id_V - T$ is invertible. Then there exists an $S \in \calL(V)$ such that
-    %
-    \begin{equation*}
-        S(\lambda \id_V - T)
-            = (\lambda \id_V - T)S
-            = \id_V,
-    \end{equation*}
-    %
-    and taking adjoints we find that
-    %
-    \begin{equation*}
-        (\conj{\lambda} \id_V - T^*)S^*
-            = S^*(\conj{\lambda} \id_V - T^*)
-            = \id_V.
-    \end{equation*}
-    %
-    That is, $\conj{\lambda} \id_V - T^*$ is invertible as claimed.
-\end{proof}
-
-\begin{remark}
-    Note that this does \emph{not} say that $v \in V$ is an eigenvector of $T^*$ if it is an eigenvector of $T$. A counterexample is given by the matrix
-    %
-    \begin{equation*}
-        A =
-        \begin{pmatrix}
-            1 & 1 \\
-            0 & 0
-        \end{pmatrix},
-    \end{equation*}
-    %
-    which has the eigenvector $(1,0)$ with eigenvalue $1$. However, while $1$ is also an eigenvalue of the transpose $A\trans$ (with eigenvector $(1,1)$), $(1,0)$ is not an eigenvector of $A\trans$.
-
-    While this does not hold in general, in \cref{enum:normal-adjoint-eigenvalues} we will see that it holds for \emph{normal} operators.
-\end{remark}
-
-
-
-\begin{proposition}
-    \label{prop:complexification-adjoint}
-    Let $V$ and $W$ be real inner product spaces, and let $T \in \calL(V,W)$. Then we have
-    %
-    \begin{equation*}
-        (T^\complex)^*
-            = (T^*)^\complex,
-    \end{equation*}
-    %
-    i.e., the adjoint of the complexification of $T$ is the complexification of the adjoint of $T$. In particular
-    %
-    \begin{enumprop}
-        \item $T$ is normal if and only if $T^\complex$ is normal, and
-        \item $T$ is self-adjoint if and only if $T^\complex$ is self-adjoint.
-    \end{enumprop}
-\end{proposition}
-
-\begin{proof}
-    For $v,u,x,y \in V$ we have
-    %
-    \begin{align*}
-        \inner{(T^*)^\complex(x + \iu y)}{v + \iu u}
-            &= \inner{ T^*x + \iu T^*y }{v + \iu u} \\
-            &= \inner{T^*x}{v}
-                + \inner{T^*y}{u}
-                + \iu ( \inner{T^*y}{u} - \inner{T^*x}{v} ) \\
-            &= \inner{x}{Tv}
-                + \inner{y}{Tu}
-                + \iu ( \inner{y}{Tu} - \inner{x}{Tv} ) \\
-            &= \inner{x + \iu y}{Tv + \iu Tu} \\
-            &= \inner{x + \iu y}{T^\complex(v + \iu u)}.
-    \end{align*}
-    %
-    Uniqueness of adjoints thus yields the claim.
-
-    Assume that $T$ is normal. Then
-    %
-    \begin{equation*}
-        T^\complex (T^\complex)^*
-            = T^\complex (T^*)^\complex
-            = (TT^*)^\complex
-            = (T^*T)^\complex
-            = (T^*)^\complex T^\complex
-            = (T^\complex)^* T^\complex,
-    \end{equation*}
-    %
-    so $T^\complex$ is normal. The converse follows similarly. If $T$ is self-adjoint, then
-    %
-    \begin{equation*}
-        (T^\complex)^*
-            = (T^*)^\complex
-            = T^\complex,
-    \end{equation*}
-    %
-    and similarly if $T^\complex$ is self-adjoint.
-\end{proof}
-
-
 \begin{lemma}
     \label{lemma:mr-eigenvalues}
     Let $V$ be a finite-dimensional vector space, let $T \in \calL(V)$, and let $\calV$ be an ordered basis for $V$. Then $v \in V$ is an eigenvector for $T$ if and only if $\coordvec{v}{\calV}$ is an eigenvector for $\mr{\calV}{T}{\calV}$ with the same eigenvalue.
@@ -2020,129 +2284,7 @@ In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that 
 \end{proof}
 
 
-\begin{lemma}
-    \label{lem:complexification-eigenvalue}
-    Let $V$ be a real vector space, and let $T \in \calL(V)$. If $\lambda \in \reals$ is an eigenvalue of the complexification $T^\complex$ of $T$, then $\lambda$ is also an eigenvalue of $T$.
-\end{lemma}
-
-\begin{proof}
-    Let $v + \iu u \in V^\complex$ be an eigenvector of $T^\complex$ corresponding to $\lambda$. Then
-    %
-    \begin{equation*}
-        Tv + \iu Tu
-            = T^\complex (v + \iu u)
-            = \lambda(v + \iu u)
-            = \lambda v + \iu \lambda u.
-    \end{equation*}
-    %
-    It follows that $Tv = \lambda v$ as desired.
-\end{proof}
-
-
-\begin{proposition}
-    Let $T \in \calL(V)$ be a normal operator.
-    %
-    \begin{enumprop}
-        \item \label{enum:normal-adjoint-norm} $\norm{Tv} = \norm{T^*v}$ for all $v \in V$.
-        
-        \item \label{enum:normal-adjoint-eigenvalues} If $\lambda \in \mathbb{K}$ is an eigenvalue of $T$, then $\conj{\lambda}$ is an eigenvalue of $T^*$ with the same eigenvectors. In other words, $E_T(\lambda) = E_{T^*}(\conj{\lambda})$.
-
-        \item \label{enum:normal-orthogonal-eigenspaces} If $\mu \in \mathbb{K}$ is another eigenvalue of $T$ distinct from $\lambda$, then $E_T(\lambda)$ and $E_T(\mu)$ are orthogonal.
-
-        \item \label{enum:self-adjoint-eigenvalues-exists-and-real} If $T$ is self-adjoint, then it has an eigenvalue and all its eigenvalues are real.
-
-        \item \label{enum:unitary-eigenvalues-unit-circle} If $T$ is unitary, then all its eigenvalues lie on the unit circle $S^1 \subseteq \complex$.
-    \end{enumprop}
-\end{proposition}
-%
-In \cref{cor:self-adjoint-unitary-eigenvalue-characterisation} we will prove the converses of \subcref{enum:self-adjoint-eigenvalues-exists-and-real} and \subcref{enum:unitary-eigenvalues-unit-circle} under the assumption that $T$ is normal, using the spectral theorem (cf. \cref{thm:spectral-theorem}). We will use \subcref{enum:self-adjoint-eigenvalues-exists-and-real} in the proof of the spectral theorem, and we have proved \subcref{enum:unitary-eigenvalues-unit-circle} already to make explicit that it does not depend on the spectral theorem.
-
-\begin{proof}
-\begin{proofsec}
-    \item[Proof of \subcref{enum:normal-adjoint-norm}]
-    Notice that
-    %
-    \begin{equation*}
-        \norm{Tv}^2
-            = \inner{Tv}{Tv}
-            = \inner{T^*Tv}{v}
-            = \inner{TT^*v}{v}
-            = \inner{T^*v}{T^*v}
-            = \norm{T^*v}^2.
-    \end{equation*}
-
-    \item[Proof of \subcref{enum:normal-adjoint-eigenvalues}]
-    If $T$ is normal then so is $\lambda \id_V - T$, so \subcref{enum:normal-adjoint-norm} implies that
-    %
-    \begin{equation*}
-        \norm{(\lambda \id_V - T)v}
-            = \norm{(\conj{\lambda} \id_V - T^*)v},
-    \end{equation*}
-    %
-    so $v \in V$ is an eigenvector for $T$ with eigenvalue $\lambda$ if and only if $v$ is an eigenvector for $T^*$ with eigenvalue $\conj{\lambda}$.
-
-    \item[Proof of \subcref{enum:normal-orthogonal-eigenspaces}]
-    Let $v \in E_T(\lambda)$ and $u \in E_T(\mu)$. Since $w$ is also an eigenvector for $T^*$ with eigenvalue $\conj{\mu}$, we have
-    %
-    \begin{equation*}
-        \lambda \inner{v}{u}
-            = \inner{Tv}{u}
-            = \inner{v}{T^*u}
-            = \mu \inner{v}{u}.
-    \end{equation*}
-    %
-    Since $\lambda \neq \mu$ we must have $\inner{v}{u} = 0$ as claimed.
-
-    \item[Proof of \subcref{enum:self-adjoint-eigenvalues-exists-and-real}]
-    If $T$ is self-adjoint and $v \in V$ is an eigenvector for $T$ with $\lambda \in \mathbb{K}$, then
-    %
-    \begin{equation*}
-        \lambda \inner{v}{v}
-            = \inner{Tv}{v}
-            = \inner{v}{Tv}
-            = \conj{\lambda} \inner{v}{v},
-    \end{equation*}
-    %
-    and since $v \neq 0$ we must have $\lambda = \conj{\lambda}$. Hence $\lambda$ is real.
-
-    If $\mathbb{K} = \complex$ then $V$ has a complex eigenvalue, which is real by the above argument. Assume instead that $\mathbb{K} = \reals$ and consider the complexification $T^\complex$ of $T$. This is self-adjoint by \cref{prop:complexification-adjoint}, so it has a real eigenvalue by the above. But then \cref{lem:complexification-eigenvalue} implies that this also is an eigenvalue of $T$.
-    
-    % Alternatively, let $\calV$ be an orthonormal basis for $V$ and consider the matrix representation $\mr{\calV}{T}{\calV}$. This is a real symmetric matrix, in particular a matrix with \emph{complex} entries, i.e. an operator $\complex^n \to \complex^n$. Hence it has a complex eigenvalue $\lambda$, which is real by the above. This means that $\lambda I - \mr{\calV}{T}{\calV}$ is singular when considered as an operator $\complex^n \to \complex^n$. But then it is clearly singular as an operator $\reals^n \to \reals^n$ since an inverse in $\calL(\reals^n)$ would also be an inverse in $\calL(\complex^n)$, so $\lambda$ is an eigenvalue of $T$.
-
-    \item[Proof of \subcref{enum:unitary-eigenvalues-unit-circle}]
-    Let $\lambda \in \mathbb{K}$ be an eigenvalue of $T$ with eigenvector $v$. Then
-    %
-    \begin{equation*}
-        \inner{v}{v}
-            = \inner{Tv}{Tv}
-            = \inner{\lambda v}{\lambda v}
-            = \lambda \conj{\lambda} \inner{v}{v}
-            = \abs{\lambda}^2 \inner{v}{v},
-    \end{equation*}
-    %
-    so $\abs{\lambda} = 1$.
-\end{proofsec}
-\end{proof}
-
-
-Let $T \colon V \to V$ is an operator on an $\field$-vector space $V$, and let $U$ be a subspace of $V$ that is invariant under $T$. If $W$ is a complement of $V$, i.e. $V = U \oplus W$, then $W$ is not necessarily invariant under $T$. However, we have the following:
-
-\begin{lemma}
-    \label{thm:adjoint-invariant-subspace}
-    Let $T \in \calL(V)$ be an operator on a finite-dimensional inner product space $V$. If a subspace $U$ of $V$ is invariant under $T$, then $U^\perp$ is invariant under $T^*$.
-\end{lemma}
-
-\begin{proof}
-    Let $v \in U^\perp$. For $u \in U$ we have $Tu \in U$, so
-    %
-    \begin{equation*}
-        \inner{T^*v}{u}
-            = \inner{v}{Tu}
-            = 0.
-    \end{equation*}
-    %
-    Since this holds for all $u \in U$, it follows that $T^*v \in U^\perp$ as desired.
-\end{proof}
+\section{The spectral theorem}
 
 \begin{lemma}
     \label{lem:spectral-lemma}
