@@ -1,0 +1,3764 @@
+% Document setup
+\documentclass[a4paper, 11pt]{memoir}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[danish, UKenglish]{babel}
+
+% Document info
+\newcommand\doctitle{Linear Algebra}
+\newcommand\docauthor{Danny Nygård Hansen}
+
+% Formatting and layout
+% \openany % https://stackoverflow.com/questions/491904/how-do-i-remove-blank-pages-coming-between-two-chapters-in-appendix
+\setlrmargins{*}{*}{1} % https://tex.stackexchange.com/questions/25516/same-margins-when-specifying-twoside-in-memoir
+\checkandfixthelayout
+\usepackage[autostyle]{csquotes}
+\renewcommand{\mktextelp}{(\textellipsis\unkern)}
+\usepackage[final]{microtype}
+\usepackage{xcolor}
+\frenchspacing
+\usepackage[sc]{latex-sty/pagestyle-article}
+\usepackage[boxsc,bf]{latex-sty/sectionstyle-article}
+\usepackage{latex-sty/frontpage}
+
+% Fonts
+\usepackage{amssymb}
+\usepackage[largesmallcaps,partialup,oldstylenums]{kpfonts}
+\DeclareSymbolFontAlphabet{\mathrm}{operators} % https://tex.stackexchange.com/questions/40874/kpfonts-siunitx-and-math-alphabets
+% https://tex.stackexchange.com/questions/327184/copy-search-of-old-style-numbers-with-kpfonts
+\pdfglyphtounicode{zerooldstyle}{0030}
+\pdfglyphtounicode{oneoldstyle}{0031}
+\pdfglyphtounicode{twooldstyle}{0032}
+\pdfglyphtounicode{threeoldstyle}{0033}
+\pdfglyphtounicode{fouroldstyle}{0034}
+\pdfglyphtounicode{fiveoldstyle}{0035}
+\pdfglyphtounicode{sixoldstyle}{0036}
+\pdfglyphtounicode{sevenoldstyle}{0037}
+\pdfglyphtounicode{eightoldstyle}{0038}
+\pdfglyphtounicode{nineoldstyle}{0039}
+\pdfgentounicode=1
+\linespread{1.06}
+% \let\mathfrak\undefined
+% \usepackage{eufrak}
+\DeclareMathAlphabet\mathfrak{U}{euf}{m}{n}
+\SetMathAlphabet\mathfrak{bold}{U}{euf}{b}{n}
+% https://tex.stackexchange.com/questions/13815/kpfonts-with-eufrak
+\usepackage{inconsolata}
+
+% Bibliography
+\usepackage[backend=biber, style=authoryear, maxcitenames=2, useprefix]{biblatex}
+\addbibresource{references.bib}
+
+% Hyperlinks
+\usepackage{hyperref}
+\definecolor{linkcolor}{HTML}{4f4fa3}
+\hypersetup{%
+	pdftitle=\doctitle,
+	pdfauthor=\docauthor,
+	colorlinks,
+	linkcolor=linkcolor,
+	citecolor=linkcolor,
+	urlcolor=linkcolor,
+	bookmarksnumbered=true,
+    hidelinks
+}
+
+
+\usepackage{multirow}
+
+
+% Bookmark ChatGPT
+\usepackage{bookmark}
+
+% Equation numbering
+\numberwithin{equation}{chapter}
+
+% Footnotes
+\footmarkstyle{\textsuperscript{#1}\hspace{0.25em}}
+
+% Mathematics
+\usepackage{latex-sty/mathcommands-basic}
+\usepackage{latex-sty/mathcommands-topology}
+\usepackage{latex-sty/theorems-changedot}
+\usepackage{latex-sty/theorems-references}
+\usepackage{tikz-cd}
+\tikzcdset{arrow style=math font} % https://tex.stackexchange.com/questions/300352/equalities-look-broken-with-tikz-cd-and-math-font
+\usetikzlibrary{babel}
+
+% Lists
+\usepackage{enumitem}
+\setenumerate[0]{label=\normalfont(\arabic*)}
+\setlist{
+	listparindent=\parindent,
+	parsep=0pt,
+}
+
+% Title
+\makeatletter
+\title{\doctitle}
+\def\@alttitle{Notes on abstract linear algebra}
+\author{\docauthor}
+\makeatother
+
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calV}{\mathcal{V}}
+\newcommand{\calW}{\mathcal{W}}
+\newcommand{\calU}{\mathcal{U}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calI}{\mathcal{I}}
+\newcommand{\calJ}{\mathcal{J}}
+\newcommand{\calS}{\mathcal{S}}
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calC}{\mathcal{C}}
+\DeclareMathOperator{\sign}{sgn}
+\DeclareMathOperator{\adj}{adj}
+\DeclareMathOperator{\spec}{Spec}
+\DeclareMathOperator{\trace}{tr}
+\DeclareMathOperator{\Span}{span}
+\DeclareMathOperator{\chr}{char}
+
+
+\usepackage{listofitems}
+\setsepchar{,}
+
+\makeatletter
+\newcommand{\mat@dims}[1]{%
+    \readlist*\@dims{#1}%
+    \ifnum \@dimslen=1
+        \def\@dimsout{\@dims[1]}%
+    \else
+        \def\@dimsout{\@dims[1], \@dims[2]}%
+    \fi
+    \@dimsout
+}
+
+
+\newcommand{\matgroup}[3]{\mathrm{#1}_{#2}(#3)}
+\newcommand{\matGL}[2]{\matgroup{GL}{#1}{#2}}
+\newcommand{\trans}{^{\top}}
+% \newcommand{\mat}[2]{\calM_{\mat@dims{#1}}(#2)}
+\newcommand{\mat}[2]{\mathrm{M}_{\mat@dims{#1}}(#2)}
+\newcommand{\matO}[1]{\mathrm{O}(#1)}
+\newcommand{\matSO}[1]{\mathrm{SO}(#1)}
+\newcommand{\field}{\mathbb{F}}
+\newcommand{\cof}{\operatorname{cof}}
+\newcommand{\im}{\operatorname{im}}
+
+\newcommand{\vecU}[1]{\mathrm{U}(#1)}
+\newcommand{\vecO}[1]{\mathrm{O}(#1)}
+\newcommand{\vecSp}[1]{\mathrm{Sp}(#1)}
+\makeatother
+
+
+
+
+% https://tex.stackexchange.com/a/124311/63353
+\makeatletter
+\g@addto@macro\bfseries{\boldmath}
+\makeatother
+
+
+% https://tex.stackexchange.com/questions/55863/how-to-detect-if-in-an-exercise-environment
+\usepackage{etoolbox}
+\newbool{indefinition}
+\AtBeginEnvironment{definition}{\booltrue{indefinition}}
+
+% \newcommand{\keyword}[1]{{\itshape\bfseries #1}}
+\newcommand{\keyword}[1]{\ifbool{indefinition}{{\itshape #1}}{{\itshape\bfseries #1}}}
+
+
+% \newlist{newenum}{enumerate}{3}
+% \setlist[newenum]{label={(\alph*)},align=left, leftmargin=0pt, labelindent=0pt,labelwidth=0pt, itemindent=*, ref=\thesection(\alph*)}
+% \crefalias{newenumi}{chapter}
+
+
+\maxsecnumdepth{paragraph}
+\renewcommand{\theparagraph}{(\alph{paragraph})}
+\crefname{paragraph}{paragraph}{paragraph}
+\crefformat{paragraph}{#2§\thesection#1#3}
+\newcommand{\newpar}{\paragraph{}}
+
+
+
+
+\makeatletter
+
+\renewcommand*{\cftchapterleader}{}
+\renewcommand*{\cftsectionleader}{}
+\renewcommand{\cftchapterpagefont}{}
+\renewcommand*{\cftchapterformatpnum}[1]{\itshape~~{\footnotesize\textbullet}~~#1}
+\renewcommand*{\cftsectionformatpnum}[1]{\itshape~~{\footnotesize\textbullet}~~#1}
+\renewcommand{\cftchapterafterpnum}{\cftparfillskip}
+\renewcommand{\cftsectionafterpnum}{\cftparfillskip}
+
+% I'm trying to redefine chapter/section numberings to get a small caps minuscule letter for appendices.
+% Is it smart to redefine this stuff???
+% And is that really what I want? It looks fine in headers!
+\renewcommand*{\numberline}[1]{%
+  \numberlinehook{#1}%
+  \hb@xt@\@tempdima{\@cftn@me\@cftbsnum {#1}\@cftasnum\hfil}\@cftasnumb}
+\renewcommand{\chapternumberline}[1]{%
+  \chapternumberlinehook{#1}%
+  \hb@xt@\@tempdima{\@chapapp@head\@cftbsnum {#1}\@cftasnum\hfil}%
+  \@cftasnumb}
+
+\renewcommand{\cftchapterpagefont}{\normalfont\large} % Chapter page numbers
+\renewcommand{\cftchapterfont}{\normalfont\large} % Chapter title and number
+\setlength{\cftbeforesectionskip}{3pt}
+\setrmarg{3.55em plus 1fil}
+
+\makeatother
+
+
+
+
+
+\begin{document}
+
+\frontmatter
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\chapter{Preface}
+
+These notes cover aspects of linear algebra that I have not found satisfactory expositions of elsewhere. We generally restrict ourselves to the finite-dimensional case, unless results can be generalised without significant effort. For instance, in the context of inner product spaces there is of course no loss in generality by restricting to the real or the complex numbers, and the elementary theory of Hilbert space adjoints is not simplified substantially by the assumption of finite dimension, so we make no such assumption. On the other hand, we only prove the spectral theorem for normal operators on finite-dimensional spaces.
+
+Throughout we let $\field$ denote an arbitrary field and $R$ a commutative ring. Unless otherwise specified, vector spaces will be vector spaces over $\field$, and modules will be left modules over $R$. Furthermore, sesquilinear forms are linear in their \emph{second} entry. This is rarely relevant, but it seems more natural both in the representation of sesquilinear forms with matrices (see [TODO ref]) and in the theory of duality of Hilbert spaces (see [TODO ref]).
+
+\mainmatter
+
+\chapter{Linear equations and matrices}
+
+\section{Linear equations}
+
+Let $m$ and $n$ be positive integers. A \keyword{linear equation in $n$ unknowns} is an equation on the form
+%
+\begin{equation*}
+    l \colon a_1 x_1 + \cdots + a_n x_n = b,
+\end{equation*}
+%
+where $a_1, \ldots, a_n, b \in \field$. A \keyword{solution} to $l$ is an element $v = (v_1, \ldots, v_n) \in \field^n$ such that
+%
+\begin{equation*}
+    a_1 v_1 + \cdots + a_n v_n = b.
+\end{equation*}
+%
+A \keyword{system of linear equations in $n$ unknowns} is a tuple $L = (l_1, \ldots, l_m)$, where each $l_i$ is a linear equation in $n$ unknowns. An element $v \in \field^n$ is a \keyword{solution} to $L$ if it is a solution to each linear equation $l_1, \ldots, l_m$.
+
+Let $L$ and $L'$ be systems of linear equations in $n$ unknowns. We say that $L$ and $L'$ are \keyword{solution equivalent} if they have the same solutions. Furthermore, we say that they are \keyword{combination equivalent} if each equation in $L'$ is a linear combination of the equations in $L$, and vice versa. Clearly, if $L$ and $L'$ are combination equivalent they are also solution equivalent, but the converse does not hold.
+
+
+\section{Matrices}
+
+
+
+\newpar
+
+For $m,n \in \naturals$ we denote by $\mat{m,n}{R}$ the set of $m \times n$ matrices over $R$. In the case where $R = \field$, it is well-known that a system of linear equations is equivalent to a matrix equation on the form $Ax = b$, where $A \in \mat{m,n}{\field}$, $x \in \field^n$ and $b \in \field^m$. Recall the \keyword{elementary row operations} on $A$:
+%
+\begin{enumerate}
+    \item multiplication of one row of $A$ by a nonzero scalar,
+    \item addition to one row of $A$ a scalar multiple of another (different) row, and
+    \item interchange of two rows of $A$.
+\end{enumerate}
+%
+If $e$ is an elementary row operation, we write $e(A)$ for the matrix obtained when applying $e$ to $A$. Clearly each elementary row operation $e$ has an \enquote{inverse}, i.e. an elementary row operation $e'$ such that $e'(e(A)) = e(e'(A)) = A$. Two matrices $A,B \in \mat{m,n}{\field}$ are called \keyword{row-equivalent} if $A$ is obtained by applying a finite sequence of elementary row operations to $B$ (and vice versa, though this need not be assumed since each elementary row operation has an inverse).
+
+Clearly, if $A, B \in \mat{m,n}{\field}$ are row-equivalent, then the systems of equations $Ax = 0$ and $Bx = 0$ are combination equivalent, hence have the same solutions.
+
+An \keyword{elementary matrix} is a matrix obtained by applying a single elementary row operation to the identity matrix $I$. It is easy to show that if $e$ is an elementary row operation and $E = e(I) \in \mat{m}{\field}$, then $e(A) = EA$ for $A \in \mat{m,n}{\field}$. If also $B \in \mat{m,n}{\field}$, then $A$ and $B$ are row-equivalent if and only if $A = PB$, where $P \in \mat{m}{\field}$ is a product of elementary matrices.
+
+
+\newpar
+
+We now show that every matrix is row-equivalent to a matrix with a particularly simple form:
+
+\begin{definition}
+    A matrix $H \in \mat{m,n}{\field}$ is called \keyword{row-reduced} if
+    %
+    \begin{enumdef}
+        \item the first nonzero entry of each nonzero row in $H$ is $1$, and
+        \item each column of $H$ containing the leading nonzero entry of some row has all its other entries equal $0$.
+    \end{enumdef}
+    %
+    If $H$ is row-reduced, it is called a \keyword{row-reduced echelon matrix} if it also has the following properties:
+    %
+    \begin{enumdef}[resume]
+        \item Every row of $H$ only containing zeroes occur below every row which has a nonzero entry, and
+        \item if rows $1, \ldots, r$ are the nonzero rows of $H$, and if the leading nonzero entry of row $i$ occurs in column $k_i$, then $k_1 < \cdots < k_r$.
+    \end{enumdef}
+\end{definition}
+
+
+\begin{proposition}
+    Every matrix in $\mat{m,n}{\field}$ is row-equivalent to a unique row-reduced echelon matrix.
+\end{proposition}
+
+\begin{proof}
+    The usual Gauss--Jordan elimination algorithm proves existence. If $H, K \in \mat{m,n}{R}$ are row-equivalent row-reduced echelon matrices, we claim that $H = K$. We prove this by induction in $n$. If $n = 1$ then this is obvious, so assume that $n > 1$. Let $H_1$ and $K_1$ be the matrices obtained by deleting the $n$th column in $H$ and $K$ respectively. Then $H_1$ and $K_1$ are also row-equivalent\footnote{It should be obvious that deleting columns preserves row-equivalence, but we give a more precise argument: If $P \in \mat{m}{\field}$ is a product of elementary matrices and $a_1, \ldots, a_n \in \field^m$ are the columns in $A$, then the columns in $PA$ are $Pa_1, \ldots, Pa_m$. Thus elementary row operations are applied to each column independently of the other columns.} and row-reduced echelon matrices, so by induction $H_1 = K_1$. Thus if $H$ and $K$ differ, they must differ in the $n$th column.
+
+    Let $H_2$ be the matrix obtained by deleting columns in $H$, only keeping those columns containing pivots, as well as keeping the $n$th column. Define $K_2$ similarly. Thus we have deleted the same columns in $H$ and $K$, so $H_2$ and $K_2$ are also row-equivalent. Say that the number of columns in $H_2$ and $K_2$ is $r+1$, and write the matrices on the form
+    %
+    \begin{equation*}
+        H_2
+            = \begin{pmatrix}
+                I_r & h \\
+                0   & h'
+            \end{pmatrix}
+        \quad \text{and} \quad
+        K_2
+            = \begin{pmatrix}
+                I_r & k \\
+                0   & k'
+            \end{pmatrix},
+    \end{equation*}
+    %
+    where $h,k \in \field^r$ and $h',k' \in \field^{m-r}$ are column vectors. Since $H_2$ and $K_2$ are row-equivalent, the systems $H_2 x = 0$ and $K_2 x = 0$ are solution equivalent. If $h' = 0$, then $H_2 x = 0$ has the solution $(-h,1)$. But this is also a solution to $K_2 x = 0$, so $h = k$ and $k' = 0$. If $h' \neq 0$, then $H_2 x = 0$ only has the trivial solution. But then $K_2 x = 0$ also only has the trivial solution, and hence $k' \neq 0$. But that must be because both $H_2$ and $K_2$ has a pivot in the rightmost column, so also in this case $H_2 = K_2$.
+\end{proof}
+
+
+\newpar
+
+Next we study when square matrices are invertible. The main result says for a square matrix to be invertible, it suffices that it has either a left- or a right-inverse. Since (as we will see in \cref{par:matrix-rep}) square matrices are precisely the linear endomorphisms on finite-dimensional vector spaces, this shows that for such an endomorphism to be invertible, it suffices that it has either a left- or a right-inverse. This result is also a direct consequence of the rank--nullity theorem, see e.g. \textcite[Corollary~2.9]{romanlinalg}.
+
+Notice that elementary matrices are invertible since elementary row operations are invertible.
+
+\begin{lemma}
+    If $A \in \mat{n}{\field}$, then the following are equivalent:
+    %
+    \begin{enumlem}
+        \item \label{enum:lemma-A-invertible} $A$ is invertible,
+        \item \label{enum:lemma-A-equivalent-to-I} $A$ is row-equivalent to $I_n$,
+        \item \label{enum:lemma-A-elementary-matrix-product} $A$ is a product of elementary matrices, and
+        \item \label{enum:lemma-only-trivial-solution} the system $Ax = 0$ has only the trivial solution $x = 0$.
+    \end{enumlem}
+\end{lemma}
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\Namesubcref{enum:lemma-A-invertible} $\Leftrightarrow$ \namesubcref{enum:lemma-A-equivalent-to-I}]
+    Let $H \in \mat{n}{\field}$ be a row-reduced echelon matrix that is row-equivalent to $A$. Then $H = PA$, where $P \in \mat{n}{\field}$ is a product of elementary matrices. Then $A = P\inv H$, so $A$ is invertible if and only if $H$ is. But the only invertible row-reduced echelon matrix is the identity matrix, so \subcref{enum:lemma-A-invertible} and \subcref{enum:lemma-A-equivalent-to-I} are equivalent.
+    
+    \item[\Namesubcref{enum:lemma-A-equivalent-to-I} $\implies$ \namesubcref{enum:lemma-A-elementary-matrix-product}]
+    As above, there exists a product $P$ of elementary matrices such that $I_n = PA$, so $A = P\inv$.
+
+    \item[\Namesubcref{enum:lemma-A-elementary-matrix-product} $\implies$ \namesubcref{enum:lemma-A-invertible}]
+    This is obvious since elementary matrices are invertible.
+
+    \item[\Namesubcref{enum:lemma-A-equivalent-to-I} $\Leftrightarrow$ \namesubcref{enum:lemma-only-trivial-solution}]
+    If $A$ and $I_n$ are row-equivalent, then the systems $Ax = 0$ and $I_n x = 0$ have the same solutions. Conversely, assume that $Ax = 0$ only has the trivial solution. If $H \in \mat{m,n}{\field}$ is a row-reduced echelon matrix that is row-equivalent to $A$, then $Hx = 0$ has no nontrivial solution. Thus if $r$ is the number of nonzero rows in $H$, then $r \geq n$. But then $r = n$, so $H$ must be the identity matrix.
+\end{proofsec*}
+\end{proof}
+
+
+\begin{proposition}
+    Let $A \in \mat{n}{\field}$. Then the following are equivalent:
+    %
+    \begin{enumprop}
+        \item $A$ is invertible,
+        \item $A$ has a left inverse, and
+        \item $A$ has a right inverse.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    If $A$ has a left inverse, then $Ax = 0$ has no nontrivial solution, so $A$ is invertible. If $A$ has a right inverse $B \in \mat{n}{\field}$, i.e. $AB = I$, then $B$ has a left inverse and is thus invertible. But then $A$ is the inverse of $B$ and hence is itself invertible.
+\end{proof}
+
+
+
+
+\chapter{Bases and coordinates}
+
+\section{Bases}
+
+\newcommand{\gen}[1]{\langle#1\rangle}
+
+If $\calV$ is a subset of $V$, the \keyword{span} of $\calV$, denoted $\Span\calV$ or $\gen{\calV}$, is the smallest subspace of $V$ containing $\calV$. Equivalently, it is the set of all linear combinations
+%
+\begin{equation*}
+    \alpha_1 v_1 + \cdots + \alpha_n v_n,
+\end{equation*}
+%
+where $\alpha_i \in \field$ and $v_i \in \calV$. We say that $\calV$ is \keyword{linearly independent} if any linear relation
+%
+\begin{equation*}
+    \alpha_1 v_1 + \cdots + \alpha_n v_n = 0
+\end{equation*}
+%
+among elements $v_i$ in $\calV$ can only be satisfied if $\alpha_1 = \cdots = \alpha_n = 0$. An element $v \in V$ is an \keyword{essentially unique} linear combination of the elements in $\calV$ if there is an up to ordering unique way to express $v$ as a linear combination of elements in $\calV$. It is easy to see that $\calV$ is linearly independent if and only if every nonzero $v \in \Span\calV$ is an essentially unique linear combination of the elements in $\calV$.
+
+\begin{proposition}
+    Let $\calV$ be a subset of $V$. The following are equivalent:
+    %
+    \begin{enumprop}
+        \item $\calV$ is linearly independent and spans $V$.
+        \item Every nonzero $v \in V$ is an essentially unique linear combination of vectors in $\calV$.
+        \item $\calV$ is a minimal spanning set.
+        \item $\calV$ is a maximal linearly independent set.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+\begin{proofsec*}
+    \item[(i) <=> (ii)]
+    This follows easily as mentioned above.
+
+    \item[(i) <=> (iii)]
+    If (i) holds and a proper subset $\calV'$ of $\calV$ spanned $V$, then any element of $\calV \setminus \calV'$ is a linear combination of elements in $\calV'$, so $\calV$ is not linearly independent. Conversely, if $\calV$ is a minimal spanning set but is not linearly independent, then some $v \in \calV$ is a linear combination of the other elements in $\calV$, so $\calV \setminus \{v\}$ is also a spanning set.
+
+    \item[(i) <=> (iv)]
+    Again assuming (i), if $\calV$ were not maximal there would be some $v \in V \setminus \calV$ such that $\calV \union \{v\}$ were linearly independent. But then $v$ would not be a linear combination of elements in $\calV$. Conversely, if $\calV$ is a maximal linearly independent set that did not span $V$, then there would be some $v \in V \setminus \calV$ that is not a linear combination of elements in $\calV$. But then $\calV \union \{v\}$ is also linearly independent.
+\end{proofsec*}
+\end{proof}
+
+
+\begin{proposition}
+    \label{prop:basis-existence}
+    Let $V$ be a vector space. If $\calI \subseteq V$ is linearly independent, $\calS \subseteq V$ is a spanning set, and $\calI \subseteq \calS$, then there is a basis $\calV$ for $V$ with $\calI \subseteq \calV \subseteq \calS$.
+\end{proposition}
+
+\begin{proof}
+    Let $\calA$ be the collection of linearly independent subsets $\calJ$ of $V$ with $\calI \subseteq \calJ \subseteq \calS$. If $\calC$ is a chain in $\calA$, then
+    %
+    \begin{equation*}
+        \calU
+            = \bigunion_{\calJ \in \calC} \calJ
+    \end{equation*}
+    %
+    is linearly independent and satisfies $\calI \subseteq \calU \subseteq \calS$, so it lies in $\calA$. Hence every chain in $\calA$ has an upper bound, so it has a maximal element $\calV$. This is linearly independent since it lies in $\calA$, and it is also a spanning set by maximality, hence it is a basis.
+\end{proof}
+
+
+\begin{corollary}
+    Every vector space has a basis.
+\end{corollary}
+
+\begin{proof}
+    Let $\calI = \emptyset$ and $\calS = V$ in \cref{prop:basis-existence}.
+\end{proof}
+
+\begin{proposition}
+    A subset $\calV \subseteq V$ is a basis for $V$ if and only if
+    %
+    \begin{equation*}
+        V
+            = \bigoplus_{v \in \calV} \gen{v}.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    TODO
+\end{proof}
+
+
+
+\begin{proposition}
+    If the vectors $v_1, \ldots, v_n$ in $V$ are linearly independent, and the vectors $w_1, \ldots, w_m$ span $V$, then $n \leq m$.
+\end{proposition}
+
+\begin{proof}
+    List the vectors as follows:
+    %
+    \begin{equation*}
+        w_1, \ldots, w_m; v_1, \ldots, v_n.
+    \end{equation*}
+    %
+    We transform this list such that the collection of vectors on the left-hand side of the semicolon always span $V$, and such that the vectors on the right-hand side are always linearly independent. Note that $v_1$ is a linear combination of the $w_j$, implying that we may add $v_1$ to the left-hand side and remove one of the $w_j$ (which, by reindexing, we may assume is $w_1$) and still have a spanning set. We simultaneously remove $v_1$ from the right-hand side. That is, we obtain
+    %
+    \begin{equation*}
+        v_1, w_2, \ldots, w_m; v_2, \ldots, v_n.
+    \end{equation*}
+    %
+    If $m < n$, then applying this process recursively will eventually exhaust the $w_j$, at which point we would have
+    %
+    \begin{equation*}
+        v_1, \ldots, v_m; v_{m+1}, \ldots, v_n.
+    \end{equation*}
+    %
+    But this is not possible, since $v_n$ does not lie in the span of $v_1, \ldots, v_m$. Hence $n \leq m$.
+\end{proof}
+
+
+\begin{corollarynoproof}
+    If $V$ has a finite spanning set, then all bases for $V$ have the same cardinality.
+\end{corollarynoproof}
+%
+This in fact holds for arbitrary vector spaces, though the proof is significantly more involved.
+
+Since bases always exist and all bases have the same cardinality, the following definition makes sense:
+
+\begin{definition}[Dimension]
+    The \keyword{dimension} of a vector space $V$, written $\dim V$, is the cardinality of any basis for $V$.
+\end{definition}
+
+
+
+
+
+\newpar
+
+Let $V$ be a vector space. A \keyword{Hamel basis} for $V$ is a linearly independent set $\calV \subseteq V$ that spans $V$, i.e. for every $v \in V$ there exist unique (up to ordering) $v_1, \ldots, v_n \in \calV$ and $\alpha_1, \ldots, \alpha_n \in \field$ such that $v = \sum_{i=1}^n \alpha_i v_i$. In other words, a Hamel basis is a maximal linearly independent subset of $V$. It turns out that all Hamel bases for $V$ have the same cardinality, and this is called the \keyword{(Hamel) dimension} of $V$, written $\dim V$.
+
+If $V$ is an inner product space, a subset $\calO$ of $V$ is said to be \keyword{orthogonal} if $v \neq w$ implies $v \perp w$ for $v,w \in \calO$. Furthermore, if every element of $\calO$ is a unit vector, then $\calO$ is called \keyword{orthonormal}. If $\calV$ is a Hamel basis for $V$ that is also an orthogonal/orthonormal set, then $\calV$ is called an \keyword{orthogonal/orthonormal Hamel basis}. If every vector in an orthogonal set $\calO$ is nonzero, then $\calO$ gives rise to an orthonormal set by dividing each vector by its norm. This clearly preserves the span of every subset of $\calO$; in particular, if $\calO$ is an orthogonal Hamel basis then this modification yields an orthonormal Hamel basis.
+
+There is also another notion of basis in an inner product space: A maximal orthonormal subset of $V$ is called a \keyword{Hilbert basis}. An orthonormal Hamel basis is thus a Hilbert basis, but not vice-versa. For instance, the \enquote{standard basis} of $\reals^\naturals$ consisting of sequences $e_n = (0,\ldots,0,1,0,\ldots)$ with a $1$ in the $n$th place and zeros elsewhere is a Hilbert basis for the space $l^2(\naturals)$, but it is not a Hamel basis for $l^2(\naturals)$ since its linear span is the \emph{coproduct} $\reals^{\oplus\naturals}$, i.e. the subspace of $l^2(\naturals)$ of sequences with finitely many nonzero elements.
+
+
+\newpar
+
+Zorn's lemma can be used to show that every vector space has a Hamel basis, and that every inner product space has a Hilbert basis (every inner product space of course also has a Hamel basis). However, not every inner product space has an \emph{orthonormal} Hamel basis. For instance, let $\calH$ be an infinite-dimensional Hilbert space, let $\calO$ be an infinite orthonormal subset of $\calH$, and let $(e_n)_{n\in\naturals}$ be a sequence of distinct elements from $\calO$. Then the sum of the series $\sum_{n=1}^n e_n/n$ lies in $\calH$ by completeness, but this cannot be expressed as a finite linear combination of elements in $\calO$, since the terms in the sum become arbitrarily small.
+
+The argument above in particular shows that the (Hamel) dimension of an infinite-dimensional Hilbert space $\calH$ is uncountable. For if $\calI$ is any countable, linearly independent collection of elements from $\calH$, then the Gram--Schmidt process yields an orthonormal collection $\calO \subseteq \calH$ with $\Span \calO = \Span \calI$. But the above shows that $\calO$ cannot span $\calH$, so neither can $\calI$.
+
+
+\newpar
+
+We now turn to a different characterisation of the dimension of finite-dimensional vector spaces. Below we write $\dim V = \infty$ if the dimension of the vector space $V$ is infinite. A \keyword{series} of subspaces $U_i$ of $V$ is a finite or infinite decreasing sequence
+%
+\begin{equation*}
+    V
+        = U_0
+        \supsetneq U_1
+        \supsetneq U_2
+        \supsetneq \cdots.
+\end{equation*}
+%
+If the sequence is finite, then the \keyword{length} of the series is the number of strict inclusions. If the sequence is infinite, then we say that the length of the series is $\infty$. The maximal length of a series of subspaces of $V$ is denoted $l(V)$.
+
+In the proposition below, we write $\dim V = \infty$ if the dimension of $V$ is infinite.
+
+\begin{proposition}
+    Let $V$ be a vector space. Then $\dim V = l(V)$.
+\end{proposition}
+
+\begin{proof}
+    First assume that $V$ is finite-dimensional, and let $\calV = (v_1, \ldots, v_n)$ be a basis for $V$. Then there is a series
+    %
+    \begin{equation*}
+        V
+            = \Span(v_1, \ldots, v_n)
+            \supsetneq \Span(v_1, \ldots, v_{n-1})
+            \supsetneq \cdots
+            \supsetneq \Span(v_1)
+            \supsetneq 0
+    \end{equation*}
+    %
+    of subspaces of $V$, so $\dim V \leq l(V)$. Conversely, let
+    %
+    \begin{equation*}
+        V
+            = U_0
+            \supsetneq U_1
+            \supsetneq U_2
+            \supsetneq \cdots
+    \end{equation*}
+    %
+    be a series of subspaces of $V$. If the series ends with $0$, remove it. Hence all subspaces in the series are nontrivial. Then choose for each $i$ an element $v_i \in U_i \setminus U_{i+1}$, and collect them in a set $\calI$. It is clear that $\calI$ is linearly independent, hence finite. Thus the series is also finite with length $\card{\calI}-1$. Adding back $0$ to the series we obtain a series that is at least as long as the original sequence, and that is of length $\card{\calI} \leq \dim V$. Since the sequence was arbitrary, $l(V) \leq \dim V$.
+
+    Next assume that $V$ is infinite-dimensional. Then $V$ contains a sequence $(v_i)_{i\in\naturals}$ that is linearly independent, so the series
+    %
+    \begin{equation*}
+        V
+            \supseteq \Span \set{v_i}{i \in \naturals}
+            \supsetneq \Span \set{v_i}{i \geq 2}
+            \supsetneq \Span \set{v_i}{i \geq 3}
+            \supsetneq \cdots
+    \end{equation*}
+    %
+    is infinite, and $l(V) = \infty$. Conversely, assume that $V$ has an infinite series. As above we construct a linearly independent set $\calI$ whose size equals the length of the sequence. Thus $V$ contains an infinite linearly independent set, so $\dim V = \infty$.
+\end{proof}
+
+
+
+
+\section{Coordinate maps and matrices}
+
+\newcommand{\coordmap}[1]{\phi_{#1}}
+\newcommand{\coordvec}[2]{[#1]_{#2}}
+\newcommand{\basischange}[2]{\phi_{#1,#2}}
+\newcommand{\mr}[3]{{}_{#1}[#2]_{#3}}
+\newcommand{\basischangemat}[2]{\mr{#1}{\square}{#2}}
+\newcommand{\lin}{\calL}
+\newcommand{\smr}[1]{\calM(#1)} % standard matrix representation
+
+\newcommand{\colvec}[1]{\begin{pmatrix}#1\end{pmatrix}}
+
+
+
+
+\newpar
+
+Every matrix $A \in \mat{m,n}{\field}$ gives rise to a map $M_A \colon \field^n \to \field^m$ given by $M_A v = Av$. The next result shows that every linear map $\field^n \to \field^m$ arises in this way:
+
+\begin{proposition}
+    \label{prop:smr-properties}
+    Let $(e_1, \ldots, e_n)$ be the standard basis for $\field^n$. The map
+    %
+    \begin{align*}
+        \calM \colon \lin(\field^n, \field^m) &\to \mat{m,n}{\field}, \\
+        T &\mapsto \bigl( Te_1 \mid \cdots \mid Te_n \bigr),
+    \end{align*}
+    %
+    is a linear isomorphism with inverse $A \mapsto M_A$. The matrix $\smr{T}$ is called the \keyword{standard matrix representation} of $T$. If $T \colon \field^n \to \field^m$ and $S \colon \field^m \to \field^l$ are linear maps, then
+    %
+    \begin{enumprop}
+        \item \label{enum:smr-vector-multiplication} $Tv = \smr{T}v$ for all $v \in \field^n$.
+        
+        \item \label{enum:smr-of-identity-map} $\smr{\id_{\field^n}} = I$.
+
+        \item \label{enum:smr-multiplicative} $\smr{S \circ T} = \smr{S} \smr{T}$.
+
+        \item \label{enum:smr-invertibility} $T$ is invertible if and only if $\smr{T}$ is invertible, in which case $\smr{T\inv} = \smr{T}\inv$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    The map $A \mapsto M_A$ is clearly linear, so to prove the first point it suffices to show that this is the inverse of $\calM$. Let $T \in \lin(\field^n,\field^m)$. Then
+    %
+    \begin{equation*}
+        M_{\smr{T}} \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \smr{T} \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \bigl( Te_1 \mid \cdots \mid Te_n \bigr) \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \sum_{i=1}^n \alpha_i Te_i
+            = T \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+    \end{equation*}
+    %
+    for $\alpha_1, \ldots, \alpha_n \in \field$. Conversely, for $A \in \mat{m,n}{\field}$ we have
+    %
+    \begin{equation*}
+        \smr{M_A}
+            = \bigl( M_A e_1 \mid \cdots \mid M_A e_n \bigr)
+            = \bigl( A e_1 \mid \cdots \mid A e_n \bigr)
+            = A,
+    \end{equation*}
+    %
+    since $Ae_i$ is the $i$th column of $A$. We prove the remaining claims:
+    %
+    \begin{proofsec}
+        \item[\Namesubcref{enum:smr-vector-multiplication}]
+        Simply notice that $Tv = M_{\smr{T}}v = \smr{T}v$.
+
+        \item[\Namesubcref{enum:smr-of-identity-map}]
+        This is obvious from the definition of $\calM$.
+
+        \item[\Namesubcref{enum:smr-multiplicative}]
+        Let $v \in \field^n$ and notice that
+        %
+        \begin{equation*}
+            \smr{S \circ T}v
+                = (S \circ T) v
+                = S(Tv)
+                = S(\smr{T}v)
+                = \smr{S}\smr{T}v
+        \end{equation*}
+        %
+        by \subcref{enum:smr-vector-multiplication}. Since this holds for all $v$, the claim follows.
+
+        \item[\Namesubcref{enum:smr-invertibility}]
+        This follows easily from \subcref{enum:smr-of-identity-map} and \subcref{enum:smr-multiplicative}.
+    \end{proofsec}
+\end{proof}
+
+
+\newpar
+
+Having characterised all linear maps between powers of the field $\field$, we now wish to characterise the linear maps between abstract finite-dimensional vector spaces. The first order of business is to establish a correspondence between such a vector space and an appropriate power of $\field$.
+
+Let $V$ be a finite-dimensional $\field$-vector space. If $\calV = (v_1, \ldots, v_n)$ is an ordered basis for $V$, then for every $v \in V$ there are unique $\alpha_1, \ldots, \alpha_n \in \field$ such that $v = \sum_{i=1}^n \alpha_i v_i$. Hence the map $\coordmap{\calV} \colon V \to \field^n$ given by $\coordmap{\calV}(v) = (\alpha_1, \ldots, \alpha_n)$ is well-defined. Furthermore, it is clearly linear, and since $\calV$ is a basis it is also bijective, hence a linear isomorphism. The map $\coordmap{\calV}$ is called the \keyword{coordinate map} with respect to $\calV$, and the vector $\coordvec{v}{\calV} = \coordmap{\calV}(v)$ is called the \keyword{coordinate vector} of $v$ with respect to $\calV$.
+
+Now let $\calW$ be another ordered basis for $V$. The composition $\basischange{\calW}{\calV} = \coordmap{\calW} \circ \coordmap{\calV}\inv$ is called the \keyword{change of basis operator} from $\calV$ to $\calW$, and this makes the diagram
+%
+\begin{equation}
+    \label{eq:change-of-basis-diagram}
+    \begin{tikzcd}[row sep=small]
+        & \field^n
+            \ar[dd, "\basischange{\calW}{\calV}"] \\
+        V
+            \ar[ru, "\coordmap{\calV}"]
+            \ar[rd, "\coordmap{\calW}", swap] \\
+        & \field^n
+    \end{tikzcd}
+\end{equation}
+%
+commute. Its standard matrix is denoted $\basischangemat{\calW}{\calV}$. This has the expected properties:
+
+\begin{proposition}
+    Let $\calV$, $\calW$ and $\calU$ be ordered bases for a finite-dimensional $\field$-vector space $V$. Then
+    %
+    \begin{enumprop}
+        \item \label{enum:basis-change-coordvec} $\coordvec{v}{\calW} = \basischange{\calW}{\calV} (\coordvec{v}{\calV})$ for all $v \in V$. In particular, $\coordvec{v}{\calW} = \basischangemat{\calW}{\calV} \cdot \coordvec{v}{\calV}$.
+
+        \item \label{enum:basis-change-identity-map} $\basischange{\calV}{\calV}$ is the identity map. In particular, $\basischangemat{\calV}{\calV}$ is the identity matrix.
+
+        \item $\basischange{\calU}{\calW} \circ \basischange{\calW}{\calV} = \basischange{\calU}{\calV}$. In particular, $\basischangemat{\calU}{\calW} \cdot \basischangemat{\calW}{\calV} = \basischangemat{\calU}{\calV}$.
+
+        \item $\basischange{\calW}{\calV}$ (resp. $\basischangemat{\calW}{\calV}$) is invertible with inverse $\basischange{\calV}{\calW}$ (resp. $\basischangemat{\calV}{\calW}$).
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    All claims about change of basis matrices follow by \cref{prop:smr-properties} from the corresponding claims about change of basis operators.
+
+    The claim \subcref{enum:basis-change-coordvec} follows by commutativity of the diagram \cref{eq:change-of-basis-diagram}, i.e.
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calV} (\coordvec{v}{\calV})
+            = (\coordmap{\calW} \circ \coordmap{\calV}\inv) \circ \coordmap{\calV}(v)
+            = \coordmap{\calW}(v)
+            = \coordvec{v}{\calW}.
+    \end{equation*}
+    %
+    Claim \subcref{enum:basis-change-identity-map} is an immediate consequence of the definition of $\basischange{\calV}{\calV}$. The remaining claims are proved similarly to \subcref{enum:basis-change-coordvec}.
+\end{proof}
+
+
+\newpar\label{par:matrix-rep}
+
+Next consider a linear map $T \colon V \to W$. If $\calV \in V^n$ and $\calW \in W^m$ are bases for $V$ and $W$ respectively, then the diagram
+%
+\begin{equation*}
+    \begin{tikzcd}
+        V
+            \ar[d, "T", swap]
+            \ar[r, "\coordmap{\calV}"]
+        & \field^n
+            \ar[d, "\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv"] \\
+        W
+            \ar[r, "\coordmap{\calW}", swap]
+        & \field^m
+    \end{tikzcd}
+\end{equation*}
+%
+commutes. The map $\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is the \keyword{basis representation} of $T$ with respect to the bases $\calV$ and $\calW$. This is a linear map $\field^n \to \field^m$, so it has a standard matrix which we denote $\mr{\calW}{T}{\calV}$. This is called the \keyword{matrix representation} of $T$ with respect to the bases $\calV$ and $\calW$.
+
+\begin{proposition}
+    \label{prop:mr-properties}
+    Let $V$ and $W$ be finite-dimensional $\field$-vector spaces with ordered bases $\calV = (v_1, \ldots, v_n) \in V^n$ and $\calW \in W^m$, respectively. The map
+    %
+    \begin{align*}
+        \mr{\calW}{\,\cdot\,}{\calV} \colon \lin(V,W) &\to \mat{m,n}{\field}, \\
+        T &\mapsto \mr{\calW}{T}{\calV},
+    \end{align*}
+    %
+    is a linear isomorphism. Let $T \colon V \to W$ and $S \colon W \to U$ be linear maps, and let $\calU \in U^l$ be an ordered basis for $U$. Then
+    %
+    \begin{enumprop}
+        \item \label{enum:mr-explicit-formula} $\mr{\calW}{T}{\calV} = \bigl( \coordvec{Tv_1}{\calW} \mid \cdots \mid \coordvec{Tv_n}{\calW} \bigr)$.
+
+        \item \label{enum:mr-vector-multiplication} $\coordvec{Tv}{\calW} = \mr{\calW}{T}{\calV} \cdot \coordvec{v}{\calV}$ for all $v \in V$.
+
+        \item \label{enum:mr-of-identity-map} If $\calV'$ is another basis for $V$, then $\mr{\calV'}{\id_V}{\calV} = \basischangemat{\calV'}{\calV}$.
+
+        \item \label{enum:mr-multiplicative} $\mr{\calU}{S \circ T}{\calV} = \mr{\calU}{S}{\calW} \cdot \mr{\calW}{T}{\calV}$.
+
+        \item \label{enum:mr-invertibility} $T$ is invertible if and only if $\mr{\calW}{T}{\calV}$ is invertible, in which case $\mr{\calV}{T\inv}{\calW} = \mr{\calW}{T}{\calV}\inv$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    For the first claim, notice that the map $T \mapsto \coordmap{\calW} \circ T \circ \coordmap{\calV}\inv$ is a linear isomorphism, since pre- and postcomposition with linear isomorphisms are themselves linear isomorphisms. Composing this map with $\calM$ yields $\mr{\calW}{\,\cdot\,}{\calV}$, so this is a linear isomorphism by \cref{prop:smr-properties}.
+    %
+    \begin{proofsec}
+        \item[\Namesubcref{enum:mr-explicit-formula}]
+        If $(e_1, \ldots, e_n)$ is the standard basis for $\field^n$, then the definition of the standard matrix representation yields that the $i$th column of $\mr{\calW}{T}{\calV}$ is given by
+        %
+        \begin{equation*}
+            \mr{\calW}{T}{\calV} \cdot e_i
+                = \smr{\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv} \cdot e_i
+                = (\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv) e_i
+                = \coordmap{\calW}(Tv_i)
+                = \coordvec{Tv_i}{\calW},
+        \end{equation*}
+        %
+        as claimed.
+
+        \item[\Namesubcref{enum:mr-vector-multiplication}]
+        Notice that
+        %
+        \begin{align*}
+            \coordvec{Tv}{\calW}
+                &= (\coordmap{\calW} \circ T)(v) \\
+                &= (\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv) \circ \coordmap{\calV}(v) \\
+                &= (\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv)(\coordvec{v}{\calV}) \\
+                &= \mr{\calW}{T}{\calV} \cdot \coordvec{v}{\calV}.
+        \end{align*}
+        %
+        where the last equality follows from \cref{enum:smr-vector-multiplication}.
+
+        \item[\Namesubcref{enum:mr-of-identity-map}]
+        This is obvious from the definitions of $\mr{\calV'}{\id_V}{\calV}$ and $\basischangemat{\calV'}{\calV}$.
+
+        \item[\Namesubcref{enum:mr-multiplicative}]
+        Notice that
+        %
+        \begin{equation*}
+            \coordmap{\calU} \circ (S \circ T) \circ \coordmap{\calV}\inv
+                = (\coordmap{\calU} \circ S \circ \coordmap{\calW}\inv) \circ (\coordmap{\calW} \circ T \circ \coordmap{\calV}\inv)
+        \end{equation*}
+        %
+        The claim then follows from \cref{enum:smr-multiplicative}.
+
+        \item[\Namesubcref{enum:mr-invertibility}]
+        This is an immediate consequence of either \subcref{enum:mr-multiplicative} or of \cref{enum:smr-invertibility}.
+    \end{proofsec}
+\end{proof}
+
+
+\begin{proposition}
+    Let $\calV = (v_1, \ldots, v_n)$ be an ordered basis for an $\field$-vector space $V$, and let $T \colon V \to V$ be a linear isomorphism. Let $\calW = (w_1, \ldots, w_n)$ where $w_i = Tv_i$. Then $\calW$ is an ordered basis for $V$ and
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calV}
+            = \coordmap{\calV} \circ T\inv \circ \coordmap{\calV}\inv,
+        \quad \text{or} \quad
+        \basischangemat{\calW}{\calV}
+            = \mr{\calV}{T\inv}{\calV}.
+    \end{equation*}
+    %
+    In particular, if $V = \field^n$ and $\calV$ is the standard basis $\calE$, then
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calE}
+            = T\inv,
+        \quad \text{or} \quad
+        \basischangemat{\calW}{\calE}
+            = \smr{T}\inv.
+    \end{equation*}
+\end{proposition}
+%
+We think of this result as follows: If we change basis by applying an invertible linear transformation $T$, we obtain the coordinate vectors corresponding to the transformed basis by applying $T\inv$ (in the old basis). This says that if we perform a \emph{passive transformation}, i.e. a change of basis while keeping vectors themselves fixed, the coordinates change by the inverse of said transformation.
+
+\begin{proof}
+    Let $v \in V$ and write $v = \sum_{i=1}^n \alpha_i v_i$. Then
+    %
+    \begin{equation*}
+        Tv
+            = \sum_{i=1}^n \alpha_i Tv_i
+            = \sum_{i=1}^n \alpha_i w_i
+            = \coordmap{\calW}\inv \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \coordmap{\calW}\inv \circ \coordmap{\calV}(v),
+    \end{equation*}
+    %
+    implying that
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calV}
+            = \coordmap{\calW} \circ \coordmap{\calV}\inv
+            = (T \circ \coordmap{\calV}\inv)\inv \circ \coordmap{\calV}\inv
+            = \coordmap{\calV} \circ T\inv \circ \coordmap{\calV}\inv
+    \end{equation*}
+    %
+    as claimed.
+\end{proof}
+
+
+\newpar
+
+We end this section with the following result on eigenvalues of matrix representations:
+
+\begin{lemma}
+    \label{lemma:mr-eigenvalues}
+    Let $V$ be a finite-dimensional vector space, let $T \in \calL(V)$, and let $\calV$ be an ordered basis for $V$. Then $v \in V$ is an eigenvector for $T$ if and only if $\coordvec{v}{\calV}$ is an eigenvector for $\mr{\calV}{T}{\calV}$ with the same eigenvalue.
+\end{lemma}
+
+\begin{proof}
+    Let $\lambda \in \field$ be the eigenvalue of $v$. Then
+    %
+    \begin{equation*}
+        \mr{\calV}{T}{\calV} \cdot \coordvec{v}{\calV}
+            = \coordvec{Tv}{\calV}
+            = \coordvec{\lambda v}{\calV}
+            = \lambda \coordvec{v}{\calV}.
+    \end{equation*}
+    %
+    For the converse, a similar calculation shows that  $\coordvec{Tv}{\calV} = \coordvec{\lambda v}{\calV}$. Since $\coordmap{\calV}$ is an isomorphism, it follows that $Tv = \lambda v$ as desired.
+\end{proof}
+
+
+
+
+\chapter{Sesquilinear forms}
+
+\section{Definitions}
+
+\newpar
+
+If $V$ is a complex vector space, recall that a map $g \colon V \prod V \to \complex$ is called \keyword{sesquilinear} if it is linear in one entry and conjugate-linear in the other. Opinions differ as to in which entry $g$ should be linear, but our sesquilinear forms will be linear in the \emph{second} entry. Similarly, if $V$ is a vector space over an arbitrary field $\field$, recall that $g \colon V \prod V \to \field$ is \keyword{bilinear} if it is linear in each entry (i.e., if it is $2$-linear in the terminology of \cref{sec:determinant-existence-uniqueness}).
+
+In order to collect these two properties under one concept, we make the following definition:
+
+\begin{definition}[Involutive field]
+    Let $\field$ be a field. An \keyword{involution} on $\field$ is a homomorphism $\iota \colon \field \to \field$ with $\iota^2 = \id_{\field}$. The pair $(\field, \iota)$ is called an \keyword{involutive field}.
+\end{definition}
+%
+The most important example of an involutive field is of course the complex field equipped with complex conjugation. However, the identity map $\id_\field$ is obviously an involution regardless of the field $\field$, so any field is involutive in a trivial way. By analogy with complex conjugation we will also call $\iota$ \keyword{conjugation}, and for any $a \in \field$ we denote $\iota(a)$ by $\conj{a}$ and call this the \keyword{conjugate} of $a$.
+
+If $V$ and $W$ are vector spaces over an involutive field $\field$, then a map $T \colon V \to W$ is \keyword{conjugate-linear} if
+%
+\begin{equation*}
+    T(\alpha u + v)
+        = \conj{\alpha} Tu + Tv
+\end{equation*}
+%
+for all $\alpha \in \field$ and $u,v \in V$. If $T$ is bijective it is called a \keyword{(conjugate-linear) isomorphism}, and its inverse is clearly also conjugate-linear.
+
+\begin{definition}[Sesquilinear form]
+    Let $\field$ be an involutive field, and let $V$ be an $\field$-vector space. A \keyword{sesquilinear form} on $V$ is a map $g \colon V \prod V \to \field$ such that $g(v, \,\cdot\,)$ is linear and $g(\,\cdot\,, v)$ is conjugate-linear for all $v \in V$.
+\end{definition}
+%
+Furthermore, if $g$ is a sesquilinear form on $V$, the map $g^* \colon V \prod V \to \field$ given by $g^*(v,u) = \conj{g(u,v)}$ is called the \keyword{conjugate sesquilinear form} of $g$.
+
+
+\newpar
+
+We next describe the different kinds of sesquilinear forms that are of interest to us. Let $V$ be a vector space over the involutive field $\field$ equipped with a sesquilinear form $g$.
+
+\begin{definition}
+    The sesquilinear form $g$ on $V$ is said to be
+    %
+    \begin{enumdef}
+        \item \keyword{reflexive} if $g(u,v) = 0$ implies $g(v,u) = 0$ for all $u,v \in V$.
+
+        \item \keyword{conjugate symmetric} if $g = g^*$, i.e. if $g(u,v) = \conj{g(v,u)}$ for all $u,v \in V$.
+        
+        \item \keyword{symmetric} if $g(u,v) = g(v,u)$ for all $u,v \in V$.
+        
+        \item \keyword{pre-symmetric} if it is either conjugate symmetric or symmetric.
+        
+        \item \keyword{skew-symmetric} if $g(u,v) = -g(v,u)$ for all $u,v \in V$.
+        
+        \item \keyword{alternating} if $g(v,v) = 0$ for all $v \in V$.
+    \end{enumdef}
+\end{definition}
+%
+In the sequel we will drop the adjective \textquote{sesquilinear} and simply talk of forms. We immediately note the following relationships between the properties defined above:
+
+\begin{lemma}
+    \begin{enumlem}
+        \item If the involution on $\field$ is trivial, then
+        %
+        \begin{equation*}
+            \text{symmetric}
+                \iff \text{conjugate symmetric}.
+        \end{equation*}
+        
+        \item If $\chr \field = 2$, then
+        %
+        \begin{equation*}
+            \text{alternating}
+                \implies \text{symmetric}
+                \iff \text{skew-symmetric}.
+        \end{equation*}
+
+        \item If $\chr \field \neq 2$, then
+        %
+        \begin{equation*}
+            \text{alternating}
+                \iff \text{skew-symmetric}.
+        \end{equation*}
+
+        \item We always have
+        %
+        \begin{equation*}
+            \text{reflexive}
+                \iff \text{pre-symmetric or alternating}.
+        \end{equation*}
+    \end{enumlem}
+\end{lemma}
+
+\begin{proof}
+    If the involution of $\field$ is trivial and $g$ is symmetric, then $g(u,v) = \conj{g(u,v)}$, so the first equivalence follows.
+
+    Next note that if $g$ is alternating then it is skew-symmetric: For
+    %
+    \begin{equation*}
+        0
+            = g(u + v, u + v)
+            = g(u,v) + g(v,u),
+    \end{equation*}
+    %
+    implying that $g$ is skew-symmetric.
+
+    If $\chr \field = 2$ then $1 = -1$, and so symmetry and skew-symmetry are clearly equivalent. If instead $\chr \field \neq 2$ and $g$ is skew-symmetric, then $g(v,v) = -g(v,v)$, so $2g(v,v) = 0$ which implies that $g(v,v) = 0$.
+
+    For the final claim, assume that 
+    
+    It suffices to show that if $u,v \in V$ and $u \perp v$ then $v \perp u$, so assume that $u \perp v$. This is obvious if the form on $V$ is symmetric. If it is conjugate symmetric, then also
+    %
+    \begin{equation*}
+        \inner{v}{u}
+            = \conj{\inner{u}{v}}
+            = \conj{0}
+            = 0,
+    \end{equation*}
+    %
+    since conjugation on $\field$ sends $0$ to $0$. If instead the form is alternating, then it is also skew-symmetric, and so
+    %
+    \begin{equation*}
+        \inner{v}{u}
+            = -\inner{u}{v}
+            = -0
+            = 0,
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+%
+In particular, a skew-symmetric form is either symmetric or alternating, and we thus do not need to explicitly study skew-symmetric forms.
+
+We make the following further definitions:
+
+\begin{definition}[Metric vector space]
+    If $V$ is a vector space over an involutive field $\field$ and $g$ is a metric form on $V$, then we call $(V,g)$ a \keyword{metric vector space}. Furthermore, if $g$ is
+    %
+    \begin{center}
+        \begin{tabular}{rcl}
+            conjugate symmetric & \multirow{4}{*}{then $(V,g)$ is called} & a \keyword{unitary} \\
+            symmetric && an \keyword{orthogonal} \\
+            pre-symmetric && a \keyword{pre-orthogonal} \\
+            alternating && a \keyword{symplectic} \\
+        \end{tabular}
+    \end{center}
+    %
+    \keyword{geometry} over $\field$.
+\end{definition}
+%
+Furthermore, the form $g$ in question will always be understood, and we will simply denote $g(u,v)$ by $\inner{u}{v}$. In the same vein, we will also refer to $V$ a metric vector space.
+
+
+\section{Metric vector spaces}
+
+In this section we study properties that all metric vector spaces share, and concepts that are common to them all. Let $V$ be a metric vector space.
+
+
+\newpar
+
+We begin with a concept familiar from the theory of inner product spaces:
+
+\begin{definition}[Orthogonality]
+    let $M,N \subseteq V$ be subsets. If $\inner{u}{v} = 0$ for all $u \in M$ and $v \in N$, then we say that $M$ is \keyword{orthogonal} to $N$, written $M \perp N$. The \keyword{orthogonal complement} of $M$ is the set $M^\perp = \set{v \in V}{v \perp M}$.
+\end{definition}
+%
+If either $M$ or $N$ (or both) is a singleton, then we variously write e.g. $u \perp N$ for $\{u\} \perp N$, and we say that $u$ is orthogonal to $N$. Note that if $M \subseteq N$, then $N^\perp \subseteq M^\perp$.
+
+The reason for only studying orthogonality in the context of \emph{metric} vector spaces is the following:
+
+\begin{lemma}
+    If $V$ is a metric vector space, then the orthogonality relation on $V$ is symmetric, i.e., $M \perp N$ implies $N \perp M$ for all $M,N \subseteq V$.
+\end{lemma}
+
+\begin{proof}
+    It suffices to show that if $u,v \in V$ and $u \perp v$ then $v \perp u$, so assume that $u \perp v$. This is obvious if the form on $V$ is symmetric. If it is conjugate symmetric, then also
+    %
+    \begin{equation*}
+        \inner{v}{u}
+            = \conj{\inner{u}{v}}
+            = \conj{0}
+            = 0,
+    \end{equation*}
+    %
+    since conjugation on $\field$ sends $0$ to $0$. If instead the form is alternating, then it is also skew-symmetric, and so
+    %
+    \begin{equation*}
+        \inner{v}{u}
+            = -\inner{u}{v}
+            = -0
+            = 0,
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+
+\begin{lemma}
+    If $M \subseteq V$, then $M^\perp$ is a subspace of $V$.
+\end{lemma}
+
+\begin{proof}
+    If $u,v \in M^\perp$ and $\alpha \in \field$, then for all $w \in M$ we have
+    %
+    \begin{equation*}
+        \inner{\alpha u + v}{w}
+            = \conj{\alpha} \inner{u}{w} + \inner{v}{w}
+            = 0,
+    \end{equation*}
+    %
+    so $\alpha u + v \in M^\perp$.
+\end{proof}
+
+
+\newpar
+
+In an inner product space, only the zero vector is orthogonal to itself. However, in a general metric vector space this is not so, and it is in fact possible for a nonzero vector to be orthogonal to \emph{every} vector in the space.
+
+\newcommand{\rad}[1]{\sqrt{#1}}
+
+First of all, a vector $v \in V$ is \keyword{isotropic} if $v \perp v$, and \keyword{nonisotropic} otherwise. On the other hand, $v$ is \keyword{degenerate} if $v \perp V$. The set of all degenerate vectors in $V$ is called the \keyword{radical} of $V$ and is denoted $\rad{V}$. (Note that $\rad{V}$ is simply the orthogonal complement $V^\perp$, so in particular it is a subspace of $V$.) If $\rad{V} = 0$ then $V$ is called \keyword{nonsingular/nondegenerate}, if $\rad{V} \neq 0$ it is \keyword{singular/degenerate}, and if $\rad{V} = V$ it is \keyword{totally singular/degenerate}.
+
+Note that if $U$ is a subspace of $V$, then the notation $U^\perp$ is ambiguous. It might refer to the subset of $U$ of vectors orthogonal to $U$, or the subset of $V$ of vectors orthogonal to $U$. However, the notation $\rad{U}$ always refers to the former. In either interpretation of $U^\perp$, note that $\rad{U} = U \intersect U^\perp$.
+
+
+\newpar
+
+Every subspace of a vector space has a complement. However, in metric vector spaces we can wish for something more:
+
+\begin{definition}[Orthogonal direct sum]
+    A metric vector space $V$ is the \keyword{orthogonal direct sum} of the subspaces $U$ and $W$, written
+    %
+    \begin{equation*}
+        V
+            = U \odot W,
+    \end{equation*}
+    %
+    if $V = U \oplus W$ and $U \perp W$.
+\end{definition}
+
+
+\begin{proposition}
+    If $U$ is a complement of $\rad{V}$, then $U$ is nonsingular and $V = \rad{V} \odot U$.
+\end{proposition}
+
+\begin{proof}
+    Clearly $\rad{V} \perp U$. Now notice that if $v \in \rad{U}$, then $v \perp U$, and we obviously also have $v \perp \rad{V}$. Hence $v \perp \rad{V} \oplus U = V$, so $\rad{U} \subseteq \rad{V}$. And since also $\rad{U} \subseteq U$, we must have $\rad{U} = 0$, so $U$ is nonsingular.
+\end{proof}
+%
+This result shows that we can find a subspace of $V$ that is nonsingular, and every element of $V$ almost lies in $U$: we just have to add an isotropic vector to it. And if isotropic vectors are somehow insignificant, then a restriction to nonsingular spaces is not very severe. And of course, we can always obtain a complement $U$ of $\rad{V}$ as the quotient $V/\rad{V}$ by \cref{prop:complement-iso-to-quotient}.
+
+If $V = U \odot W$, then we regrettably cannot call $W$ an \textquote{orthogonal complement} of $U$, since we have already used this term for the set $W^\perp$, as is standard. However, we will say that 
+
+
+\newpar
+
+If $u \in V$, define a map $\phi_u \colon V \to \field$ by $\phi_u(v) = \inner{u}{v}$. This gives rise to a conjugate-linear map $\Phi_V \colon V \to V^*$ given by $\Phi_V(u) = \phi_u$.
+
+\begin{theorem}[The Riesz representation theorem]
+    The map $\Phi_V$ is injective if and only if $V$ is nonsingular. In particular, if $V$ is finite-dimensional and nonsingular, then $\Phi_V$ is an isomorphism.
+\end{theorem}
+
+\begin{proof}
+    Notice that $\phi_u(v) = 0$ for all $v \in V$ just when $u \perp V$, i.e. when $u$ is degenerate. This is the case if and only if $u \in \rad{V}$, so $\ker \Phi_V = \rad{V}$.
+\end{proof}
+%
+If $\Phi_V$ is an isomorphism, we say that $V$ is \keyword{(algebraically) reflexive}. One can show (cf. \cite[Theorem~3.12]{romanlinalg}) that if a vector space $W$ is infinite-dimensional, then $\dim W < \dim W^*$, so infinite-dimensional spaces have no chance of being reflexive. It follows that a metric vector space is algebraically reflexive if and only if it is finite-dimensional and nonsingular.
+
+
+\newpar
+
+We next study maps that respect the metric structure on metric vector spaces. We sometimes write $\inner{\,\cdot\,}{\,\cdot\,}_V$ for the form on $V$ to distinguish this from forms on other vector spaces.
+
+\begin{definition}[Isometry]
+    Let $V$ and $W$ be metric vector spaces. A linear map $T \colon V \to W$ is an \keyword{isometry} if
+    %
+    \begin{equation*}
+        \inner{Tu}{Tv}_W
+            = \inner{u}{v}_V
+    \end{equation*}
+    %
+    for all $u,v \in V$. If $T$ is also bijective, we call it an \keyword{isometric isomorphism} and say that $V$ and $W$ are \keyword{isometric}.
+\end{definition}
+%
+Clearly the composition of two isometries is an isometry, and the inverse of an isometric isomorphism is also an isometry. In particular, the set of isometric isomorphisms on $V$ is a group under composition. If $V$ is also nondegenerate [TODO why??], an isometric isomorphism $T$ gets a distinctive name depending on the type of geometry:
+%
+\begin{enumerate}
+    \item If $V$ is a unitary geometry, $T$ is called a \keyword{unitary transformation}. The set $\vecU{V}$ of unitary transformations on $V$ is called the \keyword{unitary group} on $V$.
+
+    \item If $V$ is an orthogonal geometry, $T$ is called an \keyword{orthogonal transformation}. The set $\vecO{V}$ of orthogonal transformations on $V$ is called the \keyword{orthogonal group} on $V$.
+
+    \item If $V$ is a symplectic geometry, $T$ is called a \keyword{symplectic transformation}. The set $\vecSp{V}$ of symplectic transformations on $V$ is called the \keyword{symplectic group} on $V$.
+\end{enumerate}
+%
+In each case these sets are obviously groups under composition.
+
+
+
+\section{TODO}
+
+In the sequel we fix an involutive field $\field$ and a finite-dimensional $\field$-vector space, and we also fix a sesquilinear form $g$ on $V$. If $A = (a_{ij}) \in \mat{m,n}{\field}$ is a matrix, we denote by $A^*$ the $n \prod m$ matrix whose $(i,j)$th element is $\conj{a}_{ji}$ and call this the \keyword{conjugate} of $A$. That is, $A^*$ is obtained from $A$ by transposition and entrywise conjugation. If $B \in \mat{n,k}{\field}$ is another matrix, notice that $(AB)^* = B^* A^*$. If $A$ is square and $A = A^*$, then we also say that $A$ is \keyword{conjugate symmetric}.
+
+
+\newpar
+
+Consider an ordered basis $\calV = (v_1, \ldots, v_n)$ for $V$, and let $v = \sum_{i=1}^n \alpha_i v_i$ and $w = \sum_{i=1}^n \beta_i v_i$ be vectors in $V$. Notice that
+%
+\begin{equation*}
+    g(v,w)
+        = \sum_{i=1}^n \sum_{j=1}^n \conj{\alpha}_i g(v_i,v_j) \beta_j.
+\end{equation*}
+%
+Hence if we define the matrix $\Sigma = (g(v_i,v_j))_{i,j} \in \mat{n}{\field}$, then\footnote{Here we see the usefulness of sesquilinear forms being linear in the \emph{second} entry: For then we simply conjugate the coordinate vector of the left argument and leave the coordinate vector of the right argument untouched.}
+%
+\begin{equation}
+    \label{eq:sesquilinear-form}
+    g(v,w) =
+    \begin{pmatrix}
+        \conj{\alpha}_1 & \cdots & \conj{\alpha}_n
+    \end{pmatrix}
+    \begin{pmatrix}
+        g(v_1,v_1) & \cdots & g(v_1,v_n) \\
+        \vdots & \ddots & \vdots \\
+        g(v_n,v_1) & \cdots & g(v_n,v_n)
+    \end{pmatrix}
+    \begin{pmatrix}
+        \beta_1 \\ \vdots \\ \beta_n
+    \end{pmatrix}
+        = \coordvec{v}{\calV}^* \, \Sigma \, \coordvec{w}{\calV}.
+\end{equation}
+%
+We call $\Sigma$ the \keyword{matrix representation} of $g$ with respect to the basis $\calV$. Notice that $\Sigma$ is conjugate symmetric if and only if $g$ is.
+
+Conversely, notice that after fixing a basis $\calV$, any square matrix $\Sigma$ gives rise to a sesquilinear form by the identity \cref{eq:sesquilinear-form}. Furthermore, such a matrix is uniquely determined (once a basis has been chosen), so there is a one-to-one correspondence between (conjugate symmetric) sesquilinear forms and (conjugate symmetric) square matrices, given a choice of basis.
+
+
+\newpar
+
+Next we study how a matrix representation of $g$ transforms under a change of basis. If $\calW$ is another basis for $V$ then the results in [TODO ref] show that e.g. $\coordvec{v}{\calW} = \basischangemat{\calW}{\calV} \, \coordvec{v}{\calV}$. If $\Sigma$ and $\Gamma$ are the matrix representation of $g$ with respect to $\calV$ and $\calW$, respectively, then
+%
+\begin{equation*}
+    g(v,w)
+        = \coordvec{v}{\calW}^* \, \Gamma \, \coordvec{w}{\calW}
+        = \coordvec{v}{\calV}^* \, \basischangemat{\calW}{\calV}^* \, \Gamma \, \basischangemat{\calW}{\calV} \, \coordvec{w}{\calV},
+\end{equation*}
+%
+so $\Sigma = \basischangemat{\calW}{\calV}^* \, \Gamma \, \basischangemat{\calW}{\calV}$ by uniqueness. In the case where the involution on $\field$ is just the identity, this means that $\Sigma$ and $\Gamma$ are \keyword{congruent}. We will also use this terminology for more general involutions. TODO converse
+
+
+\chapter{Determinants}
+
+\section{Existence and uniqueness}\label{sec:determinant-existence-uniqueness}
+
+\newpar
+
+We begin by establishing some terminology and some basic properties of maps between modules. If $M_1, \ldots, M_n, N$ are modules over a commutative ring $R$, a map
+%
+\begin{equation*}
+    \phi \colon M_1 \prod \cdots \prod M_n \to N
+\end{equation*}
+%
+is called \keyword{$n$-linear} if, for all $i$, the maps $m_i \mapsto \phi(m_1, \ldots, m_n)$ are linear for all choices of $m_j \in M_j$ where $j \neq i$. Since there is a natural isomorphism $\mat{m,n}{R} \cong (R^n)^m$, a map $\phi \colon \mat{m,n}{R} \to N$ that is linear in each row is also called $n$-linear.
+
+In the case $M_1 = \cdots = M_n$, we call $\phi$ \keyword{alternating} if $\phi(m_1, \ldots, m_n) = 0$ whenever $m_i = m_j$ for some $i \neq j$. Furthermore, $\phi$ is called \keyword{skew-symmetric} if
+%
+\begin{multline*}
+    \phi(m_1, \ldots, m_{i-1}, m_i, m_{i+1}, \ldots, m_{j-1}, m_j, m_{j+1}, \ldots, m_n) \\
+        = -\phi(m_1, \ldots, m_{i-1}, m_j, m_{i+1}, \ldots, m_{j-1}, m_i, m_{j+1}, \ldots, m_n)
+\end{multline*}
+%
+for all $i < j$.
+
+With this terminology at hand, we can now define determinants:
+
+\begin{definition}[Determinant functions]
+    If $n$ be a positive integer, a \keyword{determinant function} is a map $\phi \colon \mat{n}{R} \to R$ that is $n$-linear, alternating, and which satisfies $\phi(I_n) = 1$.
+\end{definition}
+
+
+Before proceeding with proving the existence of determinants, we need the following lemma:
+
+\begin{lemma}
+    Let $M$ and $N$ be $R$-modules, and let $\phi \colon M^n \to N$ be an $n$-linear map.
+    %
+    \begin{enumlem}
+        \item \label{enum:alternating-implies-skew-symmetric} If $\phi$ is alternating, then $\phi$ is skew-symmetric. If $\chr R \neq 2$ then the converse also holds.
+        \item \label{enum:alternating-adjacent-rows} If $\phi(m_1, \ldots, m_n) = 0$ whenever $m_i = m_{i+1}$ for some $i = 1, \ldots, n-1$, then $\phi$ is alternating.
+    \end{enumlem}
+\end{lemma}
+%
+We shall not use the converse direction of \cref{enum:alternating-implies-skew-symmetric} but we include it for completeness.
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\Namesubcref{enum:alternating-implies-skew-symmetric}]
+    Consider $m_1, \ldots, m_n \in M$, and let $1 \leq i < j \leq n$. Define a map $\psi \colon M \prod M \to N$ by
+    %
+    \begin{equation*}
+        \psi(a, b)
+            = \phi(m_1, \ldots, m_{i-1}, a, m_{i+1}, \ldots, m_{j-1}, b, m_{j+1}, \ldots, m_n),
+    \end{equation*}
+    %
+    and notice that it suffices to show that $\psi(m_i,m_j) = -\psi(m_j,m_i)$. But $\psi$ is $2$-linear and alternating, so for $a,b \in M$ we have
+    %
+    \begin{equation*}
+        \psi(a+b, a+b)
+            = \psi(a,a) + \psi(a,b) + \psi(b,a) + \psi(b,b)
+            = \psi(a,b) + \psi(b,a).
+    \end{equation*}
+    %
+    Thus $\psi(m_i,m_j) = -\psi(m_j,m_i)$, so $\phi$ is skew-symmetric as claimed.
+
+    Conversely, if $\chr R \neq 2$ and $\psi$ is skew-symmetric, then since $\psi(a,b) = -\psi(b,a)$, letting $a = b$ we have $2\psi(a,a) = 0$, so $\psi(a,a) = 0$.
+
+    \item[\Namesubcref{enum:alternating-adjacent-rows}] 
+    The argument above shows that, in particular, if $A, B \in M^n$, and $B$ is obtained from $A$ by interchanging two adjacent elements, then $\phi(B) = -\phi(A)$. Assuming now that $B$ is obtained from $A$ by interchanging the $i$th and $j$th elements in $A$, with $i < j$, we claim that we may obtain $B$ by successively interchanging adjacent elements of $A$. Writing $A = (m_1, \ldots, m_n)$, we first perform $j - i$ such interchanges and arrive that the tuple
+    %
+    \begin{equation*}
+        (m_1, \ldots, m_{i-1}, m_{i+1}, \ldots, m_{j-1}, m_j, m_i, m_{j+1}, \ldots, m_n),
+    \end{equation*}
+    %
+    moving $m_i$ to the right $j - i$ places. Next we perform another $j-i-1$ interchanges, moving $m_j$ to the left until we reach
+    %
+    \begin{equation*}
+        B = (m_1, \ldots, m_{i-1}, m_j, m_{i+1}, \ldots, m_{j-1}, m_i, m_{j+1}, \ldots, m_n).
+    \end{equation*}
+    %
+    Since each interchange results in a sign change, we have
+    %
+    \begin{equation*}
+        \phi(B) = (-1)^{2(j-i) - 1} \phi(A) = -\phi(A).
+    \end{equation*}
+    %
+    If $m_i = m_j$ for $i < j$, then we claim that $\phi(A) = 0$. For let $B$ be obtained from $A$ by interchanging $m_{i+1}$ and $m_j$. Then $\phi(B) = 0$, so $\phi(A) = -\phi(B) = 0$ by the above argument, and hence $\phi$ is alternating as claimed.
+    \end{proofsec*}
+\end{proof}
+
+
+\newpar
+
+We now proceed with constructing determinants. If $A \in \mat{n}{R}$ with $n > 1$ and $1 \leq i,j \leq n$, denote by $M(A)_{i,j}$ the matrix in $\mat{n-1}{R}$ obtained by removing the the $i$th row and the $j$th column of $A$. This is called the \keyword{$(i,j)$-th minor} of $A$. If $\phi \colon \mat{n-1}{R} \to R$ is an $(n-1)$-linear function and $A \in \mat{n}{R}$, then we write $\phi_{i,j}(A) = \phi(M(A)_{i,j})$. Then $\phi_{i,j} \colon \mat{n}{R} \to R$ is clearly linear in all rows except row $i$, and is independent of row $i$.
+
+We construct determinants recursively, using the Laplace expansion:
+
+\begin{theorem}[Construction of determinants]
+    \label{thm:determinant-recursive-definition}
+    Let $n > 1$, and let $\phi \colon \mat{n-1}{R} \to R$ be alternating and $(n-1)$-linear. For $j = 1, \ldots, n$ define a map $\psi_j \colon \mat{n}{R} \to R$ by
+    %
+    \begin{equation*}
+        \psi_j(A)
+            = \sum_{i=1}^n (-1)^{i+j} a_{ij} \phi_{i,j}(A),
+    \end{equation*}
+    %
+    for $A = (a_{ij}) \in \mat{n}{R}$. Then $\psi_j$ is alternating and $n$-linear. If $\phi$ is a determinant function, then so is $\psi_j$.
+\end{theorem}
+
+\begin{proof}
+    Let $A = (a_{ij}) \in \mat{n}{R}$. Then $A \mapsto a_{ij}$ is independent of all rows except row $i$, and $\phi_{i,j}$ is linear in all rows except row $i$. Thus $A \mapsto a_{ij} \phi_{i,j}(A)$ is linear in all rows except row $i$. Conversely, $A \mapsto a_{ij}$ is linear in row $i$, and $\phi_{i,j}$ is independent of row $i$, so $A \mapsto a_{ij} \phi_{i,j}(A)$ is also linear in row $i$. Since $\psi_j$ is a linear combination of $n$-linear maps, is it itself $n$-linear.
+
+    Now assume that $A$ has two equal adjacent rows, say $a_k, a_{k+1} \in R^n$. If $i \neq k$ and $i \neq k+1$, then $M(A)_{i,j}$ has two equal rows, so $\phi_{i,j}(A) = 0$. Thus
+    %
+    \begin{equation*}
+        \psi_j(A)
+            = (-1)^{k+j} a_{kj} \phi_{k,j}(A)
+              + (-1)^{k+1+j} a_{(k+1)j} \phi_{k+1,j}(A).
+    \end{equation*}
+    %
+    Since $a_k = a_{k+1}$ we also have $a_{kj} = a_{(k+1)j}$ and $M(A)_{k,j} = M(A)_{k+1,j}$. Thus $\psi_j(A) = 0$, so \cref{enum:alternating-adjacent-rows} implies that $\psi_j$ is alternating.
+
+    Finally suppose that $\phi$ is a determinant function. Then $M(I_n)_{j,j} = I_{n-1}$ and we have
+    %
+    \begin{equation*}
+        \psi_j(I_n)
+            = (-1)^{j+j} \phi_{j,j}(I_n)
+            = \phi(I_{n-1})
+            = 1,
+    \end{equation*}
+    %
+    so $\psi_j$ is also a determinant function.
+\end{proof}
+
+
+\begin{corollary}[Existence of determinants]
+    For every positive integer $n$, there exists a determinant function $\mat{n}{R} \to R$.
+\end{corollary}
+
+\begin{proof}
+    The identity map on $\mat{1}{R} \cong R$ is a determinant function for $n = 1$, and \cref{thm:determinant-recursive-definition} allows us to recursively construct a determinant for each $n > 1$.
+\end{proof}
+
+
+\newpar
+
+We finally show that determinants are unique by showing that any determinant function must be given by the Leibniz formula:
+
+\begin{theorem}[Uniqueness of determinants]
+    \label{thm:determinant-uniqueness}
+    Let $n$ be a positive integer. There is precisely one determinant function on $\mat{n}{R}$, namely the function $\det \colon \mat{n}{R} \to R$ given by
+    %
+    \begin{equation*}
+        \det A
+            = \sum_{\sigma \in S_n} (\sign\sigma) a_{1 \sigma(1)} \cdots a_{n \sigma(n)}
+    \end{equation*}
+    %
+    for $A = (a_{ij}) \in \mat{n}{R}$. If $\phi \colon \mat{n}{R} \to R$ is any alternating $n$-linear function, then
+    %
+    \begin{equation*}
+        \phi(A)
+            = (\det A) \phi(I_n).
+    \end{equation*}
+\end{theorem}
+%
+We use the notation $\det$ for the unique determinant on $\mat{n}{R}$ for all $n$.
+
+\begin{proof}
+    Let $e_1, \ldots, e_n$ denote the rows of $I_n$, and denote the rows of a matrix $A = (a_{ij}) \in \mat{n}{R}$ by $a_1, \ldots, a_n$. Then $a_i = \sum_{j=1}^n a_{ij} e_j$, so
+    %
+    \begin{equation*}
+        \phi(A)
+            = \sum_{k_1, \ldots, k_n} a_{1k_1} \cdots a_{nk_n} \phi(e_{k_1}, \ldots, e_{k_n}),
+    \end{equation*}
+    %
+    where the sum is taken over all $k_i = 1, \ldots, n$. Since $\phi$ is alternating we have $\phi(e_{k_1}, \ldots, e_{k_n}) = 0$ if two of the indices $k_1, \ldots, k_n$ are equal. Thus it suffices to sum over those sequences $(k_1, \ldots, k_n)$ that are permutations of $(1, \ldots, n)$, and so
+    %
+    \begin{equation*}
+        \phi(A)
+            = \sum_{\sigma \in S_n} a_{1 \sigma(1)} \cdots a_{n \sigma(n)} \phi(e_{\sigma(1)}, \ldots, e_{\sigma(n)}).
+    \end{equation*}
+    %
+    Next notice that, since $\phi$ is also skew-symmetric by \cref{enum:alternating-implies-skew-symmetric}, we have $\phi(e_{\sigma(1)}, \ldots, e_{\sigma(n)}) = (-1)^m \phi(e_1, \ldots, e_n)$, where $m$ is the number of transpositions of $(1, \ldots, n)$ it takes to obtain the permutation $(\sigma(1), \ldots, \sigma(n))$. But then $(-1)^m$ is just the sign of $\sigma$, so
+    %
+    \begin{equation*}
+        \phi(A)
+            = \sum_{\sigma \in S_n} (\sign\sigma) a_{1 \sigma(1)} \cdots a_{n \sigma(n)} \phi(I_n).
+    \end{equation*}
+    %
+    Finally, if $\phi$ is a determinant function, then $\phi(I_n) = 1$, so we must have $\phi = \det$. The rest of the theorem follows directly from this.
+\end{proof}
+
+
+
+
+\section{Properties of determinants}
+
+
+
+\newpar
+
+We begin with what is surely the most important property of determinants, which is also our first application of the uniqueness theorem for determinants:
+
+\begin{theorem}
+    \label{thm:determinant-multiplicative}
+    Let $A,B \in \mat{n}{R}$. Then
+    %
+    \begin{equation*}
+        \det AB
+            = (\det A) (\det B).
+    \end{equation*}
+    %
+    In particular, $\det \colon \matGL{n}{R} \to R^*$ is a group homomorphism.
+\end{theorem}
+
+\begin{proof}
+    The map $\phi \colon \mat{n}{R} \to R$ given by $\phi(A) = \det AB$ is clearly $n$-linear and alternating. Hence $\phi(A) = (\det A) \phi(I)$, and $\phi(I) = \det B$.
+
+    Furthermore, if $A$ is invertible, then $1 = \det I = (\det A) (\det A\inv)$. Thus $\det A \in R^*$, so $\det$ is a group homomorphism as claimed.
+\end{proof}
+
+
+\begin{corollary}
+    \label{cor:determinant-similar-matrices}
+    If $A,B \in \mat{n}{\field}$ are similar matrices, then $\det A = \det B$.
+\end{corollary}
+
+\begin{proof}
+    Let $P \in \mat{n}{\field}$ be such that $A = PBP\inv$. \Cref{thm:determinant-multiplicative} then implies that
+    %
+    \begin{equation*}
+        \det A
+            = (\det P)(\det B)(\det P\inv)
+            = (\det B)(\det PP\inv)
+            = \det B.
+    \end{equation*}
+\end{proof}
+
+\Cref{cor:determinant-similar-matrices} allows us to define the determinant of a general linear operator $T \colon V \to V$ on a finite-dimensional $\field$-vector space. If $\calV$ and $\calW$ are bases for $V$, then the matrix representations $\mr{\calV}{T}{\calV}$ and $\mr{\calW}{T}{\calW}$ are similar. This allows us to define the determinant $\det T$ of $T$ as the matrix representation $\mr{\calV}{T}{\calV}$ for any basis $\calV$.
+
+Next the fairly obvious result that the determinant of a matrix equals the determinant of its transpose:
+
+\begin{proposition}
+    Let $A \in \mat{n}{R}$. Then $\det A = \det A\trans$.
+\end{proposition}
+
+\begin{proof}
+    Writing $A = (a_{ij})$, first notice that
+    %
+    \begin{equation*}
+        \det A\trans
+            = \sum_{\sigma \in S_n} (\sign \sigma\inv) a_{\sigma(1)1} \cdots a_{\sigma(n)n},
+    \end{equation*}
+    %
+    since $\sign \sigma = \sign \sigma\inv$. Next notice that, if $j = \sigma(i)$, then $a_{\sigma(i)i} = a_{j \sigma\inv(j)}$. Since $R$ is commutative, it follows that
+    %
+    \begin{equation*}
+        \det A\trans
+            = \sum_{\sigma \in S_n} (\sign \sigma\inv) a_{1\sigma\inv(1)} \cdots a_{n\sigma\inv(n)},
+    \end{equation*}
+    %
+    and since $\sigma \mapsto \sigma\inv$ is a bijection on $S_n$, it follows that $\det A\trans = \det A$ as desired.
+\end{proof}
+
+
+\newpar
+
+Let $A \in \mat{n}{R}$. For $1 \leq i,j \leq n$, the \keyword{$(i,j)$-th cofactor} of $A$ is the number $A_{i,j} = (-1)^{i+j} \det M(A)_{i,j}$, where we recall that $M(A)_{i,j}$ is the $(i,j)$-th minor of $A$. The \keyword{cofactor matrix} of $A$ is the matrix $\cof A \in \mat{n}{R}$ whose $(i,j)$-th entry is the cofactor $A_{i,j}$. Note that
+%
+\begin{equation*}
+    (A\trans)_{i,j}
+        = (-1)^{i+j} \det M(A\trans)_{i,j}
+        = (-1)^{j+i} \det M(A)_{j,i}
+        = A_{j,i},
+\end{equation*}
+%
+so $\cof A\trans = (\cof A)\trans$. Of greater importance than the cofactor matrix is the \keyword{adjoint matrix} of $A$, written $\adj A$, which is just the transpose of $\cof A$. That is, the $(i,j)$-th entry of $\adj A$ is the cofactor $A_{j,i}$. Similar to the cofactor matrix we have
+%
+\begin{equation*}
+    \adj A\trans
+        = (\cof A\trans)\trans
+        = \cof A
+        = (\adj A)\trans.
+\end{equation*}
+%
+We then have the following:
+
+\begin{proposition}
+    \label{thm:adjoint-matrix-product}
+    Let $A \in \mat{n}{R}$. Then
+    %
+    \begin{equation*}
+        (\adj A) A
+            = (\det A) I
+            = A (\adj A).
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    Writing $A = (a_{ij})$ and fixing some $j \in \{1, \ldots, n\}$, \cref{thm:determinant-recursive-definition} implies that
+    %
+    \begin{equation*}
+        \det A
+            = \sum_{i=1}^n (-1)^{i+j} a_{ij} \det M(A)_{i,j}
+            = \sum_{i=1}^n a_{ij} A_{i,j},
+    \end{equation*}
+    %
+    which is just the $(j,j)$-th entry in the product $(\adj A)A$.
+
+    Next we claim that if $k \neq j$, then $\sum_{i=1}^n a_{ik} A_{i,j} = 0$. Let $B = (b_{ij}) \in \mat{n}{R}$ be the matrix obtained from $A$ by replacing the $j$th column of $A$ by its $k$th column. Then $B$ has two equal columns, so $\det B = 0$. Also, $b_{ij} = a_{ik}$ and $M(B)_{i,j} = M(A)_{i,j}$, so it follows that
+    %
+    \begin{align*}
+        0
+            &= \det B
+             = \sum_{i=1}^n (-1)^{i+j} b_{ij} \det M(B)_{i,j} \\
+            &= \sum_{i=1}^n (-1)^{i+j} a_{ik} \det M(A)_{i,j}
+             = \sum_{i=1}^n a_{ik} A_{i,j}.
+    \end{align*}
+    %
+    That is, the $(j,k)$-th entry of the product $(\adj A)A$ is zero, so the off-diagonal entries of $(\adj A)A$ are zero. In total we thus have $(\adj A)A = (\det A) I$.
+
+    Finally we prove the equality $A(\adj A) = (\det A) I$, Applying the first equality to $A\trans$ yields
+    %
+    \begin{equation*}
+        (\adj A\trans) A\trans
+            = (\det A\trans)I
+            = (\det A)I,
+    \end{equation*}
+    %
+    and transposing we get
+    %
+    \begin{equation*}
+        A (\adj A)
+            = A (\adj A\trans)\trans
+            = (\det A) I
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+
+\begin{corollary}
+    Let $A \in \mat{n}{R}$. The following are equivalent:
+    %
+    \begin{enumcor}
+        \item $A$ is a (two-sided) unit in $\mat{n}{R}$.
+        \item $A$ is a left- or right-unit in $\mat{n}{R}$.
+        \item $\det A$ is a unit in $R$.
+    \end{enumcor}
+\end{corollary}
+
+\begin{proof}
+    If $A$ is e.g. a left-unit, then \cref{thm:determinant-multiplicative} implies that
+    %
+    \begin{equation*}
+        1
+            = \det I_n
+            = (\det A)(\det A\inv),
+    \end{equation*}
+    %
+    so $\det A$ is a unit in $R$. Conversely, if $\det A$ is a unit then \cref{thm:adjoint-matrix-product} implies that $(\det A)\inv(\adj A)$ is a two-sided inverse of $A$.
+\end{proof}
+
+Notice that this gives us a second proof of the fact that a matrix is invertible just when it has either a left- or right-inverse. In fact, we see that this holds for matrices with entries in any commutative ring.
+
+
+\newpar
+
+We close this section by proving a result on the determinant of a block matrix:
+
+\begin{proposition}
+    \label{prop:block-matrix-determinant}
+    Let $A_{11}, \ldots, A_{nn}$ be square matrices with entries in $R$ and consider the block matrix
+    %
+    \begin{equation*}
+        M
+            = \begin{pmatrix}
+                A_{11} & A_{12} & \cdots & A_{1n} \\
+                0      & A_{22} & \cdots & A_{2n} \\
+                \vdots & \ddots & \ddots & \vdots \\
+                0      & \cdots & 0      & A_{nn}
+            \end{pmatrix},
+    \end{equation*}
+    %
+    where the remaining $A_{ij}$ are matrices of appropriate dimensions. Then $\det M = \bigprod_{i=1}^n \det A_{ii}$.
+\end{proposition}
+
+\begin{proof}
+    By induction it suffices to consider the case where $M$ has the block form
+    %
+    \begin{equation*}
+        M
+            = \begin{pmatrix}
+                A & C \\
+                0 & B
+            \end{pmatrix},
+    \end{equation*}
+    %
+    where $A \in \mat{r}{R}$, $B \in \mat{s}{R}$ and $C \in \mat{r,s}{R}$ for appropriate integers $r,s$. Notice that if we define the matrices
+    %
+    \begin{equation*}
+        M_1
+            = \begin{pmatrix}
+                I_r & 0 \\
+                0   & B
+            \end{pmatrix}
+        \quad \text{and} \quad
+        M_2
+            = \begin{pmatrix}
+                A & C   \\
+                0 & I_s
+            \end{pmatrix},
+    \end{equation*}
+    %
+    then $M = M_1 M_2$. But using \cref{thm:determinant-recursive-definition} we easily see that $\det M_1 = \det B$ and $\det M_2 = \det A$, so it follows that
+    %
+    \begin{equation*}
+        \det M
+            = (\det M_1) (\det M_2)
+            = (\det A) (\det B)
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+
+\section{Cross products}
+
+\newpar
+
+We now study rigorously the well-known 
+
+\begin{definition}[Cross products]
+    Let $v = (\alpha_1, \alpha_2, \alpha_3)$ and $w = (\beta_1, \beta_2, \beta_3)$ be vectors in $\reals^3$. The \keyword{cross product} of $v$ and $w$ is the vector
+    %
+    \begin{equation*}
+        v \crossp w =
+        \begin{pmatrix}
+            \alpha_2 \beta_3 - \alpha_3 \beta_2 \\
+            \alpha_3 \beta_1 - \alpha_1 \beta_3 \\
+            \alpha_1 \beta_2 - \alpha_2 \beta_1
+        \end{pmatrix}.
+    \end{equation*}
+\end{definition}
+%
+Denote the standard basis on $\reals^3$ by $\calE = (e_1, e_2, e_3)$. We easily see that $e_i \crossp e_j = e_k$ when $(i,j,k)$ is a cyclic permutation of $(1,2,3)$. Perhaps surprisingly, there is an important connection between cross products and determinants which from which will follow most of the elementary properties of cross products:
+
+\begin{lemma}
+    \label{lem:cross-product-determinant}
+    Let $v,w,u \in \reals^3$. Then
+    %
+    \begin{equation*}
+        \inner{u}{v \crossp w}
+            = \det(u,v,w).
+    \end{equation*}
+\end{lemma}
+
+\begin{proof}
+    By multilinearity of the inner product and of determinants, it suffices to prove the lemma when $u$ is a basis vector. But it is clear that
+    %
+    \begin{equation*}
+        \inner{e_i}{v \crossp w}
+            = \det(e_i,v,w),
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+%
+The product $\inner{u}{v \crossp w}$ is called the \keyword{(scalar) triple product} of $u$, $v$ and $w$, and is denoted $[u,v,w]$. We call it the \emph{scalar} triple product to distinguish it from the \emph{vector} triple product $u \crossp (v \crossp w)$, whose properties we will examine in \cref{cor:vector-triple-product}. The scalar triple product has some very nice properties summarised in the following proposition:
+
+\begin{proposition}
+    Let $u,v,w \in \reals^3$.
+    %
+    \begin{enumprop}
+        \item The cross product map $(v,w) \mapsto v \crossp w$ is bilinear.
+
+        \item $v \crossp w = - w \crossp v$.
+
+        \item The triple product $[u,v,w]$ is invariant under cyclic permutations, i.e.
+        %
+        \begin{equation*}
+            [u,v,w]
+                = [v,w,u]
+                = [w,u,v]
+        \end{equation*}
+        %
+        and invariant under interchange of inner product and cross product, i.e.
+        %
+        \begin{equation*}
+            \inner{u}{v \crossp w}
+                = [u,v,w]
+                = \inner{u \crossp v}{w}.
+        \end{equation*}
+
+        \item $v \crossp w = 0$ if and only if $v$ and $w$ are linearly dependent.
+
+        \item $v \crossp w$ is orthogonal to both $v$ and $w$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    The first three claims follow from \cref{lem:cross-product-determinant} since the determinant is multilinear and alternating (hence skew-symmetric).
+    
+    For the fourth claim, if $v$ and $w$ are linearly dependent then $\det(u,v,w) = 0$ for all $u \in \reals^3$, so $v \crossp w = 0$. Conversely, if $v$ and $w$ are linearly independent, then extending to a basis $(u,v,w)$ for $\reals^3$ we have $\det(u,v,w) \neq 0$, implying that $v \crossp w \neq 0$.
+
+    To prove the final claim, notice that
+    %
+    \begin{equation*}
+        \inner{v}{v \crossp w}
+            = \det(v,v,w)
+            = 0,
+    \end{equation*}
+    %
+    and similarly for $w$.
+\end{proof}
+
+
+\begin{proposition}
+    Let $a,b,v,w \in \reals^3$. Then
+    %
+    \begin{equation*}
+        \inner{a \crossp b}{v \crossp w}
+            = \det
+            \begin{pmatrix}
+                \inner{a}{v} & \inner{b}{v} \\
+                \inner{a}{w} & \inner{b}{w}
+            \end{pmatrix}.
+    \end{equation*}
+    %
+    In particular,
+    %
+    \begin{equation}
+        \label{eq:Lagrange-identity}
+        \norm{v \crossp w}^2
+            = \det
+            \begin{pmatrix}
+                \norm{v}^2 & \inner{v}{w} \\
+                \inner{v}{w} & \norm{w}^2
+            \end{pmatrix}.
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    By linearity it suffices to prove the identity when the four vectors are basis vectors. If $a = b$ or $v = w$ then both sides are zero, so we may assume that $a = e_i$, $b = e_j$, $v = e_k$ and $v = e_l$ with $i \neq j$ and $k \neq l$. By potentially swapping $a$ and $b$ and/or $v$ and $w$ we may assume that $e_i \crossp e_j = e_p$ and $e_k \crossp e_l = e_q$ for some $p,q \in \{1,2,3\}$.
+
+    If $p = q$ then $i = k$ and $j = l$, so both sides equal $1$. If instead $p \neq q$, then the two cross products on the left-hand side are orthogonal, so the inner product is zero. Furthermore, either $k$ or $l$ equals $p$, so one of the rows in the right-hand side matrix is zero, and hence the determinant is zero.
+\end{proof}
+%
+The identity \cref{eq:Lagrange-identity} is just Lagrange's identity in three dimensions. If $\theta$ is the angle between $v$ and $w$, then $\inner{v}{w} = \norm{v} \, \norm{w} \cos\theta$, so
+%
+\begin{equation*}
+    \norm{v \crossp w}^2
+        = \norm{v}^2 \norm{w}^2 - \inner{v}{w}^2
+        = \norm{v}^2 \norm{w}^2 (1 - \cos^2 \theta)
+        = \norm{v}^2 \norm{w}^2 \sin^2 \theta.
+\end{equation*}
+%
+Hence $\norm{v \crossp w} = \norm{v} \, \norm{w} \, \abs{\sin \theta}$, which is the area of the parallelogram spanned by $v$ and $w$. If $u \in \reals^3$ is another vector and $\phi$ is the angle between $u$ and the normal of the plane spanned by $v$ and $w$ (e.g. $v \crossp w$), then
+%
+\begin{equation*}
+    \abs[\big]{[u,v,w]}
+        = \abs{\inner{u}{v \crossp w}}
+        = \norm{u} \, \norm{v \crossp w} \, \abs{\cos\phi}
+        = \norm{u} \, \norm{v} \, \norm{w} \, \abs{\sin\theta \cos\phi}.
+\end{equation*}
+%
+But this is the volume of the parallelepiped spanned by $u$, $v$ and $w$. This gives a geometric interpretation (or \enquote{proof}) of the invariance of the scalar triple product.
+
+
+\begin{corollary}
+    \label{cor:vector-triple-product}
+    Let $u,v,w \in \reals^3$. Then
+    %
+    \begin{equation}
+        \label{eq:bac-cab}
+        u \crossp (v \crossp w)
+            = v\inner{u}{w} - w\inner{u}{v}.
+    \end{equation}
+    %
+    In particular, the cross product satisfies the \keyword{Jacobi identity}
+    %
+    \begin{equation}
+        \label{eq:cross-product-Jacobi}
+        u \crossp (v \crossp w)
+            + v \crossp (w \crossp u)
+            + w \crossp (u \crossp v)
+            = 0.
+    \end{equation}
+\end{corollary}
+%
+The identity \cref{eq:bac-cab} is sometimes called the \enquote{bac-cab rule}, a name that would have been self-explanatory had we used the names $a$, $b$ and $c$ instead of $u$, $v$ and $w$. Note that to conform to this rule we need to write the vectors before the scalars.
+
+\begin{proof}
+    For $x \in \reals^3$ we have
+    %
+    \begin{align*}
+        \inner{x}{u \crossp (v \crossp w)}
+            &= [x, u, v \crossp w] \\
+            &= \inner{x \crossp u}{v \crossp w} \\
+            &= \det \begin{pmatrix}
+                \inner{x}{v} & \inner{u}{v} \\
+                \inner{x}{w} & \inner{u}{w}
+            \end{pmatrix} \\
+            &= \inner{x}{v} \inner{u}{w} - \inner{u}{v} \inner{x}{w} \\
+            &= \inner[\big]{x}{ v\inner{u}{w} - w\inner{u}{v} }.
+    \end{align*}
+    %
+    The claim then follows since $x$ was arbitrary.
+\end{proof}
+
+
+\newpar
+
+We now study how the cross product transforms under linear transformations. Since $\mat{d}{\reals}$ is a finite-dimensional vector space, it has a unique vector space topology. More concretely, all norms on $\mat{d}{\reals}$ are Lipschitz equivalent, so we may choose whatever norm we wish. We choose the Euclidean norm, identifying $\mat{d}{\reals}$ with $\reals^{d^2}$. First a lemma:
+
+\begin{lemma}
+    \label{lem:GL-density}
+    $\matGL{d}{\reals}$ is dense in $\mat{d}{\reals}$.
+\end{lemma}
+
+\begin{proof}
+    Let $A \in \mat{d}{\reals}$, and let $t \in \reals \setminus \{0\}$. Then $A - tI$ is invertible if and only if $\det(A - tI) = 0$, but $\det(A - tI)$ is a polynomial in $t$, so it has finitely many roots. Hence the nonzero roots of $\det(A - tI)$ are bounded away from zero, so since $A - tI \to A$ as $t \to 0$, the claim follows.
+\end{proof}
+
+
+\begin{proposition}[Transformation of cross products]
+    Let $u,v,w \in \reals^3$, and let $A \in \mat{3}{\reals}$. Then we have the following:
+    %
+    \begin{enumprop}
+        \item \label{enum:triple-product-transformation} $[Au, Av, Aw] = (\det A) [u,v,w]$.
+        
+        \item \label{enum:cross-product-transformation} $Av \crossp Aw = (\cof A)(v \crossp w) = (\adj A)\trans (v \crossp w)$.
+
+        \item \label{enum:cross-product-orthogonal-transformation} If $A$ is orthogonal, then $A(v \crossp w) = (\det A)(Av \crossp Aw)$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\Namesubcref{enum:triple-product-transformation}]
+    Simply notice that
+    %
+    \begin{equation*}
+        [Au, Av, Aw]
+            = \det(Au, Av, Aw)
+            = (\det A) \det(u,v,w)
+            = (\det A) \inner{u}{v \crossp w},
+    \end{equation*}
+    %
+    where the second equality follows since $\det(Au, Av, Aw)$ is also the determinant of the matrix
+    %
+    \begin{equation*}
+        \bigl( Au \mid Av \mid Aw \bigr)
+            = A \bigl( u \mid v \mid w \bigr),
+    \end{equation*}
+    %
+    and the determinant is multiplicative.
+
+    \item[\Namesubcref{enum:cross-product-transformation}]
+    First assume that $A$ is invertible. Then replacing $u$ with $A\inv u$ in \subcref{enum:triple-product-transformation} we obtain
+    %
+    \begin{align*}
+        \inner{u}{Av \crossp Aw}
+            &= (\det A) \inner{A\inv u}{v \crossp w} \\
+            &= (\det A) \inner{u}{(A\inv)\trans (v \crossp w)} \\
+            &=  \inner{u}{(\cof A)(v \crossp w)},
+    \end{align*}
+    %
+    where the last equality follows from \cref{thm:adjoint-matrix-product}. Hence we obtain the desired identity when $A$ is invertible. Finally notice that both the maps $A \mapsto \cof A$ and $A \mapsto Av \crossp Aw$ are continuous. Hence the claim for general $A$ follows from \cref{lem:GL-density}.
+
+    \item[\Namesubcref{enum:cross-product-orthogonal-transformation}]
+    Notice that $A\inv = A\trans$, so this follows immediately from \subcref{enum:cross-product-transformation}.
+\end{proofsec*}
+\end{proof}
+%
+This gives a geometric interpretation of the determinant. If $[u,v,w]$ is the signed volume of the parallelepiped spanned by $u$, $v$ and $w$, and $[Au,Av,Aw]$ is the signed volume of the parallelepiped spanned by $Au$, $Av$ and $Aw$, then $\det A$ is the factor by which this volume increasing when applying $A$ to each of $u$, $v$ and $w$. In particular, this explains why the determinant of $A$ is zero if and only if $A$ is singular: This means that $A$ sends a basis of $\reals^3$ to a linearly dependent set, and the parallelepiped spanned by such a set has zero volume.
+
+
+\newpar
+
+If $A$ is a proper rotation, i.e. if $A$ is orthogonal and $\det A = 1$, then \cref{enum:cross-product-orthogonal-transformation} implies that $A(v \crossp w) = Av \crossp Aw$. This allows us to define a cross product on any three-dimensional inner product space, when this is equipped with an orientation.
+
+First, if $\calV$ and $\calW$ are ordered bases for any finite-dimensional real vector space $V$, then we say that $\calV$ and $\calW$ have the \keyword{same orientation} if the change of basis operator $\basischange{\calW}{\calV}$ has positive determinant. It follows that orientation partitions the set of ordered bases for $V$ into two \keyword{orientation classes}, each called an \keyword{orientation} of $V$. If $V$ is equipped with an orientation $\calO$, then we call this class the \keyword{positive orientation} of $V$, and the other class the \keyword{negative orientation} of $V$. An ordered basis for $V$ is called \keyword{positive} if it lies in $\calO$ and \keyword{negative} if it does not.
+
+Returning to the case where $V$ is three-dimensional and equipped with an orientation, let $\calV$ and $\calW$ be positive ordered orthonormal bases for $V$. For vectors $v,w \in V$ we can then consider the cross products of their coordinate vectors, i.e.
+%
+\begin{equation*}
+    \coordvec{v}{\calV} \crossp \coordvec{w}{\calV}
+    \quad \text{and} \quad
+    \coordvec{v}{\calW} \crossp \coordvec{w}{\calW}.
+\end{equation*}
+%
+Since $\basischangemat{\calW}{\calV}$ is orthogonal with determinant $1$, we have
+%
+\begin{equation*}
+    \basischangemat{\calW}{\calV}(\coordvec{v}{\calV} \crossp \coordvec{w}{\calV})
+        = \basischangemat{\calW}{\calV} \cdot \coordvec{v}{\calV} \crossp \basischangemat{\calW}{\calV} \cdot \coordvec{w}{\calV}
+        = \coordvec{v}{\calW} \crossp \coordvec{w}{\calW}.
+\end{equation*}
+%
+Hence we have
+%
+\begin{equation*}
+    \coordmap{\calV}\inv(\coordvec{v}{\calV} \crossp \coordvec{w}{\calV})
+        = \coordmap{\calW}\inv(\coordvec{v}{\calW} \crossp \coordvec{w}{\calW}),
+\end{equation*}
+%
+so we may define the cross product of $v$ and $w$ as $v \crossp w = \coordmap{\calV}\inv(\coordvec{v}{\calV} \crossp \coordvec{w}{\calV})$ where $\calV$ is any positive ordered orthonormal basis for $V$. Notice that this means that $\coordvec{v \crossp w}{\calV} = \coordvec{v}{\calV} \crossp \coordvec{w}{\calV}$.
+
+This allows us to generalise most of the above results to abstract real vector spaces. For instance, using that the coordinate map $\coordmap{\calV}$ is an isometry, the scalar triple product of $u,v,w \in V$ is given by
+%
+\begin{equation*}
+    [u,v,w]
+        = \inner{u}{v \crossp w}
+        = \inner{\coordvec{u}{\calV}}{\coordvec{v \crossp w}{\calV}}
+        = \inner{\coordvec{u}{\calV}}{\coordvec{v}{\calV} \crossp \coordvec{w}{\calV}}
+        = \bigl[ \coordvec{u}{\calV}, \coordvec{v}{\calV}, \coordvec{w}{\calV} \bigr],
+\end{equation*}
+%
+and hence it has all the properties of the scalar triple product on $\reals^3$, such as invariance under cyclic permutations. Notice also that it is indeed a \emph{scalar} quantity, in the sense that it is invariant under a change of basis. Similarly, the \enquote{bac-cab rule} \cref{eq:bac-cab} becomes
+%
+\begin{align*}
+    \coordvec{u \crossp (v \crossp w)}{\calV}
+        &= \coordvec{u}{\calV} \crossp \coordvec{v \crossp w}{\calV} \\
+        &= \coordvec{u}{\calV} \crossp (\coordvec{v}{\calV} \crossp \coordvec{w}{\calV}) \\
+        &= \coordvec{v}{\calV} \inner{\coordvec{u}{\calV}}{\coordvec{w}{\calV}} - \coordvec{w}{\calV} \inner{\coordvec{u}{\calV}}{\coordvec{v}{\calV}} \\
+        &= \coordvec{v}{\calV} \inner{u}{w} - \coordvec{w}{\calV} \inner{u}{v} \\
+        &= \coordvec{ v \inner{u}{w} - w \inner{u}{v} }{\calV}.
+\end{align*}
+%
+Hence $u \crossp (v \crossp w) = v \inner{u}{w} - w \inner{u}{v}$ since $\coordmap{\calV}$ is an isomorphism. In particular, the cross product on $V$ also satisfies the Jacobi identity \cref{eq:cross-product-Jacobi}, so $V$ becomes a Lie algebra whose Lie bracket is given by the cross product, i.e. $[v,w] = v \crossp w$.
+
+
+\chapter{Eigenvalues and eigenvectors}
+
+\section{Eigenvalues and spectra}
+
+\newcommand{\geo}{\mathrm{Geo}}
+
+\newpar
+
+Let $V$ be a vector space, and let $T \in \calL(V)$. Recall that an \keyword{eigenvalue} of $T$ is an element $\lambda \in \field$ such that there is a nonzero vector $v \in V$ with $Tv = \lambda v$. Then $v$ is called an \keyword{eigenvector} of $T$ associated with $\lambda$. The set of eigenvectors associated with an eigenvalue $\lambda$ is called the \keyword{eigenspace} of $\lambda$ and is denoted $E_T(\lambda)$. This is clearly a subspace of $V$, and its dimension is called the \keyword{geometric multiplicity} of $\lambda$ and is denoted $\geo_T(\lambda)$. The set of eigenvalues of $T$ is called the \keyword{spectrum} of $T$ and is denoted $\spec T$. Clearly $\lambda \in \spec T$ if and only if $\lambda I - T$ is not injective.
+
+On finite-dimensional spaces being injective is the same as being invertible, but on infinite-dimensional vector spaces this is not the case, so the above definition of the spectrum is usually not sufficient. If $V$ and $W$ are Banach spaces over $\mathbb{K}$ and $U$ is a subspace of $V$, then a (not necessarily bounded) linear map $T \colon U \to W$ is said to be \keyword{boundedly invertible} if there is a bounded operator $S \colon W \to V$ such that $TS = \id_W$ and $ST = \iota_U$. The \keyword{resolvent set} $\rho(T)$ of $T$ is the set of $\lambda \in \mathbb{K}$ such that $\lambda I - T$ is boundedly invertible. The \keyword{spectrum} of $T$ is then the set $\sigma(T) = \mathbb{K} \setminus \rho(T)$.
+
+If $T$ is in fact bounded and $U = V$, then another definition of the spectrum of $T$ does not require that $\lambda I - T$ is not \emph{boundedly} invertible, but that it is not invertible at all.\footnote{This agrees with the definition of the spectrum of an element of a unital Banach algebra.} But the bounded inverse theorem (cf. e.g. \cite[Corollary~5.11]{follandrealanalysis}) says that if $T$ is a bounded and invertible linear map between Banach spaces, then its inverse is also bounded.
+
+In this setting it is usual to collect the eigenvalues of $T$ in a set $\sigma_{\mathrm{p}}(T)$ called the \keyword{point spectrum} of $T$. This thus agrees with the definition of $\spec T$ above.
+
+
+\newpar
+
+Let $V$ be a vector space, and let $T \in \calL(V)$.
+
+\begin{proposition}
+    If $\calV$ be a collection of eigenvectors for $T$ associated with distinct eigenvalues. Then $\calV$ is linearly independent.
+\end{proposition}
+
+\begin{proof}
+    Note that it suffices to show that any finite subset of $\calV$ is linearly independent. Let $\calI \subseteq \calV$ be a finite subset with $n$ elements. If $n = 1$, then since the sole element of $\calI$ is an eigenvector, it is nonzero and hence $\calI$ is linearly independent.
+
+    Assume now that $n > 1$ and that any $n-1$ element subset of $\calV$ is linearly independent. Write $\calI = \{v_1, \ldots, v_n\}$ and consider a linear relation
+    %
+    \begin{equation}
+        \label{eq:eigenvalues-linearly-independent-1}
+        \alpha_1 v_1 + \cdots + \alpha_n v_n = 0.
+    \end{equation}
+    %
+    Applying $T$ to both sides yields
+    %
+    \begin{equation}
+        \label{eq:eigenvalues-linearly-independent-2}
+        \alpha_1 \lambda_1 v_1 + \cdots + \alpha_n \lambda_n v_n = 0.
+    \end{equation}
+    %
+    Multiplying \cref{eq:eigenvalues-linearly-independent-1} by $\lambda_1$ and subtracting it from \cref{eq:eigenvalues-linearly-independent-2} then gives
+    %
+    \begin{equation*}
+        \alpha_2 (\lambda_2 - \lambda_1) v_2 + \cdots + \alpha_n (\lambda_n - \lambda_1) v_n = 0.
+    \end{equation*}
+    %
+    But the set $\{v_2, \ldots, v_n\}$ is linearly independent, so the coefficients above must all vanish. And since the eigenvalues are distinct, this implies that $\alpha_2 = \cdots \alpha_n = 0$. Hence $\alpha_1 v_1 = 0$, so also $\alpha_1 = 0$.
+\end{proof}
+
+
+\begin{corollarynoproof}
+    The direct sum
+    %
+    \begin{equation*}
+        \bigoplus_{\lambda \in \spec T} E_T(\lambda)
+    \end{equation*}
+    %
+    exists.
+\end{corollarynoproof}
+
+
+
+\section{The characteristic polynomial}
+
+\newpar
+
+If $V$ is finite-dimensional, then $\lambda$ is an eigenvalue of $T$ just when $\det(\lambda I - T) = 0$. This motivates the definition of the \keyword{characteristic polynomial} $p_T(t) \in \field[t]$ of $T$, given by $p_T(t) = \det(tI - T)$. The eigenvalues of $T$ are then precisely the roots of $p_T(t)$.
+
+It is also common to define the characteristic polynomial of $T$ as the polynomial $\det(T - tI)$ in $t$. Nothing substantial hangs on this choice, but our convention has the benefit that $p_T(t)$ becomes a monic polynomial, as the following result shows:
+
+\begin{proposition}
+    \label{prop:determinant-eigenvalues}
+    Let $T \in \calL(V)$.
+    %
+    \begin{enumprop}
+        \item \label{enum:characteristic-polynomial-monic} $p_T(t)$ is a monic polynomial of degree $n$.
+        \item \label{enum:characteristic-polynomial-constant-term} The constant term of $p_T(t)$ equals $(-1)^n \det T$.
+        \item \label{enum:characteristic-polynomial-coefficient} The coefficient of $t^{n-1}$ in $p_T(t)$ equals $-\trace T$.
+    \end{enumprop}
+    %
+    Assume further that $p_T(t)$ splits over $\field$. Then:
+    %
+    \begin{enumprop}[resume]
+        \item \label{enum:eigenvalue-existence} $T$ has an eigenvalue.
+        \item \label{enum:eigenvalue-product} $\det T$ is the product of the eigenvalues of $T$.
+        \item \label{enum:eigenvalue-sum} $\trace T$ is the sum of the eigenvalues of $T$.
+    \end{enumprop}
+\end{proposition}
+%
+The condition that $p_T(t)$ splits over $\field$ means that $p_T(t)$ decomposes into a product of linear factors on the form $t - a \in \field[t]$ (up to multiplication by a constant). This is in particular the case if $\field$ is algebraically closed.
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\Namesubcref{enum:characteristic-polynomial-monic}]
+    Let $A = (a_{ij}) \in \mat{n}{\field}$ be a matrix representation of $T$. The $(i,j)$-th entry of $tI - A$ is then $t\delta_{ij} - a_{ij}$, so
+    %
+    \begin{equation}
+        \label{eq:characteristic-polynomial-Leibniz}
+        \det(tI - T)
+            = \sum_{\sigma \in S_n} (\sign\sigma) (t\delta_{1\sigma(1)} - a_{1\sigma(1)}) \cdots (t\delta_{n\sigma(n)} - a_{n \sigma(n)})
+    \end{equation}
+    %
+    by \cref{thm:determinant-uniqueness}. Thus $p_T(t)$ is a polynomial in $t$. Furthermore, the only entries in $tI - A$ containing $t$ are the diagonal entries, and the largest number of such entries occurring in a single term of \cref{eq:characteristic-polynomial-Leibniz} is $n$, so $\deg p_T(t) \leq n$. But notice that there is only one term in which $t$ appears $n$ times, namely the term corresponding to the identity permutation in $S_n$, giving the product of the diagonal entries in $tI-A$. This term equals
+    %
+    \begin{equation}
+        \label{eq:characteristic-polynomial-diagonal-product}
+        (t-a_{11})(t-a_{22}) \cdots (t-a_{nn}),
+    \end{equation}
+    %
+    and multiplying out we see that the only resulting term containing $t^n$ is $t^n$ itself. Hence $p_T(t)$ is monic and of degree $n$. Thus we may write $p_T(t) = \sum_{i=0}^n c_i t^i$ for appropriate $c_0, \ldots, c_n \in \field$.
+
+    \item[\Namesubcref{enum:characteristic-polynomial-constant-term}]
+    Simply notice that
+    %
+    \begin{equation*}
+        (-1)^n \det T
+            = \det(-T)
+            = p_T(0)
+            = c_0
+    \end{equation*}
+    %
+    by $n$-linearity of $\det$ and the definition of $p_T(t)$.
+
+    \item[\Namesubcref{enum:characteristic-polynomial-coefficient}]
+    The only way for one of the terms in \cref{eq:characteristic-polynomial-Leibniz} to contain the factor $t^{n-1}$ is for at least $n-1$ of the $b_{ij}$ to be a diagonal element. But in choosing $n-1$ elements along the diagonal we are forced to also choose the final diagonal element, since otherwise $\sigma$ would not be a permutation. Hence the factor $t^n$ can only appear in the product \cref{eq:characteristic-polynomial-diagonal-product}. It is then clear that
+    %
+    \begin{equation*}
+        c_{n-1}
+            = - (a_{11} + \cdots + a_{nn})
+            = - \trace T
+    \end{equation*}
+    %
+    as claimed.
+
+    \item[\Namesubcref{enum:eigenvalue-existence}]
+    Now assume that $p_T(t)$ splits over $\field$. Then some linear factor $t-\lambda \in \field[t]$ divides $p_T(t)$, which implies that $\lambda \in \field$ is an eigenvalue of $T$.
+    
+    \item[\Namesubcref{enum:eigenvalue-product}]
+    Since $p_T(t)$ is monic we have
+    %
+    \begin{equation*}
+        p_T(t)
+            = (t - \lambda_1) (t - \lambda_2) \cdots (t - \lambda_n)
+    \end{equation*}
+    %
+    for appropriate $\lambda_1, \ldots, \lambda_n \in \field$. These are then the (not necessarily distinct) eigenvalues of $T$. Thus $p_T(0) = (-1)^n \lambda_1 \cdots \lambda_n$, and the claim follows from \subcref{enum:characteristic-polynomial-constant-term}.
+
+    \item[\Namesubcref{enum:eigenvalue-sum}]
+    We similarly find that $c_{n-1} = -(\lambda_1 + \cdots + \lambda_n)$, so the final claim follows from \subcref{enum:characteristic-polynomial-coefficient}.
+\end{proofsec*}
+\end{proof}
+
+
+\newpar
+
+\newcommand{\alg}{\mathrm{Alg}}
+
+Above we defined the geometric multiplicity of an eigenvalue. The characteristic polynomial gives rise to another kind of multiplicity: The \keyword{algebraic multiplicity} of $\lambda$ is the multiplicity of $\lambda$ as a root of the characteristic polynomial $p_T$. We denote this by $\alg_T(\lambda)$.
+
+\begin{proposition}
+    If $\lambda$ is an eigenvalue of $T$, then $\geo_T(\lambda) \leq \alg_T(\lambda)$.
+\end{proposition}
+
+\begin{proof}
+    Let $d = \geo_T(\lambda)$. Choose any basis for the eigenspace $E_T(\lambda)$ and extend it to a basis $\calV$ for $V$. The corresponding matrix representation of $T$ then has the block form
+    %
+    \begin{equation*}
+        \mr{\calV}{T}{\calV} =
+        \begin{pmatrix}
+            \lambda I_d & A \\
+            0 & B
+        \end{pmatrix},
+    \end{equation*}
+    %
+    for appropriate matrices $A$ and $B$. It follows from \cref{prop:block-matrix-determinant} that
+    %
+    \begin{align*}
+        p_T(t)
+            &= \det(t \id_V - T) \\
+            &= \det(t I_d - \lambda I_d) \det(t I_{n-d} - B) \\
+            &= (t - \lambda)^d \det(t I_{n-d} - B).
+    \end{align*}
+    %
+    This proves the claim.
+\end{proof}
+
+
+\section{Diagonalisability}
+
+\newpar
+
+If $V$ is finite-dimensional and $T \in \calL(V)$, then we say that $T$ is \keyword{diagonalisable} if there is a basis for $V$ consisting of eigenvectors for $T$. That is, $V$ has a basis $\calV = (v_1, \ldots, v_n)$ such that $Tv_i = \lambda_i v_i$ for appropriate $\lambda_i$. It is then obvious that
+
+\begin{propositionnoproof}
+    \label{prop:diagonalisability-equivalent-properties}
+    Let $T \in \calL(V)$. The following are equivalent:
+    %
+    \begin{enumerate}
+        \item $T$ is diagonalisable.
+        \item $V$ has an ordered basis $\calV$ such that $\mr{\calV}{T}{\calV}$ is diagonal.
+        \item $V$ has the form
+        %
+        \begin{equation*}
+            V
+                = \bigoplus_{\lambda \in \spec T} E_T(\lambda).
+        \end{equation*}
+        \item If $\spec T = \{\lambda_1, \ldots, \lambda_k\}$ and $P_i$ is projection onto $E_T(\lambda_i)$ along $\bigoplus_{j \neq i} E_T(\lambda_j)$, then $\{P_1, \ldots, P_k\}$ is a resolution of the identity.
+    \end{enumerate}
+\end{propositionnoproof}
+%
+Note that the last two properties are equivalent by \cref{prop:resolution-of-the-identity-characterisation}.
+
+
+\newpar
+
+There is a different way of characterising diagonalisability using resolutions of the identity. If $T \in \calL(V)$, then a \keyword{spectral resolution} of $T$ is a decomposition
+%
+\begin{equation*}
+    T
+        = \lambda_1 P_1 + \cdots + \lambda_k P_k,
+\end{equation*}
+%
+where $\{P_1, \ldots, P_k\}$ is a resolution of the identity and $\lambda_1, \ldots, \lambda_k \in \field$. We then have the following result, which follows from \cref{prop:diagonalisability-equivalent-properties} and \cref{prop:projection-characterisation}:
+
+\begin{propositionnoproof}
+    A linear operator $T \in \calL(V)$ is diagonalisable if and only if it has a spectral resolution
+    %
+    \begin{equation*}
+        T
+            = \lambda_1 P_1 + \cdots + \lambda_k P_k.
+    \end{equation*}
+    %
+    In this case $\spec T = \{\lambda_1, \ldots, \lambda_k\}$, and
+    %
+    \begin{equation*}
+        \im P_i = E_T(\lambda_i),
+        \quad \text{and} \quad
+        \ker P_i = \bigoplus_{j \neq i} E_T(\lambda_j).
+    \end{equation*}
+\end{propositionnoproof}
+
+
+
+\section{Proofs without determinants}
+
+\newcommand{\ev}{\mathrm{ev}}
+
+We now show how to obtain the results in \cref{prop:determinant-eigenvalues} without using determinants. Since we do not have access to the characteristic polynomial, we must assume that $V$ is a (finite-dimensional) vector space over an algebraically closed field $\field$. Consider $T \in \calL(V)$.
+
+
+\newpar
+
+We begin by showing that $T$ has an eigenvalue. For $d \in \naturals$, let $\field[t]_d$ denote the vector space of polynomials in $\field[t]$ with degree strictly less than $d$, such that $\dim \field[t]_d = d$. Consider the linear map $\ev_T \colon \field[t]_{n^2+1} \to \calL(V)$ given by $\ev_T(p) = p(T)$. This cannot be injective, so there is some nonzero $p(t) \in \field[t]_{n^2+1}$ such that $p(T) = 0$. Note that $p(t)$ cannot be constant.
+
+Since $\field$ is algebraically closed, there exist $c, \lambda_1, \ldots, \lambda_m \in \field$ such that $p(t) = c \bigprod_{i=1}^m (t - \lambda_i)$. But then
+%
+\begin{equation*}
+    0
+        = p(T)
+        = c \bigprod_{i=1}^m (T - \lambda_i I),
+\end{equation*}
+%
+so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eigenvalue of $T$.
+
+
+\newpar
+
+And for the remaining of the promised results:
+
+\begin{corollary}
+    Let $\field$ be algebraically closed, and let $T \in \calL(V)$. Then the sum of the eigenvalues of $T$ is $\trace T$, and the product of the eigenvalues of $T$ is $\det T$.
+\end{corollary}
+
+\begin{proof}
+    Let $A \in \mat{n}{\field}$ be an upper triangular matrix for $T$. As we will see in \cref{prop:upper-triangular-basis-exists}, such a matrix always exists. The diagonal elements of $A$ are then the eigenvalues, and the trace of $T$ is of course the sum of these elements.
+
+    For the second claim, simply notice that if $A$ is upper triangular then the Leibniz formula for $\det A$ only contains a single term, namely the one corresponding to the identity permutation.
+\end{proof}
+
+
+
+
+
+
+\chapter{Complexification}
+
+\newcommand{\calB}{\mathcal{B}}
+
+
+
+\newpar
+
+If $W$ is a complex vector space, then we may restrict the scalar multiplication $\complex \prod W \to W$ to a map $\reals \prod W \to W$. When we equip $W$ with this restricted scalar multiplication instead of the original one, we call the resulting space the \keyword{real version} of $W$ and denote it by $W_\reals$.
+
+Conversely, if $V$ is a real vector space then we define the \keyword{complexification} of $V$ as the vector space $V^\complex$ whose underlying set is $V \prod V$, and which is equipped with componentwise addition and the complex scalar multiplication
+%
+\begin{equation*}
+    (\alpha + \iu \beta)(v,u)
+        = (\alpha v - \beta u, \alpha u + \beta v),
+\end{equation*}
+%
+for $\alpha,\beta \in \reals$ and $v,u \in V$. Notice that the map $v \mapsto (v,0)$ is injective (and real linear), that $(v,0) + (w,0) = (v+w,0)$, and that $\alpha(v,0) = (\alpha v,0)$ for $\alpha \in \reals$, so $V^\complex$ contains an isomorphic copy of $V$, and we may identify elements $v \in V$ with elements $(v,0) \in V^\complex$. Furthermore, notice that $(v,u) = (v,0) + \iu (u,0)$, so by the above identification we may write $(v,u) = v + \iu u$.
+
+
+\newpar
+
+We briefly study the relationship between a real vector space and its complexification.
+
+\begin{proposition}
+    If $\calB$ is a basis for $V$, then $\calB^\complex = \set{b + \iu 0}{b \in \calB}$ is a basis for $V^\complex$. In particular, $\dim_\reals V = \dim_\complex V^\complex$.
+\end{proposition}
+
+\begin{proof}
+    Let $v + \iu u \in V^\complex$. Then there are real numbers $\alpha_b$ and $\beta_b$ (finitely many nonzero) such that $v = \sum_{b \in \calB} \alpha_b b$ and $u = \sum_{b \in \calB} \beta_b b$. But then
+    %
+    \begin{equation*}
+        v + \iu u
+            = \sum_{b \in \calB} \alpha_b b
+                + \iu \sum_{b \in \calB} \beta_b b
+            = \sum_{b \in \calB} (\alpha_b + \iu \beta_b) b
+            = \sum_{b \in \calB} (\alpha_b + \iu \beta_b) (b + \iu 0),
+    \end{equation*}
+    %
+    so $\calB^\complex$ spans $V^\complex$. Furthermore, if $v + \iu u = 0$, then the previous computation shows that $\sum_{b \in \calB} \alpha_b b = 0 = \sum_{b \in \calB} \beta_b b$. Linear independence of $\calB$ then implies that $\alpha_b = \beta_b = 0$ for all $b \in \calB$.
+\end{proof}
+
+\begin{example}
+    Notice that $(\reals^n)^\complex \cong \complex^n$. The above proposition then implies that the standard basis for $\reals^n$ gives rise to a basis for $\complex^n$, and we notice that this is precisely the standard basis.
+\end{example}
+
+
+\newpar
+
+We now show how to extend linear maps defined between real vector spaces to the complexifications of those spaces. If $T \colon V \to W$ is a linear map between real vector spaces, then we define the complexification of $T$ by
+%
+\begin{align*}
+    T^\complex \colon V^\complex &\to W^\complex, \\
+    v + \iu u &\mapsto Tv + \iu Tu.
+\end{align*}
+%
+That is, $T^\complex$ is just the product map $T \prod T$. This is easily seen to be complex-linear.
+
+\begin{proposition}
+    \label{prop:complexification-eigenvalue}
+    Let $V$ be a real vector space, and let $T \in \calL(V)$. If $\lambda \in \reals$ is an eigenvalue of the complexification $T^\complex$ of $T$, then $\lambda$ is also an eigenvalue of $T$. Furthermore, if $v + \iu u \in E_{T^\complex}(\lambda)$ then $v,u \in E_T(\lambda)$.
+\end{proposition}
+%
+Note that this does not mean that $v$ and $u$ are eigenvectors of $T$ since they might be zero. But if $v + \iu u$ is an eigenvector of $T^\complex$, then at least one of $v$ and $u$ is nonzero and hence an eigenvector of $T$.
+
+\begin{proof}
+    Let $v + \iu u \in V^\complex$ be an eigenvector of $T^\complex$ corresponding to $\lambda$. Then
+    %
+    \begin{equation*}
+        Tv + \iu Tu
+            = T^\complex (v + \iu u)
+            = \lambda(v + \iu u)
+            = \lambda v + \iu \lambda u.
+    \end{equation*}
+    %
+    It follows that $Tv = \lambda v$ and $Tu = \lambda u$ as desired.
+\end{proof}
+
+
+If $V$ is finite-dimensional and $\calV$ is an ordered basis for $V$, then $\calV^\complex$ carries the obvious ordering. Since $V$ and $V^\complex$ have the same dimension, the following result is not surprising:
+
+\begin{proposition}
+    Let $V$ and $W$ be a finite-dimensional real vector spaces, and consider $T \colon V \to W$. If $\calV = (v_1, \ldots, v_n)$ and $\calW$ are ordered bases of $V$ and $W$ respectively, then
+    %
+    \begin{equation*}
+        \mr{\calW^\complex}{T^\complex}{\calV^\complex}
+            = \mr{\calW}{T}{\calV}.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    By \cref{enum:mr-explicit-formula}, the $i$th column of $\mr{\calW^\complex}{T^\complex}{\calV^\complex}$ is given by
+    %
+    \begin{equation*}
+        \coordvec{T^\complex (v_i + \iu 0)}{\calW^\complex}
+            = \coordvec{Tv_i + \iu 0}{\calW^\complex}
+            = \coordvec{Tv_i}{\calW},
+    \end{equation*}
+    %
+    that is, the $i$th column of $\mr{\calW}{T}{\calV}$, which proves the claim.
+\end{proof}
+
+
+\newpar
+
+Finally, if $V$ is a real normed space, then we define a norm on $V^\complex$ by the equation
+%
+\begin{equation}
+    \label{eq:complexification-norm}
+    \norm{v + \iu u}^2
+        = \norm{v}^2 + \norm{u}^2.
+\end{equation}
+%
+Furthermore, if $V$ is an inner product space, then we define an inner product on $V^\complex$ by
+%
+\begin{equation}
+    \label{eq:complexification-inner-product}
+    \inner{v + \iu u}{x + \iu y}
+        = \inner{v}{x}
+          + \inner{u}{y}
+          + \iu (\inner{v}{y} - \inner{u}{x}).
+\end{equation}
+%
+The norm induced by this inner product agrees with the norm defined by \cref{eq:complexification-norm}. Notice that the identity \cref{eq:complexification-inner-product} holds in any \emph{complex} inner product space, where the notation $v + \iu u$ instead means the sum of $v$ and the scalar product of $\iu$ and $u$ (recalling that our sesquilinear forms are linear in the \emph{second} entry).
+
+
+
+
+\chapter{Triangularisation}
+
+Recall that a matrix $A = (a_{ij}) \in \mat{n}{R}$ is called \emph{upper triangular} if $a_{ij} = 0$ whenever $i > j$. If $V$ is an $n$-dimensional $\field$-vector space and $\calV$ is an ordered basis for $V$, then we say that the operator $T \in \calL(V)$ is \emph{upper triangular with respect to $\calV$} if the matrix representation $\mr{\calV}{T}{\calV}$ is upper triangular.
+
+A subspace $U$ of a vector space $V$ is said to be \emph{invariant under $T \in \calL(T)$} if $T(U) \subseteq U$.
+
+\begin{proposition}
+    \label{prop:upper-triangular-criterion}
+    Let $V$ be an $\field$-vector space with $n = \dim V < \infty$, and let $\calV = (v_1, \ldots, v_n)$ be an ordered basis for $V$. An operator $T \in \calL(V)$ is upper triangular with respect to $\calV$ if and only if $\Span(v_1, \ldots, v_i)$ is invariant under $T$ for all $i \in \{1, \ldots, n\}$.
+\end{proposition}
+
+\begin{proof}
+    This is obvious.
+\end{proof}
+
+
+\begin{lemma}
+    Let $V$ be an $\field$-vector space, and let $T \in \calL(V)$ be an isomorphism. If $U$ is a finite-dimensional subspace of $V$ that is invariant under $T$, then $U$ is also invariant under $T\inv$.
+\end{lemma}
+
+\begin{proof}
+    Since $U$ is finite-dimensional and $T|_U \colon U \to U$ is injective, applying the rank--nullity theorem implies that $T|_U$ is also surjective. Hence if $u \in U$, then there exists a $v \in U$ such that $Tv = u$. It follows that
+    %
+    \begin{equation*}
+        T\inv u
+            = T\inv Tv
+            = v
+            \in U,
+    \end{equation*}
+    %
+    so $U$ is invariant under $T\inv$.
+\end{proof}
+
+
+\begin{proposition}
+    Let $V$ be a finite-dimensional $\field$-vector space, and let $\calV$ be an ordered basis for $V$. If $T \in \calL(V)$ is an isomorphism that is upper triangular with respect to $\calV$, then $T\inv$ is also upper triangular with respect to $\calV$.
+
+    In particular, the subset of $\matGL{n}{\field}$ consisting of upper triangular matrices is a subgroup.
+\end{proposition}
+
+\begin{proof}
+    This is an obvious consequence of the above two results.
+\end{proof}
+
+
+\begin{lemma}
+    \label{lem:upper-triangular-invertible}
+    Let $A \in \mat{n}{\field}$ be upper triangular. Then $A$ is invertible if and only if all its diagonal elements are nonzero.
+\end{lemma}
+
+\begin{proof}
+    Denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$, and let $(e_1, \ldots, e_n)$ be the standard basis of $\field^n$. First assume that the diagonal elements are nonzero. Then notice that $e_1 \in R(A)$, and that
+    %
+    \begin{equation*}
+        A e_i
+            = a_1 e_1 + \cdots + a_{i-1} e_{i-1} + \lambda_i e_i
+    \end{equation*}
+    %
+    for appropriate $a_1, \ldots, a_{i-1} \in \field$. By induction we then have $e_i \in R(A)$. Since $(e_1, \ldots, e_n)$ is a basis, this implies that $R(A) = \field^n$.
+
+    Conversely, assume that some diagonal element $\lambda_i$ is zero. Then
+    %
+    \begin{equation*}
+        A \Span(e_1, \ldots, e_i)
+            \subseteq \Span(e_1, \ldots, e_{i-1}),
+    \end{equation*}
+    %
+    so the null-space of $A$ is nontrivial, and hence $A$ is singular.
+\end{proof}
+
+
+\begin{lemma}
+    Let $A \in \mat{n}{\field}$ be upper triangular. Then the eigenvalues of $A$ are its diagonal elements.
+\end{lemma}
+
+\begin{proof}
+    Let $\lambda \in \field$, and denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$. By \cref{lem:upper-triangular-invertible}, the matrix $\lambda I - A$ is singular if and only if $\lambda - \lambda_i = 0$ for some $i$, and hence $\lambda_1, \ldots, \lambda_n$ are the eigenvalues of $A$.
+\end{proof}
+
+
+\begin{proposition}
+    \label{prop:upper-triangular-basis-exists}
+    Let $\field$ be algebraically closed, and let $V$ be a finite-dimensional $\field$-vector space. If $T \in \calL(V)$, then $V$ has an ordered basis with respect to which $T$ is upper triangular.
+\end{proposition}
+
+\begin{proof}
+    This is obvious if $\dim V = 1$, so assume that $n = \dim V > 1$, and assume that the claim is true for $\field$-vector spaces of dimension $n-1$. Since $\field$ is algebraically closed, $T$ has an eigenvector $v_1 \in V$. Then $U = \Span(v_1)$ is invariant under $T$, so we may define a linear operator\footnote{The operator $\tilde T$ may arise as follows: Let $\pi \colon V \to V/U$ be the quotient map. Then $U \subseteq \ker (\pi \circ T)$ since $U$ is invariant under $T$, so $\pi \circ T$ descends to a linear map $\tilde T \colon V/U \to V/U$.} $\tilde T \in \calL(V/U)$ by $\tilde T(v + U) = Tv + U$. Since $\dim V/U = n-1$, by induction there is a basis $v_2 + U, \ldots, v_n + U$ of $V/U$ with respect to which the matrix of $\tilde T$ is upper triangular. It is easy to show that the collection $v_1, \ldots, v_n$ is linearly independent, hence a basis for $V$.
+
+    Now notice that
+    %
+    \begin{equation*}
+        Tv_i + U
+            = \tilde T(v_i + U)
+            \in \Span(v_2 + U, \ldots, v_i + U)
+    \end{equation*}
+    %
+    for $i \in \{2, \ldots, n\}$. That is, there exist $a_2, \ldots, a_i \in \field$ such that
+    %
+    \begin{equation*}
+        Tv_i + U
+            = (a_2 v_2 + \cdots + a_i v_i) + U.
+    \end{equation*}
+    %
+    But then $Tv_i \in \Span(v_1, \ldots, v_i)$ for all $i \in \{2, \ldots, n\}$, and since $U$ is invariant under $T$ this also holds for $i = 1$. Hence $T$ is upper triangular with respect to the basis $v_1, \ldots, v_n$ of $V$.
+\end{proof}
+
+
+\begin{theorem}[Schur's Theorem]
+    Let $V$ be a finite-dimensional complex inner product space. If $T \in \calL(V)$, then $V$ has an ordered orthonormal basis with respect to which $T$ is upper triangular.
+\end{theorem}
+
+\begin{proof}
+    By \cref{prop:upper-triangular-basis-exists} $V$ has an ordered basis $\calV = (v_1, \ldots, v_n)$ with respect to which $\mr{\calV}{T}{\calV}$ is upper triangular. Now apply the Gram--Schmidt procedure to $\calV$ and obtain an orthonormal basis $\calU = (u_1, \ldots, u_n)$ for $V$ such that
+    %
+    \begin{equation*}
+        \Span(u_1, \ldots, u_i)
+            = \Span(v_1, \ldots, v_i)
+    \end{equation*}
+    %
+    for all $i \in \{1, \ldots, n\}$. Then \cref{prop:upper-triangular-criterion} shows that $\mr{\calU}{T}{\calU}$ is also upper triangular, proving the claim.
+\end{proof}
+
+
+\chapter{Orthonormal diagonalisation}
+
+\section{Hilbert space adjoints}\label{mylabel2}
+
+\newpar\label{mylabel}
+
+If $V$ is a (real or complex) Hilbert space, for $u \in V$ let $\phi_u$ denote the element in the continuous dual $V^*$ given by $\phi_u(v) = \inner{u}{v}$. Further, let $\Phi_V \colon V \to V^*$ denote the (conjugate-)linear isomorphism $u \mapsto \phi_u$. Then
+%
+\begin{equation*}
+    \abs{\phi_u(v)}
+        = \abs{\inner{u}{v}}
+        \leq \norm{u} \, \norm{v},
+\end{equation*}
+%
+implying that $\norm{\phi_u} \leq \norm{u}$. Furthermore,
+%
+\begin{equation*}
+    \abs{\phi_u(u)}
+        = \norm{u}^2,
+\end{equation*}
+%
+so in fact $\norm{\phi_u} = \norm{u}$. In other words, $\Phi_V$ is an isometry and in particular continuous.
+
+\begin{definition}[Hilbert space adjoints]
+    Let $V$ and $W$ be Hilbert spaces, and let $T \in \calB(V,W)$. The \emph{(Hilbert space) adjoint} of $T$ is the operator $T^* \colon W \to V$ given by
+    %
+    \begin{equation*}
+        T^*
+            = \Phi_V\inv \circ T^\dagger \circ \Phi_W.
+    \end{equation*}
+\end{definition}
+%
+Properties of the operator adjoint $T^\dagger$ are often inherited by the Hilbert space adjoint: By \cref{enum:operator-adjoint-continuous-normed} $T^\dagger$ is continuous, so $T^*$ is also continuous. And $\Phi_V$ and $\Phi_W$ are \emph{conjugate}-linear, so $T^*$ is linear. Furthermore, if $S \in \calB(W,U)$ then
+%
+\begin{align*}
+    (ST)^*
+        &= \Phi_V\inv \circ (ST)^\dagger \circ \Phi_U \\
+        &= \Phi_V\inv \circ T^\dagger \circ S^\dagger \circ \Phi_U \\
+        &= (\Phi_V\inv \circ T^\dagger \circ \Phi_W) \circ (\Phi_W\inv \circ S^\dagger \circ \Phi_U) \\
+        &= T^* S^*.
+\end{align*}
+%
+Finally, notice that
+%
+\begin{equation*}
+    \norm{T^*}
+        \leq \norm{\Phi_V\inv} \, \norm{T^\dagger} \, \norm{\Phi_W}
+        = \norm{T^\dagger},
+\end{equation*}
+%
+since $\Phi_V$ and $\Phi_W$ are isometric isomorphisms. The opposite inequality follows similarly, so in total $\norm{T^*} = \norm{T^\dagger} = \norm{T}$ by \cref{enum:operator-adjoint-continuous-normed}.
+
+\begin{proposition}
+    \label{prop:adjoint-inner-product}
+    Let $V,W$ be Hilbert spaces, and let $T \in \calB(V,W)$. For all $w \in W$ we have $T^\dagger \phi_w = \phi_{T^* w}$. In particular, $T^*$ is the unique linear operator $W \to V$ with the property that
+    %
+    \begin{equation*}
+        \inner{v}{T^*w}_V = \inner{Tv}{w}_W,
+    \end{equation*}
+    %
+    for all $v \in V$ and $w \in W$. Furthermore, $T^{**} = T$, i.e. the map $T \mapsto T^*$ is an involution.
+\end{proposition}
+%
+The adjoint $T^*$ is equivalently characterised by the identity
+%
+\begin{equation*}
+    \inner{T^*w}{v}_V = \inner{w}{Tv}_W,
+\end{equation*}
+%
+by complex conjugation. Note that either of these two identities is often taken as the definition of $T^*$, and existence is proved without appealing to the operator adjoint. In this case, many of the above properties are proved using the uniqueness part of this proposition.
+
+\begin{proof}
+    First notice that $T^*$ indeed has this property. For $w \in W$ we have
+    %
+    \begin{equation*}
+        \phi_{T^* w}
+            = \Phi_V (T^* w)
+            = (T^\dagger \circ \Phi_W)(w)
+            = T^\dagger \phi_w,
+    \end{equation*}
+    %
+    so for $v \in V$ it thus follows that
+    %
+    \begin{equation*}
+        \inner{v}{T^* w}_V
+            = \phi_{T^* w}(v)
+            = T^\dagger \phi_w (v)
+            = \phi_w(Tv)
+            = \inner{Tv}{w}_W,
+    \end{equation*}
+    %
+    as desired. Furthermore, if $S \colon W \to V$ is another such operator, then $\inner{v}{Sw}_V = \inner{v}{T^*w}_V$ for all $v$ and $w$, so $S = T^*$. The final claim that $T^{**} = T$ follows by uniqueness.
+\end{proof}
+
+
+\newpar
+
+An operator $U \colon V \to W$ is an \emph{isometry} if
+%
+\begin{equation*}
+    \inner{Uv}{Uu}_W
+        = \inner{v}{u}_V
+\end{equation*}
+%
+for all $v,u \in V$. Clearly $U$ is injective. If $U$ is also surjective (e.g. if $\dim V = \dim W < \infty$), then it is called \emph{unitary}. Notice that if $U$ is an isometry, then
+%
+\begin{equation*}
+    \inner{U^*Uv}{u}_V
+        = \inner{Uv}{Uu}_W
+        = \inner{v}{u}_V,
+\end{equation*}
+%
+implying that $U^*U = \id_V$, and the converse clearly also holds. If $U$ is also surjective, then it is an isomorphism and so also $UU^* = \id_W$ (an operator with this property is called a \emph{coisometry}). In this case $U^* = U\inv$.
+
+In the case $W = V$ we say that $T$ is \emph{normal} if $TT^* = T^*T$, and that $T$ is \emph{self-adjoint} if $T^* = T$. Clearly both self-adjoint and unitary operators (with $V = W$) are normal.
+
+
+\section{Properties of adjoints}
+
+\begin{proposition}
+    \label{prop:complexification-adjoint}
+    Let $V$ and $W$ be real Hilbert spaces, and let $T \in \calB(V,W)$. Then we have
+    %
+    \begin{equation*}
+        (T^\complex)^*
+            = (T^*)^\complex,
+    \end{equation*}
+    %
+    i.e., the adjoint of the complexification of $T$ is the complexification of the adjoint of $T$. In particular
+    %
+    \begin{enumprop}
+        \item $T$ is normal if and only if $T^\complex$ is normal, and
+        \item $T$ is self-adjoint if and only if $T^\complex$ is self-adjoint.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    For $v,u,x,y \in V$ we have
+    %
+    \begin{align*}
+        \inner{(T^*)^\complex(x + \iu y)}{v + \iu u}
+            &= \inner{ T^*x + \iu T^*y }{v + \iu u} \\
+            &= \inner{T^*x}{v}
+                + \inner{T^*y}{u}
+                + \iu ( \inner{T^*x}{u} - \inner{T^*y}{v} ) \\
+            &= \inner{x}{Tv}
+                + \inner{y}{Tu}
+                + \iu ( \inner{x}{Tu} - \inner{y}{Tv} ) \\
+            &= \inner{x + \iu y}{Tv + \iu Tu} \\
+            &= \inner{x + \iu y}{T^\complex(v + \iu u)}.
+    \end{align*}
+    %
+    Uniqueness of adjoints thus yields the claim.
+
+    Assume that $T$ is normal. Then
+    %
+    \begin{equation*}
+        T^\complex (T^\complex)^*
+            = T^\complex (T^*)^\complex
+            = (TT^*)^\complex
+            = (T^*T)^\complex
+            = (T^*)^\complex T^\complex
+            = (T^\complex)^* T^\complex,
+    \end{equation*}
+    %
+    so $T^\complex$ is normal. The converse follows similarly. If $T$ is self-adjoint, then
+    %
+    \begin{equation*}
+        (T^\complex)^*
+            = (T^*)^\complex
+            = T^\complex,
+    \end{equation*}
+    %
+    and similarly if $T^\complex$ is self-adjoint.
+\end{proof}
+
+
+\begin{proposition}
+    Let $V$ be a finite-dimensional inner product space, and let $T \in \calL(V)$ and $\lambda \in \mathbb{K}$. Then $\lambda \id_V - T$ is invertible if and only if $\conj{\lambda} \id_V - T^*$ is invertible. In other words, $\lambda$ is an eigenvalue of $T$ if and only if $\conj{\lambda}$ is an eigenvalue of $T^*$.
+\end{proposition} % TODO: Infinite dimension? Boundedly invertible?
+
+\begin{proof}
+    Since the map $T \mapsto T^*$ is an involution it suffices to prove one implication, so assume that $\lambda \id_V - T$ is invertible. Then there exists an $S \in \calL(V)$ such that
+    %
+    \begin{equation*}
+        S(\lambda \id_V - T)
+            = (\lambda \id_V - T)S
+            = \id_V,
+    \end{equation*}
+    %
+    and taking adjoints we find that
+    %
+    \begin{equation*}
+        (\conj{\lambda} \id_V - T^*)S^*
+            = S^*(\conj{\lambda} \id_V - T^*)
+            = \id_V.
+    \end{equation*}
+    %
+    That is, $\conj{\lambda} \id_V - T^*$ is invertible as claimed.
+\end{proof}
+
+\begin{remark}
+    Note that this does \emph{not} say that $v \in V$ is an eigenvector of $T^*$ if it is an eigenvector of $T$. A counterexample is given by the matrix
+    %
+    \begin{equation*}
+        A =
+        \begin{pmatrix}
+            1 & 1 \\
+            0 & 0
+        \end{pmatrix},
+    \end{equation*}
+    %
+    which has the eigenvector $(1,0)$ with eigenvalue $1$. However, while $1$ is also an eigenvalue of the transpose $A\trans$ (with eigenvector $(1,1)$), $(1,0)$ is not an eigenvector of $A\trans$.
+
+    While this does not hold in general, recall that in \cref{enum:normal-adjoint-eigenvalues} we saw that it holds for \emph{normal} operators.
+\end{remark}
+
+
+\begin{proposition}
+    Let $T \in \calB(V)$ be a normal operator.
+    %
+    \begin{enumprop}
+        \item \label{enum:normal-adjoint-norm} $\norm{Tv} = \norm{T^*v}$ for all $v \in V$.
+        
+        \item \label{enum:normal-adjoint-eigenvalues} If $\lambda \in \mathbb{K}$ is an eigenvalue of $T$, then $\conj{\lambda}$ is an eigenvalue of $T^*$ with the same eigenvectors. In other words, $E_T(\lambda) = E_{T^*}(\conj{\lambda})$.
+
+        \item \label{enum:normal-orthogonal-eigenspaces} If $\mu \in \mathbb{K}$ is another eigenvalue of $T$ distinct from $\lambda$, then $E_T(\lambda)$ and $E_T(\mu)$ are orthogonal.
+
+        \item \label{enum:self-adjoint-eigenvalues-exists-and-real} If $T$ is self-adjoint, then it has an eigenvalue and all its eigenvalues are real.
+
+        \item \label{enum:unitary-eigenvalues-unit-circle} If $T$ is unitary, then all its eigenvalues lie on the unit circle $\sphere^1 \subseteq \complex$.
+    \end{enumprop}
+\end{proposition}
+%
+In \cref{cor:self-adjoint-unitary-eigenvalue-characterisation} we will prove the converses of \subcref{enum:self-adjoint-eigenvalues-exists-and-real} and \subcref{enum:unitary-eigenvalues-unit-circle} under the assumption that $V$ is finite-dimensional and that $T$ is normal, using the spectral theorem (cf. \cref{thm:spectral-theorem}). We will use \subcref{enum:self-adjoint-eigenvalues-exists-and-real} in the proof of the spectral theorem, and we have proved \subcref{enum:unitary-eigenvalues-unit-circle} already to make explicit that it does not depend on the spectral theorem, and that the proof does not require that $V$ is finite-dimensional.
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\Namesubcref{enum:normal-adjoint-norm}]
+    Notice that
+    %
+    \begin{equation*}
+        \norm{Tv}^2
+            = \inner{Tv}{Tv}
+            = \inner{T^*Tv}{v}
+            = \inner{TT^*v}{v}
+            = \inner{T^*v}{T^*v}
+            = \norm{T^*v}^2.
+    \end{equation*}
+
+    \item[\Namesubcref{enum:normal-adjoint-eigenvalues}]
+    If $T$ is normal then so is $\lambda \id_V - T$, so \subcref{enum:normal-adjoint-norm} implies that
+    %
+    \begin{equation*}
+        \norm{(\lambda \id_V - T)v}
+            = \norm{(\conj{\lambda} \id_V - T^*)v},
+    \end{equation*}
+    %
+    so $v \in V$ is an eigenvector for $T$ with eigenvalue $\lambda$ if and only if $v$ is an eigenvector for $T^*$ with eigenvalue $\conj{\lambda}$.
+
+    \item[\Namesubcref{enum:normal-orthogonal-eigenspaces}]
+    Let $v \in E_T(\lambda)$ and $u \in E_T(\mu)$. Since $w$ is also an eigenvector for $T^*$ with eigenvalue $\conj{\mu}$, we have
+    %
+    \begin{equation*}
+        \lambda \inner{v}{u}
+            = \inner{v}{Tu}
+            = \inner{T^*v}{u}
+            = \mu \inner{v}{u}.
+    \end{equation*}
+    %
+    Since $\lambda \neq \mu$ we must have $\inner{v}{u} = 0$ as claimed.
+
+    \item[\Namesubcref{enum:self-adjoint-eigenvalues-exists-and-real}]
+    If $T$ is self-adjoint and $v \in V$ is an eigenvector for $T$ with $\lambda \in \mathbb{K}$, then
+    %
+    \begin{equation*}
+        \lambda \inner{v}{v}
+            = \inner{v}{Tv}
+            = \inner{Tv}{v}
+            = \conj{\lambda} \inner{v}{v},
+    \end{equation*}
+    %
+    and since $v \neq 0$ we must have $\lambda = \conj{\lambda}$. Hence $\lambda$ is real.
+
+    If $\mathbb{K} = \complex$ then $V$ has a complex eigenvalue, which is real by the above argument. Assume instead that $\mathbb{K} = \reals$ and consider the complexification $T^\complex$ of $T$. This is self-adjoint by \cref{prop:complexification-adjoint}, so it has a real eigenvalue by the above. But then \cref{prop:complexification-eigenvalue} implies that this also is an eigenvalue of $T$.
+
+    \item[\Namesubcref{enum:unitary-eigenvalues-unit-circle}]
+    Let $\lambda \in \mathbb{K}$ be an eigenvalue of $T$ with eigenvector $v$. Then
+    %
+    \begin{equation*}
+        \inner{v}{v}
+            = \inner{Tv}{Tv}
+            = \inner{\lambda v}{\lambda v}
+            = \conj{\lambda} \lambda \inner{v}{v}
+            = \abs{\lambda}^2 \inner{v}{v},
+    \end{equation*}
+    %
+    so $\abs{\lambda} = 1$.
+\end{proofsec*}
+\end{proof}
+
+
+\section{Adjoints and coordinates}
+
+Now let $V$ and $W$ be finite-dimensional inner product spaces, and let $\Sigma \in \mat{n}{\mathbb{K}}$ and $\Gamma \in \mat{m}{\mathbb{K}}$ be the matrices of the inner products of $V$ and $W$ with respect to ordered bases $\calV$ and $\calW$, respectively. We then have the following characterisation of adjoints of linear maps $V \to M$.
+
+\begin{proposition}
+    \label{prop:adjoint-formula-IP-matrix}
+    Let $T \colon V \to W$ be a linear map. Its adjoint $T^* \colon W \to V$ is the unique linear map satisfying
+    %
+    \begin{equation*}
+        \Sigma \, \mr{\calV}{T^*}{\calW}
+            = (\mr{\calW}{T}{\calV})^* \, \Gamma.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    \Cref{prop:adjoint-inner-product} implies that
+    %
+    \begin{equation*}
+        \coordvec{v}{\calV}^* \, \Sigma \, \mr{\calV}{T^*}{\calW} \, \coordvec{w}{\calW}
+            = \inner{v}{T^* w}_V
+            = \inner{Tv}{w}_W
+            = \coordvec{v}{\calV}^* \, (\mr{\calW}{T}{\calV})^* \, \Gamma \, \coordvec{w}{\calW},
+    \end{equation*}
+    %
+    for all $v \in V$ and $w \in W$, and $T^*$ is clearly unique with this property.
+\end{proof}
+%
+This result has various important consequences in the case where $\calV$ and $\calW$ are orthonormal:
+
+\begin{corollarynoproof}
+    If $\calV$ and $\calW$ are orthonormal, then
+    %
+    \begin{equation*}
+        \mr{\calV}{T^*}{\calW}
+            = (\mr{\calW}{T}{\calV})^*.
+    \end{equation*}
+\end{corollarynoproof}
+
+\begin{corollarynoproof}
+    If $T \colon \mathbb{K}^n \to \mathbb{K}^m$, then
+    %
+    \begin{equation*}
+        \smr{T^*}
+            = \smr{T}^*.
+    \end{equation*}
+\end{corollarynoproof}
+
+\begin{corollarynoproof}
+    If $A \in \mat{m,n}{\mathbb{K}}$, then
+    %
+    \begin{equation*}
+        M_{A^*}
+            = (M_A)^*.
+    \end{equation*}
+\end{corollarynoproof}
+
+
+\section{The spectral theorem}
+
+\newpar
+
+Before we state and prove the spectral theorem, we need two lemmas. The first is a result on coordinate maps with respect to orthonormal bases. We equip $\mathbb{K}^n$ with the Euclidean inner product.
+
+\begin{lemma}
+    \label{lem:coordinate-map-isometry}
+    Let $V$ and $W$ be finite-dimensional inner product spaces, and let $\calV$ and $\calW$ be ordered orthonormal bases for $V$ and $W$. Then the coordinate map $\coordmap{\calV}$ is unitary, i.e.
+    %
+    \begin{equation}
+        \label{eq:coordinate-map-isometry}
+        \inner{\coordvec{v}{\calV}}{\coordvec{u}{\calV}}
+            = \inner{v}{u}
+    \end{equation}
+    %
+    for all $v,u \in V$.
+\end{lemma}
+
+\begin{proof}
+    By bi- or sesquilinearity of the inner product it suffices to prove \cref{eq:coordinate-map-isometry} for a basis for $V$. And writing $\calV = (v_1, \ldots, v_n)$ we find that
+    %
+    \begin{equation*}
+        \inner{\coordvec{v_i}{\calV}}{\coordvec{v_j}{\calV}}
+            = \inner{e_i}{e_j}
+            = \delta_{ij}
+            = \inner{v_i}{v_j}
+    \end{equation*}
+    %
+    for $1 \leq i,j \leq n$.
+\end{proof}
+
+To motivate the second lemma, let $T \colon V \to V$ be an operator on an $\field$-vector space $V$, and let $U$ be a subspace of $V$ that is invariant under $T$ (i.e., $T(U) \subseteq U$). If $W$ is a complement of $U$, i.e. $V = U \oplus W$, then $W$ is not necessarily invariant under $T$. However, we have the following, which we state for general Hilbert spaces for completeness:
+
+\begin{lemma}
+    \label{thm:adjoint-invariant-subspace}
+    Let $V$ be a Hilbert space and let $T \in \calB(V)$. If a subspace $U$ of $V$ is invariant under $T$, then $U^\perp$ is invariant under $T^*$.
+\end{lemma}
+
+\begin{proof}
+    Let $v \in U^\perp$. For $u \in U$ we have $Tu \in U$, so
+    %
+    \begin{equation*}
+        \inner{T^*v}{u}
+            = \inner{v}{Tu}
+            = 0.
+    \end{equation*}
+    %
+    Since this holds for all $u \in U$, it follows that $T^*v \in U^\perp$ as desired.
+\end{proof}
+
+
+\newpar
+
+We are now in a position to state and prove
+
+\begin{theorem}[The spectral theorem]
+    \label{thm:spectral-theorem}
+    Let $V$ be a finite-dimensional inner product space over $\mathbb{K}$, and let $T \in \calL(V)$. Then the following are equivalent:
+    %
+    \begin{enumthm}
+        \item \label{enum:spectral-selfadjoint-normal} $\mathbb{K} = \reals$ and $T$ is self-adjoint, or $\mathbb{K} = \complex$ and $T$ is normal.
+        
+        \item \label{enum:spectral-orthogonally-diagonalisable} $T$ is orthogonally diagonalisable.
+
+        \item \label{enum:spectral-operator-decomposition} $T$ has the orthogonal spectral resolution
+        %
+        \begin{equation*}
+            T
+                = \sum_{\lambda \in \spec T} \lambda P_\lambda,
+        \end{equation*}
+        %
+        where $P_\lambda$ is the orthogonal projection onto the eigenspace $E_T(\lambda)$. In particular, $V$ is an orthogonal direct sum of the eigenspaces of $T$, i.e.
+        %
+        \begin{equation*}
+            V
+                = \bigodot_{\lambda \in \spec T} E_T(\lambda).
+        \end{equation*}
+
+        \item \label{enum:spectral-multiplication-operator} $T$ is unitarily (when $\mathbb{K} = \complex$) or orthogonally (when $\mathbb{K} = \reals$) equivalent to a multiplication operator $M_A \in \calL(\mathbb{K}^n)$ where $A$ is a diagonal matrix, and the diagonal of $A$ contains the eigenvalues of $T$ with multiplicity. If $\calV$ is an ordered orthonormal basis for $V$ consisting of eigenvectors for $T$, then we may choose $A = \mr{\calV}{T}{\calV}$ and
+        %
+        \begin{equation*}
+            T
+                = \coordmap{\calV}\inv \circ M_A \circ \coordmap{\calV},
+        \end{equation*}
+        %
+        with $\coordmap{\calV}$ unitary.
+    \end{enumthm}
+\end{theorem}
+%
+Note that the first part of property \subcref{enum:spectral-operator-decomposition} means that
+%
+\begin{equation*}
+    \id_V
+        = \sum_{\lambda \in \spec T} P_\lambda
+\end{equation*}
+%
+is a resolution of the identity, i.e. that $P_\lambda P_\mu = 0$ for $\lambda \neq \mu$, and that this is composed of orthogonal projections.
+
+Most of the equivalences above are simply a matter of unrolling the definitions. The main technical work is done in the following:
+
+\begin{lemma}
+    \label{lem:spectral-lemma}
+    $V$ be a finite-dimensional inner product space over $\mathbb{K}$, and consider $T \in \calL(V)$. If either
+    %
+    \begin{enumthm}
+        \item $\mathbb{K} = \reals$ and $T$ is self-adjoint, or
+        \item $\mathbb{K} = \complex$ and $T$ is normal,
+    \end{enumthm}
+    %
+    then $T$ is orthogonally diagonalisable.
+\end{lemma}
+
+\begin{proof}
+    Assume that either $\mathbb{K} = \reals$ and $T$ is self-adjoint, or that $\mathbb{K} = \complex$ and $T$ is normal. We prove by induction in $n = \dim V$ that $T$ is orthogonally diagonalisable. If $n = 1$ then this follows since $T$ has an eigenvalue, so assume that the claim is proved for operators on spaces of dimension strictly less than $n$.
+
+    Let $\lambda \in \spec T$, and consider the corresponding eigenspace $E_T(\lambda)$. If $d \defn \dim E_T(\lambda) = n$, then any orthonormal basis of $E_T(\lambda)$ will suffice. Assume therefore that $0 < d < n$.
+
+    The space $E_T(\lambda) = E_{T^*}(\conj{\lambda})$ is clearly invariant under both $T$ and $T^*$. It follows from \cref{thm:adjoint-invariant-subspace} that $E_T(\lambda)^\perp$ is also invariant under both $T$ and $T^*$. We furthermore have $\dim E_T(\lambda)^\perp = n-d$ and $0 < n-d < n$. Let $T_\parallel \in \calL(E_T(\lambda))$ and $T_\perp \in \calL(E_T(\lambda)^\perp)$ denote the restrictions of $T$ to $E_T(\lambda)$ and $E_T(\lambda)^\perp$ respectively. Both $T_\parallel$ and $T_\perp$ are also self-adjoint or normal, depending on the hypothesis, so the induction hypothesis furnishes orthonormal bases $\calU$ and $\calW$ for $E_T(\lambda)$ and $E_T(\lambda)^\perp$ consisting of eigenvectors of $T$. But then $\calV = \calU \union \calW$ is an orthonormal basis for $V$ as desired.
+\end{proof}
+
+
+\begin{proofof}[Proof of \cref{thm:spectral-theorem}]
+\begin{proofsec*}
+    \item[\Namesubcref{enum:spectral-selfadjoint-normal} $\implies$ \namesubcref{enum:spectral-orthogonally-diagonalisable}]
+    This is just \cref{lem:spectral-lemma}.
+
+    \item[\Namesubcref{enum:spectral-selfadjoint-normal} \& \namesubcref{enum:spectral-orthogonally-diagonalisable} $\implies$ \namesubcref{enum:spectral-operator-decomposition}]
+    The first claim says that distinct eigenspaces are orthogonal, which is just a restatement of \cref{enum:normal-orthogonal-eigenspaces}. To prove the second, let $\calV = (v_1, \ldots, v_n)$ be an orthonormal basis for $V$ consisting of eigenvectors for $T$, and let $\lambda_1, \ldots, \lambda_n$ be the corresponding eigenvalues. Then for any $v = \alpha_1 v_1 + \cdots + \alpha_n v_n$ we have $P_{\lambda_i} v = \alpha_i v_i$, so
+    %
+    \begin{equation*}
+        \biggl( \sum_{\lambda \in \spec T} P_\lambda \biggr) v
+            = \sum_{\lambda \in \spec T} P_\lambda v
+            = \sum_{i=1}^n \alpha_i v_i
+            = v.
+    \end{equation*}
+    %
+    For the third claim, notice that
+    %
+    \begin{equation*}
+        \biggl( \sum_{\lambda \in \spec T} \lambda P_\lambda \biggr) v
+            = \sum_{\lambda \in \spec T} \lambda P_\lambda v
+            = \sum_{i=1}^n \lambda_i \alpha_i v_i
+            = \sum_{i=1}^n \alpha_i Tv_i
+            = Tv.
+    \end{equation*}
+    %
+    The final claim follows from the first two.
+
+    \item[\Namesubcref{enum:spectral-operator-decomposition} $\implies$ \namesubcref{enum:spectral-orthogonally-diagonalisable}]
+    This follows from the decomposition of $V$ into an orthogonal sum of eigenspaces, by constructing an orthonormal basis for each eigenspace.
+
+    \item[\Namesubcref{enum:spectral-orthogonally-diagonalisable} $\implies$ \namesubcref{enum:spectral-multiplication-operator}]
+    Let $\calV = (v_1, \ldots, v_n)$ be an ordered orthonormal basis for $\calV$ consisting of eigenvectors for $T$ with corresponding eigenvalues $\lambda_1, \ldots, \lambda_n$, and consider the matrix representation $\mr{\calV}{T}{\calV}$. If $(e_1, \ldots, e_n)$ is the standard basis on $\mathbb{K}^n$, then \cref{lemma:mr-eigenvalues} implies that the vectors $\coordvec{v_i}{\calV} = e_i$ are eigenvectors for $\mr{\calV}{T}{\calV}$. Hence $\mr{\calV}{T}{\calV}$ is diagonal, so the basis representation $\coordmap{\calV} \circ T \circ \coordmap{\calV}\inv$ is multiplication by a diagonal matrix. Next notice that
+    %
+    \begin{equation*}
+        T
+            = \coordmap{\calV}\inv \circ (\coordmap{\calV} \circ T \circ \coordmap{\calV}\inv) \circ \coordmap{\calV},
+    \end{equation*}
+    %
+    so it suffices to show that $\coordmap{\calV}$ is unitary (orthogonal). But this follows by \cref{lem:coordinate-map-isometry}.
+
+    \item[\Namesubcref{enum:spectral-multiplication-operator} $\implies$ \namesubcref{enum:spectral-selfadjoint-normal}]
+    First assume that $\mathbb{K} = \complex$. Since $\coordmap{\calV}$ is unitary we have $\coordmap{\calV}\inv = \coordmap{\calV}^*$, so
+    %
+    \begin{equation*}
+        T^*
+            = (\coordmap{\calV}^* \circ M_A \circ \coordmap{\calV})^*
+            = \coordmap{\calV}^* \circ M_A^* \circ \coordmap{\calV}
+            = \coordmap{\calV}\inv \circ M_{A^*} \circ \coordmap{\calV}.
+    \end{equation*}
+    %
+    Since $A$ is diagonal, $T$ clearly commutes with $T^*$, hence is normal.
+
+    If instead $\mathbb{K} = \reals$, the same argument shows that $T^* = \coordmap{\calV}\inv \circ M_{A\trans} \circ \coordmap{\calV}$, but since $A$ is diagonal this is just $T$, so $T$ is self-adjoint.
+\end{proofsec*}
+\end{proofof}
+
+
+\begin{corollary}
+    \label{cor:self-adjoint-unitary-eigenvalue-characterisation}
+    Let $T \in \calL(V)$ be a normal operator on a complex vector space $V$.
+    %
+    \begin{enumcor}
+        \item \label{enum:self-adjoint-eigenvalue-characterisation} $T$ is self-adjoint if and only if $\spec T \subseteq \reals$.
+        \item \label{enum:unitary-eigenvalue-characterisation} $T$ is unitary if and only if $\spec T \subseteq \sphere^1$.
+    \end{enumcor}
+\end{corollary}
+%
+Note that this does not hold on a real vector space, since then a normal operator is not necessarily diagonalisable.
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\Namesubcref{enum:self-adjoint-eigenvalue-characterisation}]
+    The \enquote{only if} part follows from \cref{enum:self-adjoint-eigenvalues-exists-and-real}, so assume that $\spec T \subseteq \reals$ and notice that
+    %
+    \begin{equation*}
+        T^*
+            = \biggl( \sum_{\lambda \in \spec T} \lambda P_\lambda \biggr)^*
+            = \sum_{\lambda \in \spec T} \conj{\lambda} P_\lambda^*
+            = \sum_{\lambda \in \spec T} \lambda P_\lambda,
+    \end{equation*}
+    %
+    since each $\lambda \in \reals$, and each $P_\lambda$ is an orthogonal projection, hence self-adjoint.
+    
+    Alternatively, choose a diagonal matrix $A \in \mat{n}{\mathbb{K}}$ in accordance with \cref{enum:spectral-multiplication-operator}. Since the diagonal of $A$ contains the eigenvalues of $T$, we have $A^* = A$, and so it follows that $T^* = T$.
+
+    \item[\Namesubcref{enum:unitary-eigenvalue-characterisation}]
+    Similarly, the \enquote{only if} part is just \cref{enum:unitary-eigenvalues-unit-circle}. Assume that $\spec T \subseteq \sphere^1$ and notice that
+    %
+    \begin{equation*}
+        T^*
+            = \sum_{\lambda \in \spec T} \conj{\lambda} P_\lambda.
+    \end{equation*}
+    %
+    Since the projections $P_\lambda$ are pairwise orthogonal, we have
+    %
+    \begin{equation*}
+        T^*T
+            = \sum_{\lambda \in \spec T} \conj{\lambda} \lambda P_\lambda
+            = \sum_{\lambda \in \spec T} \abs{\lambda}^2 P_\lambda
+            = \sum_{\lambda \in \spec T} P_\lambda
+            = \id_V,
+    \end{equation*}
+    %
+    so $U$ is unitary.
+    
+    Alternatively, let $A$ be as above. Then all diagonal elements in $A$ are nonzero, so $A$ is invertible, and we clearly have $A^* A = I_n$. Hence also $T^* T = \id_V$, so $T$ is unitary.
+\end{proofsec*}
+\end{proof}
+
+
+\chapter{Projections}
+
+\newpar
+
+Let $V$ be an $\field$-vector space. A linear operator $P \colon V \to V$ is called a \keyword{projection} if it is idempotent, i.e. if $P^2 = P$.
+
+\begin{proposition}
+    \label{prop:projection-characterisation}
+    A linear map $P \colon V \to V$ is a projection if and only if there exist subspaces $U$ and $W$ of $V$ such that $V = U \oplus W$, $P|_U = \iota_U$ and $P|_W = 0$. In this case $U = \im P$ and $W = \ker P$.
+\end{proposition}
+%
+We say that $P$ is the projection onto $U$ along $W$.
+
+\begin{proof}
+    Assume that $P$ is a projection, and let $v \in \im P$. Then $v = Pu$ for some $u \in V$, and
+    %
+    \begin{equation*}
+        Pv
+            = P^2 u
+            = Pu
+            = v.
+    \end{equation*}
+    %
+    If also $v \in \ker P$, then $v = 0$. Furthermore, for any $v \in V$ we have $v = Pv + (v - Pv) \in \im P \oplus \ker P$, so $\im P$ and $\ker P$ are indeed complements in $V$.
+
+    The converse is obvious, and so is the characterisation of $U$ and $W$.
+\end{proof}
+
+
+\newpar
+
+Now let $V$ be a Hilbert space. A projection $P \colon V \to V$ is \keyword{orthogonal} if $\im P$ and $\ker P$ are orthogonal subspaces of $V$. % TODO Is real necessary??
+
+\begin{proposition}
+    A projection $P \colon V \to V$ is orthogonal if and only if $P$ is self-adjoint.
+\end{proposition}
+
+\begin{proof}
+    Say that $P$ is a projection onto $U$ along $W$. Assume that $P$ is orthogonal and let $v,w \in V$. Since then $Pv \in U$ and $v - Pv \in W$, and similarly for $w$, we get
+    %
+    \begin{equation*}
+        \inner{v - Pv}{Pw}
+            = 0
+            = \inner{Pv}{w - Pw}.
+    \end{equation*}
+    %
+    This implies that
+    %
+    \begin{equation*}
+        \inner{v}{Pw}
+            = \inner{Pv}{Pw}
+            = \inner{Pv}{w}
+            = \inner{v}{P^* w},
+    \end{equation*}
+    %
+    which shows that $P = P^*$.
+
+    Conversely assume that $P$ is self-adjoint. For $u \in U$ and $w \in W$ we then have
+    %
+    \begin{equation*}
+        \inner{u}{w}
+            = \inner{Pu}{w}
+            = \inner{u}{Pw}
+            = \inner{u}{0}
+            = 0,
+    \end{equation*}
+    %
+    so $U$ and $W$ are orthogonal.
+\end{proof}
+
+
+\newpar
+
+Next we consider finite-dimensional inner product spaces $V$ and $W$. If $U$ is a subspace of $V$, then the inclusion map $\iota_U \colon U \to V$ is injective and its image is $\im \iota_U$. Hence the following gives a formula for orthogonal projection operators onto any subspace:
+
+\begin{proposition}
+    \label{prop:projection-formula}
+    Let $T \colon W \to V$ be an injective linear operator, and let $P$ be the orthogonal projection onto $\im T$. Then $P = T(T^* T)\inv T^*$.
+\end{proposition}
+
+\begin{proof}
+    First note that $T^* T$ is indeed injective (hence invertible) since $T$ is. This follows from the identity $\ker T^* = (\im T)^\perp$.
+
+    Next notice that the rank of $P$ is $\dim \im T$. But $T^*$ is surjective since $T$ is injective, so the rank of $T(T^* T)\inv T^*$ is also $\dim \im T$. It thus suffices to show that $P$ and $T(T^* T)\inv T^*$ agree on $\im T$, and writing $v = Tw$ we have
+    %
+    \begin{equation*}
+        T(T^* T)\inv T^* v
+            = T(T^* T)\inv (T^* T) w
+            = Tw
+            = v,
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+%
+Note that the proof does not go through in the infinite-dimensional case, for then we cannot simply use dimension arguments.
+
+We specialise to the case where $V = \reals^n$, and the inner product on $\reals^n$ has the matrix representation $\Sigma$ with respect to the standard basis.\footnote{Note that the standard basis is not necessarily orthonormal with respect to the given inner product.} In this case we may also assume that $W = \reals^k$ where $k = \dim U$: Simply precompose $\iota_U$ with any isomorphism $\reals^k \to U$.
+
+Furthermore, let $A \in \mat{n,k}{\reals}$ be the standard matrix representation of $T \colon \reals^k \to \reals^n$. In this case, $U$ is of course the column space of $A$, and $A$ is of full rank. We then have the following result:
+
+\begin{proposition}
+    The orthogonal projection $P$ onto $R(A)$ is given by
+    %
+    \begin{equation*}
+        \smr{P}
+            = A(A\trans \Sigma A)\inv A\trans \Sigma.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    Equip $\reals^k$ with the standard inner product. Its matrix representation with respect to the standard basis is then just the identity matrix, so \cref{prop:adjoint-formula-IP-matrix} implies that
+    %
+    \begin{equation*}
+        \smr{T^*}
+            = \smr{T}\trans \Sigma
+            = A\trans \Sigma.
+    \end{equation*}
+    %
+    Applying this to \cref{prop:projection-formula} we thus obtain
+    %
+    \begin{align*}
+        \smr{P}
+            &= A \bigl( \smr{T^*} A \bigr)\inv \smr{T^*} \\
+            &= A (A\trans \Sigma A)\inv A\trans \Sigma,
+    \end{align*}
+    %
+    as claimed.
+\end{proof}
+
+
+\chapter{Structural properties of vector spaces}
+
+\section{Quotient spaces and complements}
+
+\newpar
+
+If $U$ is a subspace of an $\field$-vector space $V$, then its underlying additive group is a subgroup of the underlying additive group of $V$. Since $V$ considered as such is abelian, we may consider the quotient group $V/U$ whose elements are cosets $v + U$ for $v \in V$. It is then trivial to check that the operation $\alpha(v + U) \defn \alpha v + U$ for $\alpha \in \field$ makes $V/U$ into a vector space. We denote by $\pi_U$ or simply by $\pi$ the quotient map $\pi \colon V \to V/U$ given by $\pi(v) = v + U$.
+
+\begin{theorem}
+    Let $U$ be a subspace of $V$. If $T \colon V \to W$ satisfies $U \subseteq \ker T$, then there is a unique linear map $\tilde{T} \colon V/U \to W$ such that the diagram
+    %
+    \begin{equation*}
+        \begin{tikzcd}[row sep=small]
+            & W \\
+            V
+                \ar[ur, "T"]
+                \ar[dr, "\pi", swap] \\
+            & V/U
+                \ar[uu, "\tilde{T}", swap, dashed]
+        \end{tikzcd}
+    \end{equation*}
+    %
+    commutes.
+\end{theorem}
+
+\begin{proof}
+    The corresponding result for groups yields a unique group homomorphism $\tilde{T}$. This is easily seen to also be a linear map.
+\end{proof}
+%
+This has the following immediate consequence:
+
+\begin{corollarynoproof}[Canonical decomposition]
+    \label{cor:canonical-decomposition}
+    Every linear map $T \colon V \to W$ may be decomposed as follows:
+    %
+    \begin{equation*}
+        \begin{tikzcd}
+            V
+                \ar[r, "\pi", swap, twoheadrightarrow]
+                \ar[rrr, bend left, "T"]
+            & V/\ker T
+                \ar[r, "\sim", "\tilde{T}"']
+            & \im T
+                \ar[r, "\iota_{\im T}", swap, hookrightarrow]
+            & U
+        \end{tikzcd}
+    \end{equation*}
+    %
+    In particular we have the \keyword{first isomorphism theorem}: $V/\ker T \cong \im T$.
+\end{corollarynoproof}
+
+
+\newpar
+
+If $U$ is a subspace of $V$, then a subspace $W$ of $V$ with the property that $V = U \oplus W$ is called a \keyword{complement} of $U$. Complements are certainly not unique, but we have the following:
+
+\begin{lemma}
+    \label{lem:nested-complements}
+    Assume that $V$ has two direct sum compositions
+    %
+    \begin{equation*}
+        U \oplus W_1
+            = V
+            = U \oplus W_2,
+    \end{equation*}
+    %
+    where $W_1 \subseteq W_2$. Then $W_1 = W_2$.
+\end{lemma}
+
+\begin{proof}
+    Assume that $v \in W_2$. Then there exist unique $u \in U$ and $w \in W_1$ such that $v = u + w$. But then $w$ also lies in $W_2$, and uniqueness implies that $u = 0$ and $w = v$. But then $v \in W_1$ as desired.
+\end{proof}
+%
+Next we note the following characterisation of complements:
+
+\begin{proposition}
+    \label{prop:complement-iso-to-quotient}
+    Let $U$ be a subspace of $V$, and let $W$ be a complement of $U$. The projection $P$ onto $W$ along $U$ induces an isomorphism $V/U \cong W$.
+\end{proposition}
+
+\begin{proof}
+    Note that $\ker P = U$ and $\im P = W$ by \cref{prop:projection-characterisation}, so \cref{cor:canonical-decomposition} implies that $W \cong V/U$ as claimed.
+\end{proof}
+
+\newcommand{\codim}{\operatorname{codim}}
+
+
+\newpar
+
+So far in this section we have not made use of the fact that all vector spaces have bases. This fact enters the present discussion through the following result:
+
+\begin{proposition}
+    Every subspace $U$ of a vector space $V$ has a complement.
+\end{proposition}
+
+\begin{proof}
+    Choose a basis $\calU$ for $U$ and extend it to a basis $\calV$ for $V$ using \cref{prop:basis-existence}. Then we clearly have $V = U \oplus \Span (\calV \setminus \calU)$.
+\end{proof}
+
+If $U$ is a subspace of $V$, then the dimension of the quotient space $V/U$ is called the \keyword{codimension} of $U$ in $V$ and is denoted $\codim_V U$ or simply $\codim U$. The results above then implies the following:
+
+\begin{corollarynoproof}
+    If $U$ is a subspace of $V$, then
+    %
+    \begin{equation*}
+        \dim V
+            = \dim U + \codim U.
+    \end{equation*}
+\end{corollarynoproof}
+
+
+\begin{corollarynoproof}[The rank--nullity theorem]
+    \label{cor:rank-nullity}
+    Let $T \in \calL(V,W)$. Then $\codim \ker T = \dim \im T$, and in particular
+    %
+    \begin{equation*}
+        \dim V
+            = \dim \ker T + \dim \im T.
+    \end{equation*}
+\end{corollarynoproof}
+
+
+\section{Linear maps}
+
+If a linear map $T \colon V \to W$ is bijective, then its inverse is easily seen to be linear. But if $T$ is only injective (or surjective), does it have a linear left-inverse (or right-inverse)? The answer is affirmative:
+
+\begin{lemma}
+    If $T \colon V \to W$ is injective (surjective), then it has a linear left-inverse (right-inverse).
+\end{lemma}
+
+\begin{proof}
+    First assume that $T$ is injective and restrict its codomain to obtain an isomorphism $\tilde{T} \colon V \to \im T$. If $U$ is a complement of $\im T$, writing $W = \im T \oplus U$ and letting $S = \tilde{T}\inv \oplus 0$ we get a linear left-inverse of $T$.
+
+    Next assume that $T$ is surjective. Writing $V = \ker T \oplus U$, $T|_U \colon U \to W$ is an isomorphism. If $\iota_U \colon U \to V$ is the inclusion map, $S = \iota_U \circ T|_U\inv$ is a right-inverse of $T$.
+\end{proof}
+%
+Similarly, we can ask whether monomorphisms (epimorphisms) are necessarily injective (surjective):
+
+\begin{lemma}
+    If $T \colon V \to W$ is a monomorphism (epimorphism), then it is injective (surjective).
+\end{lemma}
+
+\begin{proof}
+    First assume that $T$ is not injective, and assume that $v \neq v'$ satisfy $Tv = Tv'$. Let $U$ be a nontrivial vector space, let $u \in U$ be nonzero, and consider linear maps $S,R \colon U \to V$ with $Su = v$ and $Ru = v'$, and that agree on a complement of $\Span(u)$. Then $TS = TR$ but $S \neq R$, so $T$ is not a monomorphism.
+
+    Similarly, if $T$ is not surjective then let $w \in W \setminus \im T$ and define maps $S,R \colon W \to U$ that agree on a complement of $\Span(w)$, and that satisfy $Sw \neq Rw$. Then $ST = RT$, but $S \neq R$.
+\end{proof}
+%
+These lemmas together imply the following:
+
+\begin{theoremnoproof}
+    A linear map is injective (surjective) if and only if it is a monomorphism (epimorphism) if and only if it has a left-inverse (right-inverse).
+\end{theoremnoproof}
+
+
+
+
+\section{Duality}
+
+\newpar
+
+If $V$ is a $\field$-vector space, then a \keyword{linear functional} is a linear map $V \to \field$. Since $\field$ itself is a $\field$-vector space, the set $\calL(V,\field)$ is also vector space. We denote this by $V^*$ and call it the \keyword{(algebraic) dual space} of $V$.
+
+We note that if $v \in V$ is nonzero, then there exists a $\phi \in V^*$ with $\phi(v) \neq 0$: For extend $v$ to a basis for $V$, let $\phi(v) = 1$ and let $\phi = 0$ on any complement of $\Span(v)$.
+
+We are already in a position to prove the following:
+
+\begin{proposition}
+    \label{prop:dual-of-product}
+    Let $V$ and $W$ be vector spaces. Then the map $\alpha \colon V^* \oplus W^* \to (V \oplus W)^*$ given by
+    %
+    \begin{equation*}
+        \alpha(\phi,\psi)(v,w)
+            = \phi(v) + \psi(w)
+    \end{equation*}
+    %
+    is an isomorphism.
+\end{proposition}
+
+\begin{proof}
+    We show that $\alpha$ is both injective and surjective. For injectivity, let $\phi,\phi' \in V^*$ and $\psi,\psi' \in W^*$, and assume that $\phi \neq \phi'$. This means that there is some $v \in V$ with $\phi(v) \neq \phi'(v)$. Hence
+    %
+    \begin{equation*}
+        \alpha(\phi,\psi)(v,0)
+            = \phi(v)
+            \neq \phi'(v)
+            = \alpha(\phi',\psi')(v,0),
+    \end{equation*}
+    %
+    so $\alpha(\phi,\psi) \neq \alpha(\phi',\psi')$, and similarly if $\psi \neq \psi'$.
+
+    To prove surjectivity, let $\chi \in (V \oplus W)^*$ and define $\phi = \chi(\,\cdot\,,0)$ and $\psi = \chi(0,\,\cdot\,)$. Then $\alpha(\phi,\psi) = \chi$ as required.
+\end{proof}
+
+
+\newpar
+
+Next we study how a basis for $V$ gives rise to a basis for $V^*$. Let $\calV = \set{v_i}{i \in I}$, where $I$ is some index set, be a basis for a vector space $V$. For $i \in I$ we then define $v_i^* \in V^*$ by $v_i^*(v_j) = \delta_{ij}$, and let $\calV^* = \set{v_i^*}{i \in I}$.
+
+\begin{proposition}
+    If $\calV$ is a basis for $V$, then the set $\calV^*$ is linearly independent. If $V$ is finite-dimensional and $\calV = (v_1, \ldots, v_n)$, then $\calV^*$ is a basis for $V^*$ called the \keyword{dual basis} of $\calV$, and
+    %
+    \begin{equation*}
+        \phi
+            = \sum_{i=1}^n \phi(v_i) v_i^*
+    \end{equation*}
+    %
+    for all $\phi \in V^*$. In particular, $V \cong V^*$.
+\end{proposition}
+
+\begin{proof}
+    Applying the functional
+    %
+    \begin{equation*}
+        \alpha_{i_1} v_{i_1}^* + \cdots + \alpha_{i_n} v_{i_n}^* = 0
+    \end{equation*}
+    %
+    to the vector $v_{i_k}$ we find that $\alpha_{i_k} = 0$. If $V$ is finite-dimensional with $\dim V = n$ and $\phi \in V^*$, then
+    %
+    \begin{equation*}
+        \phi(v_j)
+            = \sum_{i=1}^n \phi(v_i) \delta_{ij}
+            = \sum_{i=1}^n \phi(v_i) v_i^*(v_j),
+    \end{equation*}
+    %
+    so $\phi = \sum_{i=1}^n \phi(v_i) v_i^* \in \Span \calV^*$.
+\end{proof}
+%
+The above in particular says that if $\phi = \phi_1 v_1^* + \cdots + \phi_n v_n^*$, then $\phi_i = \phi(v_i)$.
+
+If $\calV = (v_1, \ldots, v_n)$ is a basis for $V$, then the basis $\calV^*$ itself has a dual basis $\calV^{**}$. Applying an element $v_i^{**}$ to the functional $\phi$ then yields
+%
+\begin{equation*}
+    v_i^{**}(\phi)
+        = \phi_i
+        = \phi(v_i).
+\end{equation*}
+%
+We of course have an isomorphism $V \to V^{**}$ given by $v_i \mapsto v_i^{**}$, but the above indicates another way to construct an isomorphism: For $v \in V$ define $\ev_v \colon V^* \to \field$ by evaluation at $v$, i.e. $\ev_v(\phi) = \phi(v)$. This induces a map $\ev \colon V \to V^{**}$ given by $v \mapsto \ev_v$. If $v \neq w$, then there is a $\phi \in V^*$ such that $\phi(v) \neq \phi(w)$, which implies that $\ev_v(\phi) \neq \ev_w(\phi)$. Thus $\ev$ is injective, hence an isomorphism.
+
+
+\newpar
+
+We now introduce a new concept that is useful in characterising dual spaces:
+
+\begin{definition}
+    Let $M \subseteq V$. The \keyword{annihilator} of $M$ is the set
+    %
+    \begin{equation*}
+        M^0
+            = \set{\phi \in V^*}{\phi|_M = 0}.
+    \end{equation*}
+\end{definition}
+%
+It is easy to see that $M^0$ is a subspace of $V^*$ even when $M$ is not. Furthermore, notice that $\emptyset^0 = V^*$. It is also obvious that if $M \subseteq N$ then $N^0 \subseteq M^0$.
+
+Assume that we have a direct sum decomposition $V = U \oplus W$. If $\phi \in U^*$ then we may extend $\phi$ to a functional $\overline{\phi}$ on $V$ by letting $\overline{\phi}(w) = 0$ for all $w \in W$. We say that $\overline{\phi}$ is the \keyword{extension by $0$} of $\phi$. The map $\eta \colon U^* \to V^*$ given by $\eta(\phi) = \overline{\phi}$ has a left-inverse, namely the pullback\footnote{In [TODO ref] we will meet this pullback again under the name \emph{operator adjoint}.}
+%
+\begin{align*}
+    \iota_U^\dagger \colon V^* &\to U^*, \\
+    \psi &\mapsto \psi \circ \iota_U,
+\end{align*}
+%
+where $\iota_U \colon U \to V$ is the inclusion map: For notice that $(\iota_U^\dagger \circ \eta)(\phi) = \overline{\phi} \circ \iota_U = \phi$. In particular, $\eta$ is injective and $\iota_U^\dagger$ is surjective. Now notice that $\im \eta = W^0$, and that $\ker \iota_U^\dagger = U^0$. Hence we have proved:
+
+\begin{propositionnoproof}
+    \label{prop:subspace-dual-complement-annihilator}
+    If $V = U \oplus W$, then the map $U^* \to W^0$ given by $\phi \mapsto \overline{\phi}$ is an isomorphism. If $U$ is finite-dimensional, i.e. if $W$ has finite codimension, then in particular $\dim W^0 = \codim W$.
+\end{propositionnoproof}
+
+\begin{propositionnoproof}
+    If $U$ is a subspace of $V$, then $V^*/U^0 \cong U^*$.
+\end{propositionnoproof}
+
+\begin{corollary}
+    If $U$ is a subspace of $V$, then $(V/U)^* \cong U^0$.
+\end{corollary}
+
+\begin{proof}
+    If $W$ is a complement of $U$, then $V/U \cong W$ by \cref{prop:complement-iso-to-quotient}, so $(V/U)^* \cong W^*$. But then \cref{prop:subspace-dual-complement-annihilator} implies the claim.
+\end{proof}
+
+
+Finally, we can also use annihilators to characterise the dual space of a direct sum:
+
+\begin{proposition}
+    $(U \oplus W)^* = U^0 \oplus W^0$.
+\end{proposition}
+%
+Since $U^0 \cong W^*$ and $W^0 \cong U^*$, this gives an alternative proof of \cref{prop:dual-of-product}.
+
+\begin{proof}
+    The sum of $U^0$ and $W^0$ is clearly direct, and the inclusion \textquote{$\supseteq$} is obvious. Now let $\phi \in V^*$, and let $P_U$ and $P_W$ be the projections onto $U$ and $W$ along $W$ and $U$, respectively. then $P_W + P_U = \id_V$, so
+    %
+    \begin{equation*}
+        \phi
+            = \phi \circ (P_W + P_U)
+            = \phi \circ P_W + \phi \circ P_U
+            \in U^0 \oplus W^0,
+    \end{equation*}
+    %
+    proving the other inclusion.
+\end{proof}
+
+
+\section{Operator adjoints}
+
+\renewcommand{\hom}[1][]{\mathrm{Hom}_{#1}}
+
+\newpar
+
+Let $\calC$ be a locally small category, and let $f \colon A \to B$ be an arrow in $\calC$. For every object $C$, precomposition with $f$ then induces an arrow
+%
+\begin{align*}
+    \hom[\calC](f,C) \colon \hom[\calC](B,C) &\to \hom[\calC](A,C), \\
+        g &\mapsto g \circ f.
+\end{align*}
+%
+This gives rise to a contravariant functor $\hom[\calC](-,C) \colon \calC \to \mathbf{Set}$. Specialising to the case where $\calC$ is the category $\field\text{-}\mathbf{Vect}$ and where $C$ is the field $\field$ (considered as a vector space), we obtain the functor $(-)^*$ sending a vector space $V$ to its (algebraic) dual $V^*$, and a linear map $T$ to its pullback. Since we will use the notation $T^*$ for the Hilbert space adjoint, we instead write $T^\dagger$ for the pullback of $T$, following \textcite{follandrealanalysis}. We also call this the \emph{operator adjoint} of $T$:
+
+\begin{definition}[Operator adjoints]
+    Let $V$ and $W$ be $\field$-vector spaces, and let $T \colon V \to W$ be a linear map. The \emph{(operator) adjoint} of $T$ is the pullback
+    %
+    \begin{align*}
+        T^\dagger \colon W^* &\to V^*, \\
+        \phi &\mapsto \phi \circ T.
+    \end{align*}
+\end{definition}
+%
+This already satisfies $\id_V^\dagger = \id_{V^*}$ and $(ST)^\dagger = T^\dagger S^\dagger$ by functoriality, so that in particular $(T\inv)^\dagger = (T^\dagger)\inv$ when $T$ is invertible. Furthermore, it is easy to show that the map $T \mapsto T^\dagger$ is linear. It is also injective, since if $Tv \neq Sv$ then there is a $\phi \in W^*$ such that $\phi(Tv) \neq \phi(Sv)$. If $V$ and $W$ are finite-dimensional, it is therefore a linear isomorphism.
+
+\begin{proposition}
+    \label{prop:operator-adjoint-kernel-image}
+    Let $T \in \calL(V,W)$.
+    %
+    \begin{enumprop}
+        \item \label{enum:operator-adjoint-kernel} $\ker T^\dagger = (\im T)^0$.
+        \item \label{enum:operator-adjoint-image} $\im T^\dagger = (\ker T)^0$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    For part \subcref{enum:operator-adjoint-kernel}, notice that
+    %
+    \begin{align*}
+        \ker T^\dagger
+            &= \set{\psi \in W^*}{T^\dagger \psi = 0} \\
+            &= \set{\psi \in W^*}{\psi \circ T = 0} \\
+            &= \set{\psi \in W^*}{\psi(\im T) = \{0\}} \\
+            &= (\im T)^0.
+    \end{align*}
+    %
+    For part \subcref{enum:operator-adjoint-image}, if $\phi \in \im T^\dagger$ then there is a $\psi \in W^*$ with $\phi = T^\dagger \psi = \psi \circ T$. Hence $\ker T \subseteq \ker \phi$, so $\phi \in (\ker T)^0$. For the opposite inclusion, let $\phi \in (\ker T)^0$. Let $U$ be a complement of $\ker T$ and let $S \colon W \to U$ be a linear left-inverse of $T|_U$. Letting $\psi = \phi \circ S$ we thus get
+    %
+    \begin{equation*}
+        T^\dagger \psi
+            = \psi \circ T
+            = \phi \circ S \circ T.
+    \end{equation*}
+    %
+    This agrees with $\phi$ on $U$ by definition of $T$, and it agrees with $\phi$ on $\ker T$ since $\phi$ lies in $(\ker T)^0$. Thus $\phi \in \im T^\dagger$.
+\end{proof}
+
+
+\newpar
+
+We now consider the case where $V$ and $W$ are finite-dimensional in more detail.
+
+\newcommand{\rank}{\operatorname{rank}}
+
+\begin{corollary}
+    \label{cor:adjoint-rank}
+    If $T \in \calL(V,W)$ with $V$ and $W$ finite-dimensional, then $\rank T^\dagger = \rank T$.
+\end{corollary}
+
+\begin{proof}
+    Note that
+    %
+    \begin{equation*}
+        \dim \im T^\dagger
+            \overset{(1)}{=} \dim (\ker T)^0
+            \overset{(2)}{=} \codim \ker T
+            \overset{(3)}{=} \dim \im T,
+    \end{equation*}
+    %
+    where $(1)$ follows by \cref{enum:operator-adjoint-kernel}, $(2)$ by \cref{prop:subspace-dual-complement-annihilator}, and $(3)$ by \cref{cor:rank-nullity}.
+\end{proof}
+
+
+\begin{proposition}
+    \label{prop:adjoint-mr}
+    If $T \in \calL(V,W)$ is a linear map between finite-dimensional vector spaces, and $\calV$ and $\calW$ are ordered bases for $V$ and $W$ respectively, then
+    %
+    \begin{equation*}
+        \mr{\calV^*}{T^\dagger}{\calW^*}
+            = \bigl( \mr{\calW}{T}{\calV} \bigr)\trans.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    Write $\calV = (v_1, \ldots, v_n)$ and $\calW = (w_1, \ldots, w_m)$. Then
+    %
+    \begin{equation*}
+        \bigl( \mr{\calW}{T}{\calV} \bigr)_{ij}
+            = \bigl( \coordvec{Tv_j}{\calW} \bigr)_i
+            = w_i^*(Tv_j),
+    \end{equation*}
+    %
+    and
+    %
+    \begin{equation*}
+        \bigl( \mr{\calV^*}{T^\dagger}{\calW^*} \bigr)_{ij}
+            = \bigl( \coordvec{T^\dagger w_j^*}{\calV^*} \bigr)_i
+            = v_i^{**}(T^\dagger w_j^*)
+            = T^\dagger w_j^*(v_i)
+            = w_j^*(Tv_i).
+    \end{equation*}
+    %
+    These expressions are the same, but with $i$ and $j$ switched.
+\end{proof}
+
+From this we obtain the following result on the row and column rank of a matrix. This is often proved by showing that one can apply elementary row and column operations to the matrix in question, preserving the row and column rank, and obtain a diagonal matrix whose entries are either zero or one. The common row and column rank of the matrix is then simply the number of ones. Going through the abstract theory above we avoid these considerations.
+
+\begin{corollary}
+    The row rank and the column rank of a matrix $A \in \mat{m,n}{\field}$ are equal.
+\end{corollary}
+
+\begin{proof}
+    The matrix representation of the multiplication operator $M_A$ with respect to the standard bases on $\field^n$ and $\field^m$ is just $A$ itself, and \cref{prop:adjoint-mr} then implies that the matrix representation of $(M_A)^\dagger$ with respect to the dual bases is $A\trans$. But the rank of an operator equals the rank of any matrix representation of that operator, so \cref{cor:adjoint-rank} implies that $A$ and $A\trans$ have the same (column) rank. Finally, the column rank of $A\trans$ is the row rank of $A$, proving the claim.
+\end{proof}
+
+
+\newpar
+
+If $V$ and $W$ are instead \emph{topological} vector spaces, of arbitrary dimension, and $V^*$ and $W^*$ denote their respective \emph{continuous} dual spaces, then we may also consider the adjoint $T^\dagger$ of a \emph{continuous} linear map $T \colon V \to W$. It then turns out that $T^\dagger$ is also continuous when $V^*$ and $W^*$ are equipped with the appropriate topologies.
+
+\begin{proposition}
+    Let $T \colon V \to W$ be a continuous linear map, and let $T^\dagger \colon W^* \to V^*$ be its adjoint.
+    %
+    \begin{enumprop}
+        \item $T^\dagger$ is continuous with respect to the weak$^*$-topologies on $W^*$ and $V^*$.
+
+        \item \label{enum:operator-adjoint-continuous-normed} If $V$ and $W$ are normed vector spaces, then $T^\dagger$ is continuous with respect to the operator norms on $W^*$ and $V^*$, and $\norm{T^\dagger} = \norm{T}$.
+    \end{enumprop}
+\end{proposition}
+
+\begin{proof}
+    Let $(\phi_i)_{i \in I}$ be a net in $W^*$ that converges to some $\phi \in W^*$. That is, $\phi_i(w) \to \phi(w)$ for all $w \in W$, so in particular $\phi_i(Tv) \to \phi(Tv)$ for all $v \in V$. But then $T^\dagger \phi_i = \phi_i \circ T$ converges to $T^\dagger \phi = \phi \circ T$, so $T^\dagger$ is continuous as claimed.
+
+    If $V$ and $W$ are normed, then
+    %
+    \begin{equation*}
+        \norm{T^\dagger \phi}
+            = \norm{\phi \circ T}
+            \leq \norm{\phi} \, \norm{T}
+    \end{equation*}
+    %
+    for all $\phi \in W^*$, implying that $T^\dagger$ is bounded with $\norm{T^\dagger} \leq \norm{T}$. If $T \neq 0$, then let $v \in V$ with $\norm{v} = 1$ such that $Tv \neq 0$. The Hahn--Banach theorem then furnishes a $\phi \in W^*$ with $\norm{\phi} = 1$ and $\phi(Tv) = \norm{Tv}$ (cf. \cite[Theorem~5.8(b)]{follandrealanalysis}). It follows that
+    %
+    \begin{equation*}
+        \norm{T^\dagger}
+            \geq \norm{T^\dagger \phi}
+            \geq \abs{(T^\dagger \phi)v}
+            = \abs{\phi(Tv)}
+            = \norm{Tv}.
+    \end{equation*}
+    %
+    This inequality then holds for all $v \in V$ with $\norm{v} = 1$, implying that $\norm{T^\dagger} \geq \norm{T}$.
+\end{proof}
+
+% TODO: $T \mapsto T^\dagger$ not necessarily injective now?
+
+\section{Resolutions of the identity}
+
+Let $V$ be a vector space. Two projections $P,Q \in \calL(V)$ are said to be \keyword{orthogonal} if $PQ = QP = 0$, in which case we write $P \perp Q$. A \keyword{resolution of the identity} on $V$ is a sum on the form
+%
+\begin{equation*}
+    P_1 + \cdots + P_k = \id_V,
+\end{equation*}
+%
+where the $P_i$ are pairwise orthogonal projections. If $V$ is an inner product space and the $P_i$ are themselves orthogonal projections, then we also say that the resolution of the identity is \keyword{orthogonal}.
+
+\begin{proposition}
+    \label{prop:resolution-of-the-identity-characterisation}
+    If $P_1 + \cdots + P_k = \id_V$ is a resolution of the identity, then
+    %
+    \begin{equation*}
+        V
+            = \im P_1 \oplus \cdots \oplus \im P_k,
+        \quad \text{and} \quad
+        \ker P_i
+            = \bigoplus_{j \neq i} \im P_j
+    \end{equation*}
+    %
+    for all $i = 1, \ldots, k$. Conversely, if
+    %
+    \begin{equation*}
+        V
+            = U_1 \oplus \cdots \oplus U_k
+    \end{equation*}
+    %
+    and $P_i$ is the projection onto $U_i$ along $\bigoplus_{j \neq i} U_j$, then $P_1 + \cdots + P_k = \id_V$ is a resolution of the identity.
+\end{proposition}
+
+\begin{proof}
+    Clearly $V$ is a (not necessarily direct) sum of the above images. To see that the sum is direct, if for $v_1, \ldots, v_k \in V$ we have
+    %
+    \begin{equation*}
+        P_1 v_1 + \cdots P_k v_k = 0,
+    \end{equation*}
+    %
+    then applying $P_i$ we get $P_i v_i = 0$. Furthermore, we clearly have $\bigoplus_{j \neq i} \im P_j \subseteq \ker P_i$ by orthogonality. For the opposite inclusion, notice that
+    %
+    \begin{equation*}
+        \im P_i \oplus \ker P_i
+            = V
+            = \im P_i \oplus \biggl( \bigoplus_{j \neq i} \im P_j \biggr).
+    \end{equation*}
+    %
+    And since $\bigoplus_{j \neq i} \im P_j \subseteq \im P_i$ by orthogonality, the opposite inclusion follows from \cref{lem:nested-complements}.
+
+    For the converse, if $i \neq j$ then $\im P_i = U_i \subseteq \ker P_j$, so $P_i \perp P_j$. Furthermore, if $v = u_1 + \cdots + u_k$ with $u_i \in U_i$, then $P_i v = u_i$, so
+    %
+    \begin{equation*}
+        v
+            = u_1 + \cdots + u_k
+            = P_1 v + \cdots + P_k v
+            = (P_1 + \cdots + P_k) v,
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+
+
+
+\nocite{*}
+\chapter*{\bibname}
+\markboth{\bibname}{\bibname}
+\addcontentsline{toc}{chapter}{\bibname}
+\printbibliography[heading=none]
+
+\end{document}
