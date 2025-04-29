@@ -96,7 +96,7 @@ Notice that elementary matrices are invertible since elementary row operations a
 
 \begin{proof}
 \begin{proofsec*}
-    \item[\itemref{enum:lemma-A-invertible} $\equivalent$ \itemref{enum:lemma-A-equivalent-to-I}]
+    \item[\itemref{enum:lemma-A-invertible} $\iff$ \itemref{enum:lemma-A-equivalent-to-I}]
     Let $H \in \mat{n}{\fieldF}$ be a row-reduced echelon matrix that is row-equivalent to $A$. Then $H = PA$, where $P \in \mat{n}{\fieldF}$ is a product of elementary matrices. Then $A = \inv{P} H$, so $A$ is invertible if and only if $H$ is. But the only invertible row-reduced echelon matrix is the identity matrix, so \itemref{enum:lemma-A-invertible} and \itemref{enum:lemma-A-equivalent-to-I} are equivalent.
     
     \item[\itemref{enum:lemma-A-equivalent-to-I} $\implies$ \itemref{enum:lemma-A-elementary-matrix-product}]
@@ -105,7 +105,7 @@ Notice that elementary matrices are invertible since elementary row operations a
     \item[\itemref{enum:lemma-A-elementary-matrix-product} $\implies$ \itemref{enum:lemma-A-invertible}]
     This is obvious since elementary matrices are invertible.
 
-    \item[\itemref{enum:lemma-A-equivalent-to-I} $\equivalent$ \itemref{enum:lemma-only-trivial-solution}]
+    \item[\itemref{enum:lemma-A-equivalent-to-I} $\iff$ \itemref{enum:lemma-only-trivial-solution}]
     If $A$ and $I_n$ are row-equivalent, then the systems $Ax = 0$ and $I_n x = 0$ have the same solutions. Conversely, assume that $Ax = 0$ only has the trivial solution. If $H \in \mat{m,n}{\fieldF}$ is a row-reduced echelon matrix that is row-equivalent to $A$, then $Hx = 0$ has no nontrivial solution. Thus if $r$ is the number of nonzero rows in $H$, then $r \geq n$. But then $r = n$, so $H$ must be the identity matrix.
 \end{proofsec*}
 \end{proof}

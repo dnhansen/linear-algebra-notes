@@ -1,0 +1,250 @@
+\chapter{Bases and coordinates}
+
+\section{Bases}
+
+If $\calV$ is a subset of $V$, the \keyword{span} of $\calV$, denoted $\Span\calV$ or $\gen{\calV}$, is the smallest subspace of $V$ containing $\calV$. Equivalently, it is the set of all linear combinations
+%
+\begin{equation*}
+    \alpha_1 v_1 + \cdots + \alpha_n v_n,
+\end{equation*}
+%
+where $\alpha_i \in \fieldF$ and $v_i \in \calV$. We say that $\calV$ is \keyword{linearly independent} if any linear relation
+%
+\begin{equation*}
+    \alpha_1 v_1 + \cdots + \alpha_n v_n = 0
+\end{equation*}
+%
+among elements $v_i$ in $\calV$ can only be satisfied if $\alpha_1 = \cdots = \alpha_n = 0$. If $\calV$ is both linearly independent and a spanning set, then we call it a \keyword{basis} for $V$. We have the following characterisation of bases:
+
+\begin{propositionnoproof}
+    A subset $\calV \subseteq V$ is a basis for $V$ if and only if
+    %
+    \begin{equation*}
+        V
+            = \bigdirsum_{v \in \calV} \gen{v}.
+    \end{equation*}
+\end{propositionnoproof}
+
+We next prove that bases always exist, but first we need a different characterisation of bases. An element $v \in V$ is an \keyword{essentially unique} linear combination of the elements in $\calV$ if there is an up to ordering unique way to express $v$ as a linear combination of elements in $\calV$. It is easy to see that $\calV$ is linearly independent if and only if every nonzero $v \in \gen{\calV}$ is an essentially unique linear combination of the elements in $\calV$.
+
+\begin{proposition}
+    Let $\calV$ be a subset of $V$. The following are equivalent:
+    %
+    \begin{enumproposition}
+        \item \label{enum:linearly-independent-and-span} $\calV$ is linearly independent and spans $V$.
+        \item \label{enum:essentially-unique-linear-combination} Every nonzero $v \in V$ is an essentially unique linear combination of vectors in $\calV$.
+        \item \label{enum:minimal-spanning-set} $\calV$ is a minimal spanning set.
+        \item \label{enum:maximal-linearly-independent-set} $\calV$ is a maximal linearly independent set.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\itemref{enum:linearly-independent-and-span} $\iff$ \itemref{enum:essentially-unique-linear-combination}]
+    This follows easily as mentioned above.
+
+    \item[\itemref{enum:linearly-independent-and-span} $\iff$ \itemref{enum:minimal-spanning-set}]
+    If \itemref{enum:linearly-independent-and-span} holds and a proper subset $\calV'$ of $\calV$ spanned $V$, then any element of $\calV \setminus \calV'$ is a linear combination of elements in $\calV'$, so $\calV$ is not linearly independent. Conversely, if $\calV$ is a minimal spanning set but is not linearly independent, then some $v \in \calV$ is a linear combination of the other elements in $\calV$, so $\calV \setminus \{v\}$ is also a spanning set.
+
+    \item[\itemref{enum:linearly-independent-and-span} $\iff$ \itemref{enum:maximal-linearly-independent-set}]
+    Again assuming \itemref{enum:linearly-independent-and-span}, if $\calV$ were not maximal there would be some $v \in V \setminus \calV$ such that $\calV \union \{v\}$ were linearly independent. But then $v$ would not be a linear combination of elements in $\calV$. Conversely, if $\calV$ is a maximal linearly independent set that did not span $V$, then there would be some $v \in V \setminus \calV$ that is not a linear combination of elements in $\calV$. But then $\calV \union \{v\}$ is also linearly independent.
+\end{proofsec*}
+\end{proof}
+
+
+\begin{theorem}
+    \label{prop:basis-existence}
+    Let $V$ be a vector space. If $\calI \subseteq V$ is linearly independent, $\calS \subseteq V$ is a spanning set, and $\calI \subseteq \calS$, then there is a basis $\calV$ for $V$ with $\calI \subseteq \calV \subseteq \calS$.
+\end{theorem}
+
+\begin{proof}
+    Let $\calA$ be the collection of linearly independent subsets $\calJ$ of $V$ with $\calI \subseteq \calJ \subseteq \calS$. If $\calC$ is a chain in $\calA$, then
+    %
+    \begin{equation*}
+        \calU
+            = \bigunion \calC
+    \end{equation*}
+    %
+    is linearly independent and satisfies $\calI \subseteq \calU \subseteq \calS$, so it lies in $\calA$. Hence every chain in $\calA$ has an upper bound, so it has a maximal element $\calV$. This is linearly independent since it lies in $\calA$, and it is also a spanning set by maximality, hence it is a basis.
+\end{proof}
+
+
+\begin{corollary}
+    Every vector space has a basis.
+\end{corollary}
+
+\begin{proof}
+    Let $\calI = \emptyset$ and $\calS = V$ in \cref{prop:basis-existence}.
+\end{proof}
+
+
+We next turn to the concept of the \keyword{dimension} of a vector space. Our presentation will focus on finite-dimensional vector spaces.
+
+\begin{proposition}
+    If the vectors $v_1, \ldots, v_n$ in $V$ are linearly independent, and the vectors $w_1, \ldots, w_m$ span $V$, then $n \leq m$.
+\end{proposition}
+
+\begin{proof}
+    List the vectors as follows:
+    %
+    \begin{equation*}
+        w_1, \ldots, w_m; v_1, \ldots, v_n.
+    \end{equation*}
+    %
+    We transform this list such that the collection of vectors on the left-hand side of the semicolon always span $V$, and such that the vectors on the right-hand side are always linearly independent. Note that $v_1$ is a linear combination of the $w_j$, implying that we may add $v_1$ to the left-hand side and remove one of the $w_j$ (which, by reindexing, we may assume is $w_1$) and still have a spanning set. We simultaneously remove $v_1$ from the right-hand side. That is, we obtain
+    %
+    \begin{equation*}
+        v_1, w_2, \ldots, w_m; v_2, \ldots, v_n.
+    \end{equation*}
+    %
+    If $m < n$, then applying this process recursively will eventually exhaust the $w_j$, at which point we would have
+    %
+    \begin{equation*}
+        v_1, \ldots, v_m; v_{m+1}, \ldots, v_n.
+    \end{equation*}
+    %
+    But this is not possible, since $v_n$ does not lie in the span of $v_1, \ldots, v_m$. Hence $n \leq m$.
+\end{proof}
+
+
+\begin{corollarynoproof}
+    If $V$ has a finite spanning set, then all bases for $V$ have the same cardinality.
+\end{corollarynoproof}
+%
+This in fact holds for arbitrary vector spaces, though the proof is significantly more involved (cf. \cite[Theorem~1.12]{romanlinalg}).
+
+Since bases always exist and all bases have the same cardinality, the following definition makes sense:
+
+\begin{definition}[Dimension]
+    The \keyword{dimension} of a vector space $V$, written $\dim V$, is the cardinality of any basis for $V$.
+\end{definition}
+
+
+We now turn to a different characterisation of the dimension of finite-dimensional vector spaces. Below we write $\dim V = \infty$ if the dimension of the vector space $V$ is infinite. A \keyword{series} of subspaces $U_i$ of $V$ is a finite or infinite decreasing sequence
+%
+\begin{equation*}
+    V
+        = U_0
+        \supsetneq U_1
+        \supsetneq U_2
+        \supsetneq \cdots.
+\end{equation*}
+%
+If the sequence is finite, then the \keyword{length} of the series is the number of strict inclusions. If the sequence is infinite, then we say that the length of the series is $\infty$. The maximal length of a series of subspaces of $V$ is denoted $l(V)$.
+
+In the proposition below, we write $\dim V = \infty$ if the dimension of $V$ is infinite.
+
+\begin{proposition}
+    Let $V$ be a vector space. Then $\dim V = l(V)$.
+\end{proposition}
+
+\begin{proof}
+    First assume that $V$ is finite-dimensional, and let $\calV = (v_1, \ldots, v_n)$ be a basis for $V$. Then there is a series
+    %
+    \begin{equation*}
+        V
+            = \gen{v_1, \ldots, v_n}
+            \supsetneq \gen{v_1, \ldots, v_{n-1}}
+            \supsetneq \cdots
+            \supsetneq \gen{v_1}
+            \supsetneq 0
+    \end{equation*}
+    %
+    of subspaces of $V$, so $\dim V \leq l(V)$. Conversely, let
+    %
+    \begin{equation*}
+        V
+            = U_0
+            \supsetneq U_1
+            \supsetneq U_2
+            \supsetneq \cdots
+    \end{equation*}
+    %
+    be a series of subspaces of $V$. If the series ends with $0$, remove it. Hence all subspaces in the series are nontrivial. Then choose for each $i$ an element $v_i \in U_i \setminus U_{i+1}$, and collect them in a set $\calI$. It is clear that $\calI$ is linearly independent, hence finite. Thus the series is also finite with length $\card{\calI}-1$. Adding back $0$ to the series we obtain a series that is at least as long as the original sequence, and that is of length $\card{\calI} \leq \dim V$. Since the sequence was arbitrary, $l(V) \leq \dim V$.
+
+    Next assume that $V$ is infinite-dimensional. Then $V$ contains a sequence $(v_i)_{i\in\naturals}$ that is linearly independent, so the series
+    %
+    \begin{equation*}
+        V
+            \supseteq \genset{v_i}{i \in \naturals}
+            \supsetneq \genset{v_i}{i \geq 2}
+            \supsetneq \genset{v_i}{i \geq 3}
+            \supsetneq \cdots
+    \end{equation*}
+    %
+    is infinite, and $l(V) = \infty$. Conversely, assume that $V$ has an infinite series. As above we construct a linearly independent set $\calI$ whose size equals the length of the sequence. Thus $V$ contains an infinite linearly independent set, so $\dim V = \infty$.
+\end{proof}
+
+
+\section{Coordinate maps and matrices}
+
+Every matrix $A \in \mat{m,n}{\fieldF}$ gives rise to a map $M_A \colon \fieldF^n \to \fieldF^m$ given by $M_A v = Av$. The next result shows that every linear map $\fieldF^n \to \fieldF^m$ arises in this way:
+
+\begin{proposition}
+    \label{prop:smr-properties}
+    Let $(e_1, \ldots, e_n)$ be the standard basis for $\fieldF^n$. The map
+    %
+    \begin{align*}
+        \calM \colon \lin(\fieldF^n, \fieldF^m) &\to \mat{m,n}{\fieldF}, \\
+        T &\mapsto \bigl( Te_1 \mid \cdots \mid Te_n \bigr),
+    \end{align*}
+    %
+    is a linear isomorphism with inverse $A \mapsto M_A$. The matrix $\smr{T}$ is called the \keyword{standard matrix representation} of $T$. If $T \colon \fieldF^n \to \fieldF^m$ and $S \colon \fieldF^m \to \fieldF^l$ are linear maps, then
+    %
+    \begin{enumproposition}
+        \item \label{enum:smr-vector-multiplication} $Tv = \smr{T}v$ for all $v \in \fieldF^n$.
+        
+        \item \label{enum:smr-of-identity-map} $\smr{\id_{\fieldF^n}} = I$.
+
+        \item \label{enum:smr-multiplicative} $\smr{S \circ T} = \smr{S} \smr{T}$.
+
+        \item \label{enum:smr-invertibility} $T$ is invertible if and only if $\smr{T}$ is invertible, in which case $\smr{\inv{T}} = \inv{\smr{T}}$.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+    The map $A \mapsto M_A$ is clearly linear, so to prove the first point it suffices to show that this is the inverse of $\calM$. Let $T \in \lin(\fieldF^n,\fieldF^m)$. Then
+    %
+    \begin{equation*}
+        M_{\smr{T}} \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \smr{T} \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \bigl( Te_1 \mid \cdots \mid Te_n \bigr) \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \sum_{i=1}^n \alpha_i Te_i
+            = T \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+    \end{equation*}
+    %
+    for $\alpha_1, \ldots, \alpha_n \in \fieldF$. Conversely, for $A \in \mat{m,n}{\fieldF}$ we have
+    %
+    \begin{equation*}
+        \smr{M_A}
+            = \bigl( M_A e_1 \mid \cdots \mid M_A e_n \bigr)
+            = \bigl( A e_1 \mid \cdots \mid A e_n \bigr)
+            = A,
+    \end{equation*}
+    %
+    since $Ae_i$ is the $i$th column of $A$. We prove the remaining claims:
+    %
+    \begin{proofsec}
+        \item[\itemref{enum:smr-vector-multiplication}]
+        Simply notice that $Tv = M_{\smr{T}}v = \smr{T}v$.
+
+        \item[\itemref{enum:smr-of-identity-map}]
+        This is obvious from the definition of $\calM$.
+
+        \item[\itemref{enum:smr-multiplicative}]
+        Let $v \in \fieldF^n$ and notice that
+        %
+        \begin{equation*}
+            \smr{S \circ T}v
+                = (S \circ T) v
+                = S(Tv)
+                = S(\smr{T}v)
+                = \smr{S}\smr{T}v
+        \end{equation*}
+        %
+        by \itemref{enum:smr-vector-multiplication}. Since this holds for all $v$, the claim follows.
+
+        \item[\itemref{enum:smr-invertibility}]
+        This follows easily from \itemref{enum:smr-of-identity-map} and \itemref{enum:smr-multiplicative}.
+    \end{proofsec}
+\end{proof}

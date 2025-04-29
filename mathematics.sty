@@ -1,4 +1,5 @@
 \RequirePackage{mathtools}
+\RequirePackage{pgffor} % foreach loops
 
 % https://tex.stackexchange.com/a/124311/63353
 \g@addto@macro\bfseries{\boldmath}
@@ -9,7 +10,43 @@
 \newcommand{\mat}[2]{\mathrm{M}_{#1}(#2)}
 
 \renewcommand{\implies}{\Rightarrow}
-\newcommand{\equivalent}{\Leftrightarrow}
+\renewcommand{\iff}{\Leftrightarrow}
 
 
 \newcommand{\inv}[1]{{#1}^{-1}}
+
+\foreach \x in {A,...,Z}{%
+    \expandafter\xdef\csname cal\x\endcsname{\noexpand\mathcal{\x}}
+    % \expandafter\xdef\csname frak\x\endcsname{\noexpand\mathfrak{\x}}
+    % \expandafter\xdef\csname sf\x\endcsname{\noexpand\mathsf{\x}}
+    % \expandafter\xdef\csname rand\x\endcsname{\noexpand\rvar{\x}}
+    % \expandafter\xdef\csname bb\x\endcsname{\noexpand\mathbb{\x}}
+    % \expandafter\xdef\csname cat\x\endcsname{\noexpand\cat{\x}}
+    % \expandafter\xdef\csname scat\x\endcsname{\noexpand\scat{\x}}
+}
+
+\newcommand{\Span}{\operatorname{span}} % TODO starred
+\newcommand{\gen}[1]{\langle#1\rangle}
+\DeclarePairedDelimiterX{\genset}[2]{\langle}{\rangle}{#1\;\delimsize\vert\;#2}
+
+
+\newcommand{\bigdirsum}{\bigoplus}
+\newcommand{\bigunion}{\bigcup}
+\newcommand{\bigintersect}{\bigcap}
+\newcommand{\union}{\cup}
+\newcommand{\intersect}{\cap}
+
+\DeclarePairedDelimiter{\card}{\lvert}{\rvert}
+
+
+\newcommand{\coordmap}[1]{\phi_{#1}}
+\newcommand{\coordvec}[2]{[#1]_{#2}}
+\newcommand{\basischange}[2]{\phi_{#1,#2}}
+\newcommand{\mr}[3]{{}_{#1}[#2]_{#3}}
+\newcommand{\basischangemat}[2]{\mr{#1}{\square}{#2}}
+\newcommand{\lin}{\calL}
+\newcommand{\smr}[1]{\calM(#1)} % standard matrix representation
+
+\newcommand{\colvec}[1]{\begin{pmatrix}#1\end{pmatrix}}
+
+\DeclareMathOperator{\id}{id}
