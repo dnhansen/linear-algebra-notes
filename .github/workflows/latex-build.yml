@@ -1,11 +1,9 @@
-# .github/workflows/latex-build.yml
-
 name: Build and Upload PDF
 
 on:
   push:
     branches:
-      - main
+      - publish
   pull_request:
 
 jobs:
