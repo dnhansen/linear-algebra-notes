@@ -1,0 +1,146 @@
+\chapter{Structural properties of vector spaces}\label{testchapter}
+
+\section{Projections I}
+
+Let $V$ be a vector space. A linear operator $P \colon V \to V$ is called a \keyword{projection} if it is idempotent, i.e., if $P^2 = P$.
+
+\begin{proposition}
+    \label{prop:projection-characterisation}
+    A linear map $P \colon V \to V$ is a projection if and only if there exist subspaces $U$ and $W$ of $V$ such that $V = U \dirsum W$, $P|_U = \iota_U$ and $P|_W = 0$. In this case $U = \im P$ and $W = \ker P$.
+\end{proposition}
+%
+We say that $P$ is the projection onto $U$ along $W$.
+
+\begin{proof}
+    Assume that $P$ is a projection, and let $v \in \im P$. Then $v = Pu$ for some $u \in V$, and
+    %
+    \begin{equation*}
+        Pv
+            = P^2 u
+            = Pu
+            = v.
+    \end{equation*}
+    %
+    If also $v \in \ker P$, then $v = 0$. Furthermore, for any $v \in V$ we have $v = Pv + (v - Pv) \in \im P \dirsum \ker P$, so $\im P$ and $\ker P$ are indeed complements in $V$.
+
+    The converse is obvious, and so is the characterisation of $U$ and $W$.
+\end{proof}
+
+We will return to projections in {sec:projections-2} TODO.
+
+
+\section{Quotient spaces and complements}
+
+If $U$ is a subspace of an $\fieldF$-vector space $V$, then its underlying additive group is a subgroup of the underlying additive group of $V$. Since $V$ considered as such is abelian, we may consider the quotient group $V/U$ whose elements are cosets $v + U$ for $v \in V$. It is then trivial to check that the operation $\alpha(v + U) \defeq \alpha v + U$ for $\alpha \in \fieldF$ makes $V/U$ into a vector space. We denote by $\pi_U$ or simply by $\pi$ the quotient map $\pi \colon V \to V/U$ given by $\pi(v) = v + U$.
+
+\begin{theorem}
+    Let $U$ be a subspace of $V$. If $T \colon V \to W$ satisfies $U \subseteq \ker T$, then there is a unique linear map $\tilde{T} \colon V/U \to W$ such that the diagram
+    %
+    \begin{equation*}
+        \begin{tikzcd}[row sep=small]
+            & W \\
+            V
+                \ar[ur, "T"]
+                \ar[dr, "\pi", swap] \\
+            & V/U
+                \ar[uu, "\tilde{T}", swap, dashed]
+        \end{tikzcd}
+    \end{equation*}
+    %
+    commutes.
+\end{theorem}
+
+\begin{proof}
+    The corresponding result for groups yields a unique group homomorphism $\tilde{T}$. This is easily seen to also be a linear map. % TODO do I also need for topological vector spaces? If not, put in preface that e.g. $\cong$ is only linear isomorphism, not anything topological.
+\end{proof}
+%
+This has the following immediate consequence:
+
+\begin{corollarynoproof}[Canonical decomposition]
+    \label{cor:canonical-decomposition}
+    Every linear map $T \colon V \to W$ may be decomposed as follows:
+    %
+    \begin{equation*}
+        \begin{tikzcd}
+            V
+                \ar[r, "\pi", swap, twoheadrightarrow]
+                \ar[rrr, bend left, "T"]
+            & V/\ker T
+                \ar[r, "\sim", "\tilde{T}"']
+            & \im T
+                \ar[r, "\iota_{\im T}", swap, hookrightarrow]
+            & U
+        \end{tikzcd}
+    \end{equation*}
+    %
+    In particular we have the \keyword{first isomorphism theorem}: $V/\ker T \cong \im T$.
+\end{corollarynoproof}
+% TODO better command for \cong and \sim
+
+If $U$ is a subspace of $V$, then a subspace $W$ of $V$ with the property that $V = U \dirsum W$ is called a \keyword{complement} of $U$. Complements are certainly not unique, but we have the following:
+
+\begin{lemma}
+    \label{lem:nested-complements}
+    Assume that $V$ has two direct sum compositions
+    %
+    \begin{equation*}
+        U \dirsum W_1
+            = V
+            = U \dirsum W_2,
+    \end{equation*}
+    %
+    where $W_1 \subseteq W_2$. Then $W_1 = W_2$.
+\end{lemma}
+
+\begin{proof}
+    Assume that $v \in W_2$. Then there exist unique $u \in U$ and $w \in W_1$ such that $v = u + w$. But then $w$ also lies in $W_2$, and uniqueness implies that $u = 0$ and $w = v$. But then $v \in W_1$ as desired.
+\end{proof}
+%
+Next we note the following characterisation of complements:
+
+\begin{proposition}
+    \label{prop:complement-iso-to-quotient}
+    Let $U$ be a subspace of $V$, and let $W$ be a complement of $U$. The projection $P$ onto $W$ along $U$ induces an isomorphism $V/U \cong W$.
+\end{proposition}
+
+\begin{proof}
+    Note that $\ker P = U$ and $\im P = W$ by \cref{prop:projection-characterisation}, so \cref{cor:canonical-decomposition} implies that $W \cong V/U$ as claimed. % TODO if I want to do TVS, when is this a homeomorphism?
+\end{proof}
+
+
+So far in this section we have not made use of the fact that all vector spaces have bases. This fact enters the present discussion through the following result:
+
+\begin{proposition}
+    Every subspace $U$ of a vector space $V$ has a complement.
+\end{proposition}
+
+\begin{proof}
+    Choose a basis $\calU$ for $U$ and extend it to a basis $\calV$ for $V$ using \cref{prop:basis-existence}. Then we clearly have $V = U \dirsum \gen{\calV \setminus \calU}$.
+\end{proof}
+
+If $U$ is a subspace of $V$, then the dimension of the quotient space $V/U$ is called the \keyword{codimension} of $U$ in $V$ and is denoted $\codim_V U$ or simply $\codim U$. The results above then implies the following:
+
+\begin{corollarynoproof}
+    If $U$ is a subspace of $V$, then
+    %
+    \begin{equation*}
+        \dim V
+            = \dim U + \codim U.
+    \end{equation*}
+\end{corollarynoproof}
+
+
+\begin{corollarynoproof}[The rank--nullity theorem]
+    \label{cor:rank-nullity}
+    Let $T \in \lin(V,W)$. Then $\codim \ker T = \dim \im T$, and in particular
+    %
+    \begin{equation*}
+        \dim V
+            = \dim \ker T + \dim \im T.
+    \end{equation*}
+\end{corollarynoproof}
+
+% TODO proofs??
+
+
+\section{Linear maps}

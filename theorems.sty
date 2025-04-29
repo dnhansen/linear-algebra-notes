@@ -161,13 +161,13 @@
 % https://tex.stackexchange.com/questions/266715/referencing-an-in-theorem-list-item-without-the-preceding-theorem-number
 
 \addtotheorempostheadhook[theorem]{\crefalias{enumtheoremi}{theorem}}
-% \addtotheorempostheadhook[theoremnoproof]{\crefalias{enumtheoremi}{theorem}}
+\addtotheorempostheadhook[theoremnoproof]{\crefalias{enumtheoremi}{theorem}}
 \addtotheorempostheadhook[proposition]{\crefalias{enumpropositioni}{proposition}}
-% \addtotheorempostheadhook[propositionnoproof]{\crefalias{enumpropositioni}{proposition}}
+\addtotheorempostheadhook[propositionnoproof]{\crefalias{enumpropositioni}{proposition}}
 \addtotheorempostheadhook[lemma]{\crefalias{enumlemmai}{lemma}}
-% \addtotheorempostheadhook[lemmanoproof]{\crefalias{enumlemmai}{lemma}}
+\addtotheorempostheadhook[lemmanoproof]{\crefalias{enumlemmai}{lemma}}
 \addtotheorempostheadhook[corollary]{\crefalias{enumcorollaryi}{corollary}}
-% \addtotheorempostheadhook[corollarynoproof]{\crefalias{enumcorollaryi}{corollary}}
+\addtotheorempostheadhook[corollarynoproof]{\crefalias{enumcorollaryi}{corollary}}
 \addtotheorempostheadhook[example]{\crefalias{enumexamplei}{example}}
 % \addtotheorempostheadhook[examplebreak]{\crefalias{enumexamplei}{example}}
 % \addtotheorempostheadhook[examples]{\crefalias{enumexamplei}{example}}
@@ -179,8 +179,9 @@
 \addtotheorempostheadhook[definition]{\crefalias{enumdefinitioni}{definition}}
 
 % Cleveref names
-
+% TODO do all of them
 \crefformat{equation}{#2(#1)#3}
+\Crefname{corollarynoproof}{Corollary}{Corollaries}
 \Crefname{example}{Example}{Examples}
 % \Crefname{examples}{Example}{Examples}
 % \Crefname{examplebreak}{Example}{Examples}
