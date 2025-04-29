@@ -35,7 +35,7 @@ Clearly, if $A, B \in \mat{m,n}{\fieldF}$ are row-equivalent, then the systems o
 
 An \keyword{elementary matrix} is a matrix obtained by applying a single elementary row operation to the identity matrix $I$. It is easy to show that if $e$ is an elementary row operation and $E = e(I) \in \mat{m}{\fieldF}$, then $e(A) = EA$ for $A \in \mat{m,n}{\fieldF}$. If also $B \in \mat{m,n}{\fieldF}$, then $A$ and $B$ are row-equivalent if and only if $A = PB$, where $P \in \mat{m}{\fieldF}$ is a product of elementary matrices.
 
-We now show that every matrix is row-equivalent to a matrix with a particularly simple form: \cref{def:mydef} \cref{enumdef:myenum} \itemref{enumdef:myenum}
+We now show that every matrix is row-equivalent to a matrix with a particularly simple form:
 
 \begin{definition}\label{def:mydef}
     A matrix $H \in \mat{m,n}{\fieldF}$ is called \keyword{row-reduced} if
@@ -53,26 +53,74 @@ We now show that every matrix is row-equivalent to a matrix with a particularly 
     \end{enumdefinition}
 \end{definition}
 
-\begin{proposition}[My proposition]
+\begin{proposition}
     Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
 \end{proposition}
 
 \begin{proof}
-    This is my proof!
+    The usual Gauss--Jordan elimination algorithm proves existence. If $H, K \in \mat{m,n}{R}$ are row-equivalent row-reduced echelon matrices, we claim that $H = K$. We prove this by induction in $n$. If $n = 1$ then this is obvious, so assume that $n > 1$. Let $H_1$ and $K_1$ be the matrices obtained by deleting the $n$th column in $H$ and $K$ respectively. Then $H_1$ and $K_1$ are also row-equivalent\footnote{It should be obvious that deleting columns preserves row-equivalence, but we give a more precise argument: If $P \in \mat{m}{\fieldF}$ is a product of elementary matrices and $a_1, \ldots, a_n \in \fieldF^m$ are the columns in $A$, then the columns in $PA$ are $Pa_1, \ldots, Pa_m$. Thus elementary row operations are applied to each column independently of the other columns.} and row-reduced echelon matrices, so by induction $H_1 = K_1$. Thus if $H$ and $K$ differ, they must differ in the $n$th column.
+
+    Let $H_2$ be the matrix obtained by deleting columns in $H$, only keeping those columns containing pivots, as well as keeping the $n$th column. Define $K_2$ similarly. Thus we have deleted the same columns in $H$ and $K$, so $H_2$ and $K_2$ are also row-equivalent. Say that the number of columns in $H_2$ and $K_2$ is $r+1$, and write the matrices on the form
+    %
+    \begin{equation*}
+        H_2
+            = \begin{pmatrix}
+                I_r & h \\
+                0   & h'
+            \end{pmatrix}
+        \quad \text{and} \quad
+        K_2
+            = \begin{pmatrix}
+                I_r & k \\
+                0   & k'
+            \end{pmatrix},
+    \end{equation*}
+    %
+    where $h,k \in \fieldF^r$ and $h',k' \in \fieldF^{m-r}$ are column vectors. Since $H_2$ and $K_2$ are row-equivalent, the systems $H_2 x = 0$ and $K_2 x = 0$ are solution equivalent. If $h' = 0$, then $H_2 x = 0$ has the solution $(-h,1)$. But this is also a solution to $K_2 x = 0$, so $h = k$ and $k' = 0$. If $h' \neq 0$, then $H_2 x = 0$ only has the trivial solution. But then $K_2 x = 0$ also only has the trivial solution, and hence $k' \neq 0$. But that must be because both $H_2$ and $K_2$ has a pivot in the rightmost column, so also in this case $H_2 = K_2$.
 \end{proof}
 
+Next we study when square matrices are invertible. The main result says for a square matrix to be invertible, it suffices that it has either a left- or a right-inverse. Since (as we will see in {par:matrix-rep} TODO) square matrices are precisely the linear endomorphisms on finite-dimensional vector spaces, this shows that for such an endomorphism to be invertible, it suffices that it has either a left- or a right-inverse. This result is also a direct consequence of the rank--nullity theorem, see e.g. \textcite[Corollary~2.9]{romanlinalg} (TODO and local ref).
+
+Notice that elementary matrices are invertible since elementary row operations are invertible.
+
 \begin{lemma}
-    Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
+    If $A \in \mat{n}{\fieldF}$, then the following are equivalent:
+    %
+    \begin{enumlemma}
+        \item \label{enum:lemma-A-invertible} $A$ is invertible,
+        \item \label{enum:lemma-A-equivalent-to-I} $A$ is row-equivalent to $I_n$,
+        \item \label{enum:lemma-A-elementary-matrix-product} $A$ is a product of elementary matrices, and
+        \item \label{enum:lemma-only-trivial-solution} the system $Ax = 0$ has only the trivial solution $x = 0$.
+    \end{enumlemma}
 \end{lemma}
 
-\begin{corollary}
-    Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
-\end{corollary}
+\begin{proof}
+\begin{proofsec*}
+    \item[\itemref{enum:lemma-A-invertible} $\equivalent$ \itemref{enum:lemma-A-equivalent-to-I}]
+    Let $H \in \mat{n}{\fieldF}$ be a row-reduced echelon matrix that is row-equivalent to $A$. Then $H = PA$, where $P \in \mat{n}{\fieldF}$ is a product of elementary matrices. Then $A = \inv{P} H$, so $A$ is invertible if and only if $H$ is. But the only invertible row-reduced echelon matrix is the identity matrix, so \itemref{enum:lemma-A-invertible} and \itemref{enum:lemma-A-equivalent-to-I} are equivalent.
+    
+    \item[\itemref{enum:lemma-A-equivalent-to-I} $\implies$ \itemref{enum:lemma-A-elementary-matrix-product}]
+    As above, there exists a product $P$ of elementary matrices such that $I_n = PA$, so $A = \inv{P}$.
 
-\begin{example}
-    Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
-\end{example}
+    \item[\itemref{enum:lemma-A-elementary-matrix-product} $\implies$ \itemref{enum:lemma-A-invertible}]
+    This is obvious since elementary matrices are invertible.
 
-\begin{remark}
-    Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
-\end{remark}
+    \item[\itemref{enum:lemma-A-equivalent-to-I} $\equivalent$ \itemref{enum:lemma-only-trivial-solution}]
+    If $A$ and $I_n$ are row-equivalent, then the systems $Ax = 0$ and $I_n x = 0$ have the same solutions. Conversely, assume that $Ax = 0$ only has the trivial solution. If $H \in \mat{m,n}{\fieldF}$ is a row-reduced echelon matrix that is row-equivalent to $A$, then $Hx = 0$ has no nontrivial solution. Thus if $r$ is the number of nonzero rows in $H$, then $r \geq n$. But then $r = n$, so $H$ must be the identity matrix.
+\end{proofsec*}
+\end{proof}
+
+
+\begin{proposition}
+    Let $A \in \mat{n}{\fieldF}$. Then the following are equivalent:
+    %
+    \begin{enumproposition}
+        \item $A$ is invertible,
+        \item $A$ has a left inverse, and
+        \item $A$ has a right inverse.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+    If $A$ has a left inverse, then $Ax = 0$ has no nontrivial solution, so $A$ is invertible. If $A$ has a right inverse $B \in \mat{n}{\fieldF}$, i.e. $AB = I$, then $B$ has a left inverse and is thus invertible. But then $A$ is the inverse of $B$ and hence is itself invertible.
+\end{proof}

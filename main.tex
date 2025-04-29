@@ -45,6 +45,10 @@
 \usepackage{mathematics}
 \usepackage{theorems}
 
+\usepackage[backend=biber, style=authoryear, maxcitenames=2, useprefix]{biblatex}
+\addbibresource{references.bib}
+\DeclareNumChars*{+} % https://tex.stackexchange.com/questions/16904/xiv-pages-in-page-counts
+
 \title{Linear Algebra}
 \author{Danny Nygård Hansen}
 
@@ -63,5 +67,8 @@
 \mainmatter
 
 \input{linear-equations-matrices.tex}
+
+\nocite{*}
+\printbibliography
 
 \end{document}
