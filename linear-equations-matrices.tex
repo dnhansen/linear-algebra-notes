@@ -35,10 +35,22 @@ Clearly, if $A, B \in \mat{m,n}{\fieldF}$ are row-equivalent, then the systems o
 
 An \keyword{elementary matrix} is a matrix obtained by applying a single elementary row operation to the identity matrix $I$. It is easy to show that if $e$ is an elementary row operation and $E = e(I) \in \mat{m}{\fieldF}$, then $e(A) = EA$ for $A \in \mat{m,n}{\fieldF}$. If also $B \in \mat{m,n}{\fieldF}$, then $A$ and $B$ are row-equivalent if and only if $A = PB$, where $P \in \mat{m}{\fieldF}$ is a product of elementary matrices.
 
-We now show that every matrix is row-equivalent to a matrix with a particularly simple form:
+We now show that every matrix is row-equivalent to a matrix with a particularly simple form: \cref{def:mydef} \cref{enumdef:myenum} \itemref{enumdef:myenum}
 
-\begin{definition}
+\begin{definition}\label{def:mydef}
     A matrix $H \in \mat{m,n}{\fieldF}$ is called \keyword{row-reduced} if
+    %
+    \begin{enumdefinition}
+        \item \label{enumdef:myenum} the first nonzero entry of each nonzero row in $H$ is $1$, and
+        \item each column of $H$ containing the leading nonzero entry of some row has all its other entries equal $0$.
+    \end{enumdefinition}
+    %
+    If $H$ is row-reduced, it is called a \keyword{row-reduced echelon matrix} if it also has the following properties:
+    %
+    \begin{enumdefinition}[resume]
+        \item Every row of $H$ only containing zeroes occur below every row which has a nonzero entry, and
+        \item if rows $1, \ldots, r$ are the nonzero rows of $H$, and if the leading nonzero entry of row $i$ occurs in column $k_i$, then $k_1 < \cdots < k_r$.
+    \end{enumdefinition}
 \end{definition}
 
 \begin{proposition}[My proposition]
