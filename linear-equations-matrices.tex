@@ -1,0 +1,66 @@
+\chapter{Linear equations and matrices}
+
+\section{Linear equations}
+
+Let $m$ and $n$ be positive integers. A \keyword{linear equation in $n$ unknowns} is an equation on the form
+%
+\begin{equation*}
+    l \colon a_1 x_1 + \cdots + a_n x_n = b,
+\end{equation*}
+%
+where $a_1, \ldots, a_n, b \in \fieldF$. A \keyword{solution} to $l$ is an element $v = (v_1, \ldots, v_n) \in \fieldF^n$ such that
+%
+\begin{equation*}
+    a_1 v_1 + \cdots + a_n v_n = b.
+\end{equation*}
+%
+A \keyword{system of linear equations in $n$ unknowns} is a tuple $L = (l_1, \ldots, l_m)$, where each $l_i$ is a linear equation in $n$ unknowns. An element $v \in \fieldF^n$ is a \keyword{solution} to $L$ if it is a solution to each linear equation $l_1, \ldots, l_m$.
+
+Let $L$ and $L'$ be systems of linear equations in $n$ unknowns. We say that $L$ and $L'$ are \keyword{solution equivalent} if they have the same solutions. Furthermore, we say that they are \keyword{combination equivalent} if each equation in $L'$ is a linear combination of the equations in $L$, and vice versa. Clearly, if $L$ and $L'$ are combination equivalent they are also solution equivalent, but the converse does not hold.
+
+
+\section{Matrices}
+
+For $m,n \in \naturals$ we denote by $\mat{m,n}{R}$ the set of $m \times n$ matrices over $R$. In the case where $R = \fieldF$, it is well-known that a system of linear equations is equivalent to a matrix equation on the form $Ax = b$, where $A \in \mat{m,n}{\fieldF}$, $x \in \fieldF^n$ and $b \in \fieldF^m$. Recall the \keyword{elementary row operations} on $A$:
+%
+\begin{enumerate}
+    \item multiplication of one row of $A$ by a nonzero scalar,
+    \item addition to one row of $A$ a scalar multiple of another (different) row, and
+    \item interchange of two rows of $A$.
+\end{enumerate}
+%
+If $e$ is an elementary row operation, we write $e(A)$ for the matrix obtained when applying $e$ to $A$. Clearly each elementary row operation $e$ has an \enquote{inverse}, i.e. an elementary row operation $e'$ such that $e'(e(A)) = e(e'(A)) = A$. Two matrices $A,B \in \mat{m,n}{\fieldF}$ are called \keyword{row-equivalent} if $A$ is obtained by applying a finite sequence of elementary row operations to $B$ (and vice versa, though this need not be assumed since each elementary row operation has an inverse).
+
+Clearly, if $A, B \in \mat{m,n}{\fieldF}$ are row-equivalent, then the systems of equations $Ax = 0$ and $Bx = 0$ are combination equivalent, hence have the same solutions.
+
+An \keyword{elementary matrix} is a matrix obtained by applying a single elementary row operation to the identity matrix $I$. It is easy to show that if $e$ is an elementary row operation and $E = e(I) \in \mat{m}{\fieldF}$, then $e(A) = EA$ for $A \in \mat{m,n}{\fieldF}$. If also $B \in \mat{m,n}{\fieldF}$, then $A$ and $B$ are row-equivalent if and only if $A = PB$, where $P \in \mat{m}{\fieldF}$ is a product of elementary matrices.
+
+We now show that every matrix is row-equivalent to a matrix with a particularly simple form:
+
+\begin{definition}
+    A matrix $H \in \mat{m,n}{\fieldF}$ is called \keyword{row-reduced} if
+\end{definition}
+
+\begin{proposition}[My proposition]
+    Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
+\end{proposition}
+
+\begin{proof}
+    This is my proof!
+\end{proof}
+
+\begin{lemma}
+    Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
+\end{lemma}
+
+\begin{corollary}
+    Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
+\end{corollary}
+
+\begin{example}
+    Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
+\end{example}
+
+\begin{remark}
+    Every matrix in $\mat{m,n}{\fieldF}$ is row-equivalent to a unique row-reduced echelon matrix.
+\end{remark}

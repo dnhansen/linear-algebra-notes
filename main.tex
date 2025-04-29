@@ -1,0 +1,65 @@
+\documentclass[a4paper, 11pt]{memoir}
+\usepackage[T1]{fontenc}
+\usepackage[UKenglish]{babel}
+\usepackage[final]{microtype}
+\usepackage[autostyle]{csquotes}
+\frenchspacing
+\raggedbottom
+
+\usepackage{hyperref} % TODO consider how many times we need to compile to get the right output, once doesn't seem to give numbers in ToC
+\hypersetup{%
+	pdftitle=Linear Algebra,
+	pdfauthor=Danny Nygård Hansen,
+	% colorlinks,
+	% linkcolor=linkcolor,
+	% citecolor=linkcolor,
+	% urlcolor=linkcolor,
+	bookmarksnumbered=true,
+    % hidelinks,
+    bookmarksdepth=3
+}
+
+\usepackage[partialup,nosf,oldstylenums]{kpfonts}
+\DeclareSymbolFontAlphabet{\mathrm}{operators} % https://tex.stackexchange.com/questions/40874/kpfonts-siunitx-and-math-alphabets
+% % https://tex.stackexchange.com/questions/327184/copy-search-of-old-style-numbers-with-kpfonts
+% \pdfglyphtounicode{zerooldstyle}{0030}
+% \pdfglyphtounicode{oneoldstyle}{0031}
+% \pdfglyphtounicode{twooldstyle}{0032}
+% \pdfglyphtounicode{threeoldstyle}{0033}
+% \pdfglyphtounicode{fouroldstyle}{0034}
+% \pdfglyphtounicode{fiveoldstyle}{0035}
+% \pdfglyphtounicode{sixoldstyle}{0036}
+% \pdfglyphtounicode{sevenoldstyle}{0037}
+% \pdfglyphtounicode{eightoldstyle}{0038}
+% \pdfglyphtounicode{nineoldstyle}{0039}
+% \pdfgentounicode=1
+\linespread{1.06}
+\DeclareMathAlphabet\mathfrak{U}{euf}{m}{n}
+\SetMathAlphabet\mathfrak{bold}{U}{euf}{b}{n}
+
+% \usepackage[utf8]{inputenc}
+% No need for inputenc: https://tex.stackexchange.com/a/560594
+
+\usepackage{mathematics}
+\usepackage{theorems}
+
+\title{Linear Algebra}
+\author{Danny Nygård Hansen}
+
+\newcommand{\keyword}[1]{{\bfseries #1}}
+
+
+\begin{document}
+
+\frontmatter
+
+\maketitle
+\tableofcontents
+
+\input{preface.tex}
+
+\mainmatter
+
+\input{linear-equations-matrices.tex}
+
+\end{document}

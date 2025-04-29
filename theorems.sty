@@ -1,0 +1,46 @@
+\RequirePackage[thmmarks]{ntheorem}
+% thmmarks: Enables \theoremsymbol
+
+\newcommand{\theorembullet}{{\normalfont\footnotesize\textbullet}}
+\newcommand{\titlefont@}{\upshape\itshape}
+\newcommand{\headerfont@theorem}{\normalfont\scshape\bfseries}
+\newcommand{\headerfont@example}{\normalfont\itshape}
+\newcommand{\headerfont@proof}{\itshape\bfseries}
+
+\newcommand{\symbol@definition}{\ensuremath{\blacktriangle}}
+\newcommand{\symbol@example}{\ensuremath{\lrcorner}}
+\newcommand{\symbol@proof}{\ensuremath{\blacksquare}}
+\newcommand{\symbol@theoremnoproof}{\ensuremath{\blacksquare}}
+
+\newtheoremstyle{changedot}{%
+    \item[\hskip\labelsep \theorem@headerfont ##2~~\theorembullet~~##1\theorem@separator]%
+}%
+{%
+    \item[\rlap{\vbox{\hbox{\hskip\labelsep\theorem@headerfont##2~~\theorembullet~~##1:\ \titlefont@##3\theorem@separator}\hbox{\strut}}}]%
+}
+\theoremstyle{changedot}
+\theoremseparator{.}
+
+\theoremheaderfont{\headerfont@theorem}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremheaderfont{\headerfont@theorem}
+\theorembodyfont{\normalfont}
+\theoremsymbol{\symbol@definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\theoremheaderfont{\headerfont@example}
+\theorembodyfont{\normalfont}
+\theoremsymbol{\symbol@example}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+% Proofs
+\theoremstyle{nonumberplain}
+\theoremheaderfont{\headerfont@proof}
+\theorembodyfont{\normalfont}
+\theoremsymbol{\symbol@proof}
+\newtheorem{proof}{Proof}
