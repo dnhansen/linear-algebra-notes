@@ -1,0 +1,42 @@
+\RequirePackage{xcolor}
+
+\definecolor{sectiongray}{HTML}{982B30}%333333
+\definecolor{pedersengray}{HTML}{982B30}%545454
+
+% https://tex.stackexchange.com/questions/39306/how-to-create-a-long-running-version-of-classicstylenums-in-kpfonts-packa
+\newcommand\classicnumbers{%
+    % \renewcommand{\rmdefault}{jkpk}% Large small caps
+    \renewcommand{\rmdefault}{jkp}%
+    \normalfont}
+
+
+\setsecheadstyle{\normalfont\color{sectiongray}\bfseries\LARGE}
+\setsubsecheadstyle{\normalfont\color{sectiongray}\bfseries\Large}
+\newcommand{\subsubsecstyle}[1]{\normalfont\color{sectiongray}\bfseries\itshape #1.}
+\setsubsubsecheadstyle{\subsubsecstyle}
+\setaftersubsubsecskip{-1em}
+
+\newcommand{\mystylesection}{\color{sectiongray}\thesection~~{\color{black!70}\ensuremath{\diamond}}~~}
+\newcommand{\mystylesubsection}{\color{sectiongray}\thesubsection.~~}
+\newcommand{\mystylesubsubsection}{{\normalfont\bfseries\thesubsubsection~~}}
+\setsecnumformat{\csname mystyle#1\endcsname}
+
+
+\makechapterstyle{mypedersensc}{%
+  \chapterstyle{default}
+  \setlength{\beforechapskip}{-15pt}
+  \setlength{\afterchapskip}{30pt}
+%   \renewcommand*{\chapnamefont}{\normalfont\sffamily\huge}
+  \renewcommand*{\chapnumfont}{\normalfont\color{pedersengray}\bfseries\fontsize{60}{60}\selectfont\classicnumbers}
+  \renewcommand*{\chaptitlefont}{\normalfont\color{pedersengray}\scshape\bfseries\setSpacing{0.9}\Huge
+  }
+  \renewcommand*{\afterchapternum}{}
+  \renewcommand*{\printchaptername}{}
+  \renewcommand*{\chapternamenum}{}
+  \renewcommand{\printchapternum}{\newcommand\chaptersymb{\thechapter}}
+	\renewcommand{\printchapternonum}{\newcommand\chaptersymb{}}
+%   \renewcommand*{\printchapternum}{%
+%         \noindent\rlap{\makebox[\chapindent][l]{\chapnumfont\thechapter}}}
+  \renewcommand*{\printchaptertitle}[1]{\raggedleft\chaptitlefont ##1\rlap{\hspace{0.25cm}\smash{\rule[-5pt]{1pt}{6cm}}\hspace{0.25cm}\chapnumfont\smash{\chaptersymb}}}}%\makebox[0pt][l]{\chapnumfont\thechapter}}}}
+
+\chapterstyle{mypedersensc}

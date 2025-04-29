@@ -248,3 +248,189 @@ Every matrix $A \in \mat{m,n}{\fieldF}$ gives rise to a map $M_A \colon \fieldF^
         This follows easily from \itemref{enum:smr-of-identity-map} and \itemref{enum:smr-multiplicative}.
     \end{proofsec}
 \end{proof}
+
+
+Having characterised all linear maps between powers of the field $\fieldF$, we now wish to characterise the linear maps between abstract finite-dimensional vector spaces. The first order of business is to establish a correspondence between such a vector space and an appropriate power of $\fieldF$.
+
+Let $V$ be a finite-dimensional $\fieldF$-vector space. If $\calV = (v_1, \ldots, v_n)$ is an ordered basis for $V$, then for every $v \in V$ there are unique $\alpha_1, \ldots, \alpha_n \in \fieldF$ such that $v = \sum_{i=1}^n \alpha_i v_i$. Hence the map $\coordmap{\calV} \colon V \to \fieldF^n$ given by $\coordmap{\calV}(v) = (\alpha_1, \ldots, \alpha_n)$ is well-defined. Furthermore, it is clearly linear, and since $\calV$ is a basis it is also bijective, hence a linear isomorphism. The map $\coordmap{\calV}$ is called the \keyword{coordinate map} with respect to $\calV$, and the vector $\coordvec{v}{\calV} = \coordmap{\calV}(v)$ is called the \keyword{coordinate vector} of $v$ with respect to $\calV$.
+
+Now let $\calW$ be another ordered basis for $V$. The composition $\basischange{\calW}{\calV} = \coordmap{\calW} \circ \inv{\coordmap{\calV}}$ is called the \keyword{change of basis operator} from $\calV$ to $\calW$, and this makes the diagram
+%
+\begin{equation}
+    \label{eq:change-of-basis-diagram}
+    \begin{tikzcd}[row sep=small]
+        & \fieldF^n
+            \ar[dd, "\basischange{\calW}{\calV}"] \\
+        V
+            \ar[ru, "\coordmap{\calV}"]
+            \ar[rd, "\coordmap{\calW}", swap] \\
+        & \fieldF^n
+    \end{tikzcd}
+\end{equation}
+%
+commute. Its standard matrix is denoted $\basischangemat{\calW}{\calV}$. This has the expected properties:
+
+\begin{proposition}
+    Let $\calV$, $\calW$ and $\calU$ be ordered bases for a finite-dimensional $\fieldF$-vector space $V$. Then
+    %
+    \begin{enumproposition}
+        \item \label{enum:basis-change-coordvec} $\coordvec{v}{\calW} = \basischange{\calW}{\calV} (\coordvec{v}{\calV})$ for all $v \in V$. In particular, $\coordvec{v}{\calW} = \basischangemat{\calW}{\calV} \cdot \coordvec{v}{\calV}$.
+
+        \item \label{enum:basis-change-identity-map} $\basischange{\calV}{\calV}$ is the identity map. In particular, $\basischangemat{\calV}{\calV}$ is the identity matrix.
+
+        \item $\basischange{\calU}{\calW} \circ \basischange{\calW}{\calV} = \basischange{\calU}{\calV}$. In particular, $\basischangemat{\calU}{\calW} \cdot \basischangemat{\calW}{\calV} = \basischangemat{\calU}{\calV}$.
+
+        \item $\basischange{\calW}{\calV}$ (resp. $\basischangemat{\calW}{\calV}$) is invertible with inverse $\basischange{\calV}{\calW}$ (resp. $\basischangemat{\calV}{\calW}$).
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+    All claims about change of basis matrices follow by \cref{prop:smr-properties} from the corresponding claims about change of basis operators.
+
+    The claim \itemref{enum:basis-change-coordvec} follows by commutativity of the diagram \cref{eq:change-of-basis-diagram}, i.e.
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calV} (\coordvec{v}{\calV})
+            = (\coordmap{\calW} \circ \inv{\coordmap{\calV}}) \circ \coordmap{\calV}(v)
+            = \coordmap{\calW}(v)
+            = \coordvec{v}{\calW}.
+    \end{equation*}
+    %
+    Claim \itemref{enum:basis-change-identity-map} is an immediate consequence of the definition of $\basischange{\calV}{\calV}$. The remaining claims are proved similarly to \itemref{enum:basis-change-coordvec}.
+\end{proof}
+
+Next consider a linear map $T \colon V \to W$. If $\calV \in V^n$ and $\calW \in W^m$ are bases for $V$ and $W$ respectively, then the diagram
+%
+\begin{equation*}
+    \begin{tikzcd}
+        V
+            \ar[d, "T", swap]
+            \ar[r, "\coordmap{\calV}"]
+        & \fieldF^n
+            \ar[d, "\coordmap{\calW} \circ T \circ \inv{\coordmap{\calV}}"] \\
+        W
+            \ar[r, "\coordmap{\calW}", swap]
+        & \fieldF^m
+    \end{tikzcd}
+\end{equation*}
+%
+commutes. The map $\coordmap{\calW} \circ T \circ \inv{\coordmap{\calV}}$ is the \keyword{basis representation} of $T$ with respect to the bases $\calV$ and $\calW$. This is a linear map $\fieldF^n \to \fieldF^m$, so it has a standard matrix which we denote $\mr{\calW}{T}{\calV}$. This is called the \keyword{matrix representation} of $T$ with respect to the bases $\calV$ and $\calW$.
+
+\begin{proposition}
+    \label{prop:mr-properties}
+    Let $V$ and $W$ be finite-dimensional $\fieldF$-vector spaces with ordered bases $\calV = (v_1, \ldots, v_n) \in V^n$ and $\calW \in W^m$, respectively. The map
+    %
+    \begin{align*}
+        \mr{\calW}{\,\cdot\,}{\calV} \colon \lin(V,W) &\to \mat{m,n}{\fieldF}, \\
+        T &\mapsto \mr{\calW}{T}{\calV},
+    \end{align*}
+    %
+    is a linear isomorphism. Let $T \colon V \to W$ and $S \colon W \to U$ be linear maps, and let $\calU \in U^l$ be an ordered basis for $U$. Then
+    %
+    \begin{enumproposition}
+        \item \label{enum:mr-explicit-formula} $\mr{\calW}{T}{\calV} = \bigl( \coordvec{Tv_1}{\calW} \mid \cdots \mid \coordvec{Tv_n}{\calW} \bigr)$.
+
+        \item \label{enum:mr-vector-multiplication} $\coordvec{Tv}{\calW} = \mr{\calW}{T}{\calV} \cdot \coordvec{v}{\calV}$ for all $v \in V$.
+
+        \item \label{enum:mr-of-identity-map} If $\calV'$ is another basis for $V$, then $\mr{\calV'}{\id_V}{\calV} = \basischangemat{\calV'}{\calV}$.
+
+        \item \label{enum:mr-multiplicative} $\mr{\calU}{S \circ T}{\calV} = \mr{\calU}{S}{\calW} \cdot \mr{\calW}{T}{\calV}$.
+
+        \item \label{enum:mr-invertibility} $T$ is invertible if and only if $\mr{\calW}{T}{\calV}$ is invertible, in which case $\mr{\calV}{\inv{T}}{\calW} = \inv{\mr{\calW}{T}{\calV}}$.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+    For the first claim, notice that the map $T \mapsto \coordmap{\calW} \circ T \circ \inv{\coordmap{\calV}}$ is a linear isomorphism, since pre- and postcomposition with linear isomorphisms are themselves linear isomorphisms. Composing this map with $\calM$ yields $\mr{\calW}{\,\cdot\,}{\calV}$, so this is a linear isomorphism by \cref{prop:smr-properties}.
+    %
+    \begin{proofsec}
+        \item[\itemref{enum:mr-explicit-formula}]
+        If $(e_1, \ldots, e_n)$ is the standard basis for $\fieldF^n$, then the definition of the standard matrix representation yields that the $i$th column of $\mr{\calW}{T}{\calV}$ is given by
+        %
+        \begin{equation*}
+            \mr{\calW}{T}{\calV} \cdot e_i
+                = \smr{\coordmap{\calW} \circ T \circ \inv{\coordmap{\calV}}} \cdot e_i
+                = (\coordmap{\calW} \circ T \circ \inv{\coordmap{\calV}}) e_i
+                = \coordmap{\calW}(Tv_i)
+                = \coordvec{Tv_i}{\calW},
+        \end{equation*}
+        %
+        as claimed.
+
+        \item[\itemref{enum:mr-vector-multiplication}]
+        Notice that
+        %
+        \begin{align*}
+            \coordvec{Tv}{\calW}
+                &= (\coordmap{\calW} \circ T)(v) \\
+                &= (\coordmap{\calW} \circ T \circ \inv{\coordmap{\calV}}) \circ \coordmap{\calV}(v) \\
+                &= (\coordmap{\calW} \circ T \circ \inv{\coordmap{\calV}})(\coordvec{v}{\calV}) \\
+                &= \mr{\calW}{T}{\calV} \cdot \coordvec{v}{\calV}.
+        \end{align*}
+        %
+        where the last equality follows from \cref{enum:smr-vector-multiplication}.
+
+        \item[\itemref{enum:mr-of-identity-map}]
+        This is obvious from the definitions of $\mr{\calV'}{\id_V}{\calV}$ and $\basischangemat{\calV'}{\calV}$.
+
+        \item[\itemref{enum:mr-multiplicative}]
+        Notice that
+        %
+        \begin{equation*}
+            \coordmap{\calU} \circ (S \circ T) \circ \inv{\coordmap{\calV}}
+                = (\coordmap{\calU} \circ S \circ \inv{\coordmap{\calW}}) \circ (\coordmap{\calW} \circ T \circ \inv{\coordmap{\calV}})
+        \end{equation*}
+        %
+        The claim then follows from \cref{enum:smr-multiplicative}.
+
+        \item[\itemref{enum:mr-invertibility}]
+        This is an immediate consequence of either \itemref{enum:mr-multiplicative} or of \cref{enum:smr-invertibility}.
+    \end{proofsec}
+\end{proof}
+
+\begin{proposition}
+    Let $\calV = (v_1, \ldots, v_n)$ be an ordered basis for an $\fieldF$-vector space $V$, and let $T \colon V \to V$ be a linear isomorphism. Let $\calW = (w_1, \ldots, w_n)$ where $w_i = Tv_i$. Then $\calW$ is an ordered basis for $V$ and
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calV}
+            = \coordmap{\calV} \circ \inv{T} \circ \inv{\coordmap{\calV}},
+        \quad \text{or} \quad
+        \basischangemat{\calW}{\calV}
+            = \mr{\calV}{\inv{T}}{\calV}.
+    \end{equation*}
+    %
+    In particular, if $V = \fieldF^n$ and $\calV$ is the standard basis $\calE$, then
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calE}
+            = \inv{T},
+        \quad \text{or} \quad
+        \basischangemat{\calW}{\calE}
+            = \inv{\smr{T}}.
+    \end{equation*}
+\end{proposition}
+%
+We think of this result as follows: If we change basis by applying an invertible linear transformation $T$, we obtain the coordinate vectors corresponding to the transformed basis by applying $\inv{T}$ (in the old basis). This says that if we perform a \emph{passive transformation}, i.e. a change of basis while keeping vectors themselves fixed, the coordinates change by the inverse of said transformation.
+
+\begin{proof}
+    Let $v \in V$ and write $v = \sum_{i=1}^n \alpha_i v_i$. Then
+    %
+    \begin{equation*}
+        Tv
+            = \sum_{i=1}^n \alpha_i Tv_i
+            = \sum_{i=1}^n \alpha_i w_i
+            = \inv{\coordmap{\calW}} \colvec{\alpha_1 \\ \vdots \\ \alpha_n}
+            = \inv{\coordmap{\calW}} \circ \coordmap{\calV}(v),
+    \end{equation*}
+    %
+    implying that
+    %
+    \begin{equation*}
+        \basischange{\calW}{\calV}
+            = \coordmap{\calW} \circ \inv{\coordmap{\calV}}
+            = (T \circ \inv{\coordmap{\calV}})\inv \circ \inv{\coordmap{\calV}}
+            = \coordmap{\calV} \circ \inv{T} \circ \inv{\coordmap{\calV}}
+    \end{equation*}
+    %
+    as claimed.
+\end{proof}

@@ -1,0 +1,41 @@
+\nouppercaseheads
+\copypagestyle{chapter}{plain}
+
+\makepagestyle{scgray}
+% \newcommand{\scgrayheaderfont}{\scshape\small}
+\makeoddhead{scgray}%
+    {\small\rightmark}%
+    {}%
+    {\small\thepage}
+\makeevenhead{scgray}%
+    {\small\thepage}%
+    {}%
+    {\small\leftmark}
+\makeoddfoot{scgray}{}{}{}
+\makeevenfoot{scgray}{}{}{}
+\makepsmarks{scgray}{
+	\createmark{chapter}    {both} {shownumber}{}{. \ }
+    \createmark{section}    {right}{shownumber}{}{. \ }
+	\createplainmark{toc}   {both} {\contentsname}
+	\createplainmark{lof}   {both} {\listfigurename}
+	\createplainmark{lot}   {both} {\listtablename}
+	\createplainmark{bib}   {both} {\bibname}
+	\createplainmark{index} {both} {\indexname}
+}
+\pagestyle{scgray}
+\setlrmarginsandblock{2.5cm}{7.5cm}{*}
+\setmarginnotes{0.5cm}{4.5cm}{0.5cm}
+\checkandfixthelayout
+\makeoddfoot{chapter}{}{\thepage}{}
+\makeevenfoot{chapter}{}{\thepage}{}
+\renewcommand*{\memUChead}[1]{\normalfont\unboldmath\scshape\MakeTextLowercase{#1}}
+\makeheadposition{scgray}{flushright}{flushleft}{}{}
+\newlength{\myheaderwidth}
+\setlength{\myheaderwidth}{\textwidth}
+\addtolength{\myheaderwidth}{5cm}
+\makerunningwidth{scgray}{\myheaderwidth}
+\newlength{\myheaderrulewidth}
+\setlength{\myheaderrulewidth}{\textwidth}
+\addtolength{\myheaderrulewidth}{5cm}
+\makerunningwidth{scgray}{\myheaderwidth}
+\makeheadrule{scgray}{\myheaderrulewidth}{\normalrulethickness}

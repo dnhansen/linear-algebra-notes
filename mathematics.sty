@@ -1,6 +1,10 @@
 \RequirePackage{mathtools}
 \RequirePackage{pgffor} % foreach loops
 
+\let\temp\phi
+\let\phi\varphi
+\let\varphi\temp
+
 % https://tex.stackexchange.com/a/124311/63353
 \g@addto@macro\bfseries{\boldmath}
 
@@ -13,7 +17,7 @@
 \renewcommand{\iff}{\Leftrightarrow}
 
 
-\newcommand{\inv}[1]{{#1}^{-1}}
+\newcommand{\inv}[1]{#1^{-1}}
 
 \foreach \x in {A,...,Z}{%
     \expandafter\xdef\csname cal\x\endcsname{\noexpand\mathcal{\x}}

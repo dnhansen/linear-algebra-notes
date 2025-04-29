@@ -1,4 +1,4 @@
-\documentclass[a4paper, 11pt]{memoir}
+\documentclass[a4paper, 10pt]{memoir}
 \usepackage[T1]{fontenc}
 \usepackage[UKenglish]{babel}
 \usepackage[final]{microtype}
@@ -44,6 +44,11 @@
 
 \usepackage{mathematics}
 \usepackage{theorems}
+\usepackage{pagestyle}
+\usepackage{sectionstyle}
+
+\usepackage{tikz-cd}
+\tikzcdset{arrow style=math font} % https://tex.stackexchange.com/questions/300352/equalities-look-broken-with-tikz-cd-and-math-font
 
 \usepackage[backend=biber, style=authoryear, maxcitenames=2, useprefix]{biblatex}
 \addbibresource{references.bib}
