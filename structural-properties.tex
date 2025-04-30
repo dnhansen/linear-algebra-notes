@@ -144,3 +144,164 @@ If $U$ is a subspace of $V$, then the dimension of the quotient space $V/U$ is c
 
 
 \section{Linear maps}
+
+We begin by surveying the different kinds of ways two linear maps can be \textquote{the same}. The most general way two maps can be the same is the following:
+%
+\begin{definition}[Equivalence of maps]
+    The linear maps $T \colon V \to W$ and $S \colon X \to Y$ are \keyword{equivalent} if there exist linear isomorphisms $P \colon X \to V$ and $Q \colon Y \to W$ such that
+    %
+    \begin{equation*}
+        S = \inv{Q} TP.
+    \end{equation*}
+    %
+    The matrices $A,B \in \mat{m,n}{\fieldF}$ are \keyword{equivalent} if there exist invertible matrices $P \in \mat{n}{\fieldF}$ and $Q \in \mat{m}{\fieldF}$ such that
+    %
+    \begin{equation*}
+        B
+            = \inv{Q} AP.
+    \end{equation*}
+\end{definition}
+%
+If isomorphic vector spaces are \textquote{the same}, then it makes sense that this notion of sameness should be inherited by linear maps between vector spaces. In {par:matrix-rep} TODO we saw that a map between finite-dimensional spaces is equivalent to its basis representation.
+
+Next we have the following notion:
+%
+\begin{definition}[Similarity of maps]
+    The linear maps $T \colon V \to V$ and $S \colon W \to W$ are \keyword{similar} if there exists a linear isomorphism $P \colon W \to V$ such that
+    %
+    \begin{equation*}
+        S = \inv{P} TP.
+    \end{equation*}
+    %
+    The matrices $A,B \in \mat{n}{\fieldF}$ are \keyword{similar} if there exists an invertible matrix $P \in \mat{n}{\fieldF}$ such that
+    %
+    \begin{equation*}
+        B
+            = \inv{P} AP.
+    \end{equation*}
+\end{definition}
+%
+Notice that this only makes sense for endomorphisms, but the two maps in question can of course be defined on different spaces. As before, endomorphisms of finite-dimensional spaces are similar to their basis representation. We will also see in {prop:diagonalisability-equivalent-properties} TODO that a map is so-called \keyword{diagonalisable} if and only if it is similar to a multiplication operator.
+
+The third and final sameness notion is easy to state for matrices, but only makes sense for general linear transformations between spaces equipped with sesquilinear forms. We give the general definition here, but it will only make sense after reading {ch:sesquilinear-forms} TODO.
+%
+\begin{definition}[Congruency of maps]
+    If $V$ and $W$ satisfy the assumptions in {par:Hilbert-space-adjoints} TODO, then the linear maps $T \colon V \to V$ and $S \colon W \to W$ are \keyword{congruent} if there exists a linear isomorphism $P \colon W \to V$ such that
+    %
+    \begin{equation*}
+        S = P^* TP.
+    \end{equation*}
+    %
+    The matrices $A,B \in \mat{n}{\fieldF}$ are \keyword{congruent} if there exists an invertible matrix $P \in \mat{n}{\fieldF}$ such that
+    %
+    \begin{equation*}
+        B
+            = \trans{P}AP.
+    \end{equation*}
+\end{definition}
+%
+This notion will turn up in the matrix representation of sesquilinear forms, cf. \cref{par:sesquilinear-matrix-transformation}. % TODO return to matrix congruence
+
+% Note that all of these notions can be qualified by adverbs such as \textquote{orthogonally} or \textquote{isometrically} if the mediating maps (or matrices) $P$ and $Q$ above have the corresponding properties, here of being orthogonal and isometric. [TODO but what's the difference between orthogonal and isometric??]
+
+
+If a linear map $T \colon V \to W$ is bijective, then its inverse is easily seen to be linear. But if $T$ is only injective (or surjective), does it have a linear left-inverse (or right-inverse)? The answer is affirmative:
+
+\begin{lemma}
+    If $T \colon V \to W$ is injective (surjective), then it has a linear left-inverse (right-inverse).
+\end{lemma}
+
+\begin{proof}
+    First assume that $T$ is injective and restrict its codomain to obtain an isomorphism $\tilde{T} \colon V \to \im T$. If $U$ is a complement of $\im T$, writing $W = \im T \dirsum U$ and letting $S = \inv{\tilde{T}} \dirsum 0$ we get a linear left-inverse of $T$.
+
+    Next assume that $T$ is surjective. Writing $V = \ker T \dirsum U$, $T|_U \colon U \to W$ is an isomorphism. If $\iota_U \colon U \to V$ is the inclusion map, $S = \iota_U \circ \inv{T|_U}$ is a right-inverse of $T$.
+\end{proof}
+%
+Similarly, we can ask whether monomorphisms (epimorphisms) are necessarily injective (surjective):
+
+\begin{lemma}
+    If $T \colon V \to W$ is a monomorphism (epimorphism), then it is injective (surjective).
+\end{lemma}
+
+\begin{proof}
+    First assume that $T$ is not injective, and assume that $v \neq v'$ satisfy $Tv = Tv'$. Let $U$ be a nontrivial vector space, let $u \in U$ be nonzero, and consider linear maps $S,R \colon U \to V$ with $Su = v$ and $Ru = v'$, and that agree on a complement of $\gen{u}$. Then $TS = TR$ but $S \neq R$, so $T$ is not a monomorphism.
+
+    Similarly, if $T$ is not surjective then let $w \in W \setminus \im T$ and define maps $S,R \colon W \to U$ that agree on a complement of $\gen{w}$, and that satisfy $Sw \neq Rw$. Then $ST = RT$, but $S \neq R$.
+\end{proof}
+%
+These lemmas together imply the following:
+
+\begin{theoremnoproof}
+    A linear map is injective (surjective) if and only if it is a monomorphism (epimorphism) if and only if it has a left-inverse (right-inverse).
+\end{theoremnoproof}
+
+
+Finally we note that between \emph{finite-dimensional} spaces, \cref{cor:rank-nullity} has the following fundamental corollary:
+
+\begin{corollarynoproof}
+    If $V$ and $W$ are finite-dimensional, then $T \colon V \to W$ is injective if and only if it is surjective.
+\end{corollarynoproof}
+
+
+\section{Duality}
+
+If $V$ is an $\fieldF$-vector space, then a \keyword{linear functional} is a linear map $V \to \fieldF$. Since $\fieldF$ itself is an $\fieldF$-vector space, the set $\lin(V,\fieldF)$ is also vector space. We denote this by $V^*$ and call it the \keyword{algebraic dual space} of $V$.
+
+We note that if $v \in V$ is nonzero, then there exists a $\phi \in V^*$ with $\phi(v) \neq 0$: For extend $v$ to a basis for $V$, let $\phi(v) = 1$ and let $\phi = 0$ on any complement of $\gen{v}$.
+
+The algebraic dual space is of little interest when the vector space in question is an infinite-dimensional topological $\fieldK$-vector space. If $V$ is such a space, we instead often let $V^*$ denote the \keyword{topological dual space}, the subspace of the algebraic dual space consisting of the \emph{continuous} functionals. In the sequel, $V^*$ will denote the algebraic dual space unless otherwise stated.
+
+We study how a basis for $V$ gives rise to a basis for $V^*$. Let $\calV = \set{v_i}{i \in I}$, where $I$ is some index set, be a basis for a vector space $V$. For $i \in I$ we then define $v_i^* \in V^*$ by $v_i^*(v_j) = \delta_{ij}$, and let $\calV^* = \set{v_i^*}{i \in I}$.
+
+\begin{proposition}
+    \label{prop:dual-basis}
+    If $\calV$ is a basis for $V$, then the set $\calV^*$ is linearly independent, and hence $\dim V \leq \dim V^*$. If $V$ is finite-dimensional and $\calV = (v_1, \ldots, v_n)$, then $\calV^*$ is a basis for $V^*$ called the \keyword{dual basis} of $\calV$, and
+    %
+    \begin{equation*}
+        \phi
+            = \sum_{i=1}^n \phi(v_i) v_i^*
+    \end{equation*}
+    %
+    for all $\phi \in V^*$. In particular, $V \cong V^*$.
+\end{proposition}
+
+\begin{proof}
+    Applying the functional
+    %
+    \begin{equation*}
+        \alpha_{i_1} v_{i_1}^* + \cdots + \alpha_{i_n} v_{i_n}^* = 0
+    \end{equation*}
+    %
+    to the vector $v_{i_k}$ we find that $\alpha_{i_k} = 0$. If $V$ is finite-dimensional with $\dim V = n$ and $\phi \in V^*$, then
+    %
+    \begin{equation*}
+        \phi(v_j)
+            = \sum_{i=1}^n \phi(v_i) \delta_{ij}
+            = \sum_{i=1}^n \phi(v_i) v_i^*(v_j),
+    \end{equation*}
+    %
+    so $\phi = \sum_{i=1}^n \phi(v_i) v_i^* \in \gen{\calV^*}$.
+\end{proof}
+%
+The above in particular says that if $\phi = \phi_1 v_1^* + \cdots + \phi_n v_n^*$, then $\phi_i = \phi(v_i)$.
+
+So in the finite-dimensional case, $V$ and $V^*$ are isomorphic. In the infinite-dimensional case, one can show (cf. \cite[Theorem~3.12]{romanlinalg}, which says that then $\dim V < \dim V^*$) that the algebraic dual space of $V$ always has a strictly greater dimension than $V$, so these cannot be isomorphic. If instead $V$ is a topological vector space, then we instead consider the continuous dual space $V^*$, and since this is generally smaller than the algebraic one, $V$ again has a chance of being isomorphic to $V^*$ (though note that the dual basis elements are not guaranteed to be continuous). We will return to this point below.
+
+
+If $V$ is a vector space, we may consider its dual $V^*$. And if $V$ is finite-dimensional, then so is $V^*$, and so we may consider \emph{its} dual, $V^{**}$. On the other hand, if $V$ is a topological vector space, then its topological dual $V^*$ naturally carries the weak$^*$-topology, in which case we may also consider \emph{its} (topological) dual. In either case we call $V^{**}$ the (algebraic or topological) \keyword{double dual space} of $V$. This will again denote the algebraic double dual space unless we state otherwise.
+
+We construct a map from $V$ into $V^{**}$ as follows: For $v \in V$ define $\ev_v \colon V^* \to \fieldF$ by evaluation at $v$, i.e. $\ev_v(\phi) = \phi(v)$. This induces a map $\ev \colon V \to V^{**}$ given by $v \mapsto \ev_v$. If $v \neq w$, then we may hope to find a $\phi \in V^*$ such that $\phi(v) \neq \phi(w)$, which would implies that $\ev_v(\phi) \neq \ev_w(\phi)$, and so $\ev$ would be injective. If $V$ is finite-dimensional, then this is clearly possible. However, if $V$ is an infinite-dimensional topological vector space and $V^*$ instead denotes the topological dual, then we can still performs the constructions above, but then there might not even be any nonzero continuous linear functionals on $V$. This is for instance the case for the Lebesgue space $\calL^p([0,1])$ for $p \in (0,1)$ (cf. \cite[§1.47]{rudinfunctional}). On the other hand, the Hahn--Banach theorem implies that we can in fact find such a functional $\phi$ in case $V$ is locally convex.
+
+Whether or not $\ev$ is injective, it may not be surjective, even if $V$ is a Banach space. If $V^*$ denotes the algebraic dual and $\ev$ is an isomorphism, then $V$ is called \keyword{reflexive}. If $V^*$ instead denotes the topological dual, then we also call $V$ reflexive if $\ev$ is an isomorphism, but we also require it to be a homeomorphism. Indeed, as mentioned above the algebraic dual of an infinite-dimensional vector space $V$ is of strictly greater dimension than $V$ itself, $V$ cannot be isomorphic to its algebraic double dual. On the other hand, finite-dimensional vector spaces are always isomorphic to their double dual, so reflexivity is fairly trivial for vector spaces that are not topological. Hence the notion is usually only interesting for topological vector spaces. Whenever we below consider $V^*$ the algebraic (topological) dual, the property of being reflexive will be in relation to the corresponding algebraic (topological) double dual space.
+
+Finally, if $\calV = (v_1, \ldots, v_n)$ is a basis for $V$, then the basis $\calV^*$ itself has a dual basis $\calV^{**}$. Applying an element $v_i^{**}$ to the functional $\phi$ then yields
+%
+\begin{equation*}
+    v_i^{**}(\phi)
+        = \phi_i
+        = \phi(v_i).
+\end{equation*}
+%
+That is, $v_i^{**} = \ev_{v_i}$.
+
+% NEXT: annihilators
