@@ -19,15 +19,21 @@
 
 \newcommand{\inv}[1]{#1^{-1}}
 
+\newcommand{\cat}[1]{\mathcal{#1}} % Arbitrary category
+\newcommand{\scat}[1]{\mathbf{#1}} % Category supposed to be small
+
 \foreach \x in {A,...,Z}{%
     \expandafter\xdef\csname cal\x\endcsname{\noexpand\mathcal{\x}}
     % \expandafter\xdef\csname frak\x\endcsname{\noexpand\mathfrak{\x}}
     % \expandafter\xdef\csname sf\x\endcsname{\noexpand\mathsf{\x}}
     % \expandafter\xdef\csname rand\x\endcsname{\noexpand\rvar{\x}}
     % \expandafter\xdef\csname bb\x\endcsname{\noexpand\mathbb{\x}}
-    % \expandafter\xdef\csname cat\x\endcsname{\noexpand\cat{\x}}
+    \expandafter\xdef\csname cat\x\endcsname{\noexpand\cat{\x}}
     % \expandafter\xdef\csname scat\x\endcsname{\noexpand\scat{\x}}
 }
+
+\newcommand{\catSet}{\scat{Set}}
+\newcommand{\catVect}[1]{#1\text{-}\scat{Vect}}
 
 \newcommand{\Span}{\operatorname{span}} % TODO starred
 \newcommand{\gen}[1]{\langle#1\rangle}
@@ -57,6 +63,8 @@
 \DeclareMathOperator{\id}{id}
 \DeclareMathOperator{\im}{im}
 \DeclareMathOperator{\codim}{codim}
+\DeclareMathOperator{\rank}{rank}
+
 
 \newcommand{\defeq}{\coloneqq}
 \newcommand{\eqdef}{\eqqcolon}
@@ -66,3 +74,5 @@
 \DeclarePairedDelimiterX{\set}[2]{\lbrace}{\rbrace}{#1\;\delimsize\vert\;\mathopen{}#2} % Daleif uses \, on page 66
 
 \newcommand{\ev}{\mathrm{ev}}
+
+\renewcommand{\hom}[1][]{\mathrm{Hom}_{#1}}

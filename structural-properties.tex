@@ -304,4 +304,313 @@ Finally, if $\calV = (v_1, \ldots, v_n)$ is a basis for $V$, then the basis $\ca
 %
 That is, $v_i^{**} = \ev_{v_i}$.
 
-% NEXT: annihilators
+
+In the remainder of this section we do not consider topological vector spaces. We now introduce a new concept that is useful in characterising dual spaces:
+
+\begin{definition}
+    Let $M \subseteq V$. The \keyword{annihilator} of $M$ is the set
+    %
+    \begin{equation*}
+        M^0
+            = \set{\phi \in V^*}{\phi|_M = 0}.
+    \end{equation*}
+\end{definition}
+%
+It is easy to see that $M^0$ is a subspace of $V^*$ even when $M$ is not. Furthermore, notice that $\emptyset^0 = V^*$. It is also obvious that if $M \subseteq N$ then $N^0 \subseteq M^0$.
+
+Assume that we have a direct sum decomposition $V = U \dirsum W$. If $\phi \in U^*$ then we may extend $\phi$ to a functional $\overline{\phi}$ on $V$ by letting $\overline{\phi}(w) = 0$ for all $w \in W$. We say that $\overline{\phi}$ is the \keyword{extension by $0$} of $\phi$. The map $\eta \colon U^* \to V^*$ given by $\eta(\phi) = \overline{\phi}$ has a left-inverse, namely the pullback\footnote{In {sec:operator-adjoints} TODO we will meet this pullback again under the name \emph{operator adjoint}.}
+%
+\begin{align*}
+    \iota_U^\dagger \colon V^* &\to U^*, \\
+    \psi &\mapsto \psi \circ \iota_U,
+\end{align*}
+%
+where $\iota_U \colon U \to V$ is the inclusion map: For notice that $(\iota_U^\dagger \circ \eta)(\phi) = \overline{\phi} \circ \iota_U = \phi$. In particular, $\eta$ is injective and $\iota_U^\dagger$ is surjective. Now notice that $\im \eta = W^0$, and that $\ker \iota_U^\dagger = U^0$. Hence we have proved:
+
+\begin{propositionnoproof}
+    \label{prop:subspace-dual-complement-annihilator}
+    If $V = U \dirsum W$, then the map $U^* \to W^0$ given by $\phi \mapsto \overline{\phi}$ is an isomorphism. If $U$ is finite-dimensional, i.e. if $W$ has finite codimension, then in particular $\dim W^0 = \codim W$.
+\end{propositionnoproof}
+
+\begin{propositionnoproof}
+    If $U$ is a subspace of $V$, then $V^*/U^0 \cong U^*$.
+\end{propositionnoproof}
+
+\begin{corollary}
+    If $U$ is a subspace of $V$, then $(V/U)^* \cong U^0$.
+\end{corollary}
+
+\begin{proof}
+    If $W$ is a complement of $U$, then $V/U \cong W$ by \cref{prop:complement-iso-to-quotient}, so $(V/U)^* \cong W^*$. But then \cref{prop:subspace-dual-complement-annihilator} implies the claim.
+\end{proof}
+
+
+Finally, we can also use annihilators to characterise the dual space of a direct sum:
+
+\begin{proposition}
+    $(U \dirsum W)^* = U^0 \dirsum W^0$.
+\end{proposition}
+%
+Since $U^0 \cong W^*$ and $W^0 \cong U^*$, this gives an alternative proof of \cref{prop:dual-of-product}. TODO find a place for dual-of-product
+
+\begin{proof}
+    The sum of $U^0$ and $W^0$ is clearly direct, and the inclusion \textquote{$\supseteq$} is obvious. Now let $\phi \in V^*$, and let $P_U$ and $P_W$ be the projections onto $U$ and $W$ along $W$ and $U$, respectively. then $P_W + P_U = \id_V$, so
+    %
+    \begin{equation*}
+        \phi
+            = \phi \circ (P_W + P_U)
+            = \phi \circ P_W + \phi \circ P_U
+            \in U^0 \dirsum W^0,
+    \end{equation*}
+    %
+    proving the other inclusion.
+\end{proof}
+
+
+\section{Operator adjoints}\label{sec:operator-adjoints}
+
+Let $\catC$ be a locally small category, and let $f \colon A \to B$ be an arrow in $\catC$. For every object $C$, precomposition with $f$ then induces an arrow
+%
+\begin{align*}
+    \hom[\catC](f,C) \colon \hom[\catC](B,C) &\to \hom[\catC](A,C), \\
+        g &\mapsto g \circ f.
+\end{align*}
+%
+This gives rise to a contravariant functor $\hom[\catC](-,C) \colon \catC \to \mathbf{Set}$. Specialising to the case where $\catC$ is the category $\catVect{\fieldF}$ and where $C$ is the field $\fieldF$ (considered as a vector space), we obtain the functor $(-)^*$ sending a vector space $V$ to its (algebraic) dual $V^*$, and a linear map $T$ to its pullback. Since we will use the notation $T^*$ for the Hilbert space adjoint, we instead write $T^\dagger$ for the pullback of $T$, following \textcite{follandrealanalysis}. We also call this the \emph{operator adjoint} of $T$:
+
+\begin{definition}[Operator adjoints]
+    Let $V$ and $W$ be $\fieldF$-vector spaces, and let $T \colon V \to W$ be a linear map. The \emph{(operator) adjoint} of $T$ is the pullback
+    %
+    \begin{align*}
+        T^\dagger \colon W^* &\to V^*, \\
+        \phi &\mapsto \phi \circ T.
+    \end{align*}
+\end{definition}
+%
+This already satisfies $\id_V^\dagger = \id_{V^*}$ and $(ST)^\dagger = T^\dagger S^\dagger$ by functoriality, so that in particular $(\inv{T})^\dagger = \inv{(T^\dagger)}$ when $T$ is invertible. Furthermore, it is easy to show that the map $T \mapsto T^\dagger$ is linear. As before, if $W$ is either finite-dimensional or a locally convex space, if $Tv \neq Sv$ there is a $\phi \in W^*$ with $\phi(Tv) \neq \phi(Sv)$, so in these cases $T \mapsto T^\dagger$ is injective.
+
+
+\begin{proposition}
+    \label{prop:operator-adjoint-kernel-image}
+    Let $T \in \lin(V,W)$.
+    %
+    \begin{enumproposition}
+        \item \label{enum:operator-adjoint-kernel} $\ker T^\dagger = (\im T)^0$.
+        \item \label{enum:operator-adjoint-image} $\im T^\dagger = (\ker T)^0$.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+    For part \itemref{enum:operator-adjoint-kernel}, notice that
+    %
+    \begin{align*}
+        \ker T^\dagger
+            &= \set{\psi \in W^*}{T^\dagger \psi = 0} \\
+            &= \set{\psi \in W^*}{\psi \circ T = 0} \\
+            &= \set{\psi \in W^*}{\psi(\im T) = \{0\}} \\
+            &= (\im T)^0.
+    \end{align*}
+    %
+    For part \itemref{enum:operator-adjoint-image}, if $\phi \in \im T^\dagger$ then there is a $\psi \in W^*$ with $\phi = T^\dagger \psi = \psi \circ T$. Hence $\ker T \subseteq \ker \phi$, so $\phi \in (\ker T)^0$. For the opposite inclusion, let $\phi \in (\ker T)^0$. Let $U$ be a complement of $\ker T$ and let $S \colon W \to U$ be a linear left-inverse of $T|_U$. Letting $\psi = \phi \circ S$ we thus get
+    %
+    \begin{equation*}
+        T^\dagger \psi
+            = \psi \circ T
+            = \phi \circ S \circ T.
+    \end{equation*}
+    %
+    This agrees with $\phi$ on $U$ by definition of $T$, and it agrees with $\phi$ on $\ker T$ since $\phi$ lies in $(\ker T)^0$. Thus $\phi \in \im T^\dagger$.
+\end{proof}
+
+
+Since $T^\dagger$ is itself a linear map, we may of course consider \emph{its} adjoint $T^{\dagger\dagger} \colon V^{**} \to W^{**}$. If $V$ is not reflexive, then as far as I know there is little to say about $T^{\dagger\dagger}$, but if it is then we have the following:
+
+\begin{proposition}
+    If $V$ is reflexive and $T \colon V \to W$ is linear, then
+    %
+    \begin{equation*}
+        T^{\dagger\dagger}
+            = \ev \circ T \circ \inv{\ev},
+    \end{equation*}
+    %
+    where the leftmost $\ev$ is evaluation on $W$, and the rightmost $\ev$ is evaluation on $V$.
+\end{proposition}
+
+\begin{proof}
+    If $v \in V$, then notice that $T^{\dagger\dagger} \ev_v = \ev_v \circ T^\dagger$. But if $\phi \in W^*$, then notice that
+    %
+    \begin{equation*}
+        (\ev_v \circ T^\dagger)(\phi)
+            = (T^\dagger\phi)v
+            = (\phi \circ T)v
+            = \ev_{Tv}(\phi).
+    \end{equation*}
+    %
+    Hence $T^{\dagger\dagger} \ev_v = \ev_{Tv}$ for all $v \in V$, so $T^{\dagger\dagger} \circ \ev = \ev \circ T$. The claim follows since $V$ is reflexive.
+\end{proof}
+
+
+We now consider the case where $V$ and $W$ are finite-dimensional in more detail.
+
+\begin{corollary}
+    \label{cor:adjoint-rank}
+    If $T \in \lin(V,W)$ with $V$ and $W$ finite-dimensional, then $\rank T^\dagger = \rank T$.
+\end{corollary}
+
+\begin{proof}
+    Note that
+    %
+    \begin{equation*}
+        \dim \im T^\dagger
+            \overset{(1)}{=} \dim (\ker T)^0
+            \overset{(2)}{=} \codim \ker T
+            \overset{(3)}{=} \dim \im T,
+    \end{equation*}
+    %
+    where $(1)$ follows by \cref{enum:operator-adjoint-kernel}, $(2)$ by \cref{prop:subspace-dual-complement-annihilator}, and $(3)$ by \cref{cor:rank-nullity}.
+\end{proof}
+
+
+\begin{proposition}
+    \label{prop:adjoint-mr}
+    If $T \in \lin(V,W)$ is a linear map between finite-dimensional vector spaces, and $\calV$ and $\calW$ are ordered bases for $V$ and $W$ respectively, then
+    %
+    \begin{equation*}
+        \mr{\calV^*}{T^\dagger}{\calW^*}
+            = \trans{\bigl( \mr{\calW}{T}{\calV} \bigr)}.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    Write $\calV = (v_1, \ldots, v_n)$ and $\calW = (w_1, \ldots, w_m)$. Then
+    %
+    \begin{equation*}
+        \bigl( \mr{\calW}{T}{\calV} \bigr)_{ij}
+            = \bigl( \coordvec{Tv_j}{\calW} \bigr)_i
+            = w_i^*(Tv_j),
+    \end{equation*}
+    %
+    and
+    %
+    \begin{equation*}
+        \bigl( \mr{\calV^*}{T^\dagger}{\calW^*} \bigr)_{ij}
+            = \bigl( \coordvec{T^\dagger w_j^*}{\calV^*} \bigr)_i
+            = v_i^{**}(T^\dagger w_j^*)
+            = T^\dagger w_j^*(v_i)
+            = w_j^*(Tv_i).
+    \end{equation*}
+    %
+    These expressions are the same, but with $i$ and $j$ switched.
+\end{proof}
+
+From this we obtain the following result on the row and column rank of a matrix. This is often proved by showing that one can apply elementary row and column operations to the matrix in question, preserving the row and column rank, and obtain a diagonal matrix whose entries are either zero or one. The common row and column rank of the matrix is then simply the number of ones. Going through the abstract theory above we avoid these considerations.
+
+\begin{corollary}
+    The row rank and the column rank of a matrix $A \in \mat{m,n}{\fieldF}$ are equal.
+\end{corollary}
+
+\begin{proof}
+    The matrix representation of the multiplication operator $M_A$ with respect to the standard bases on $\fieldF^n$ and $\fieldF^m$ is just $A$ itself, and \cref{prop:adjoint-mr} then implies that the matrix representation of $(M_A)^\dagger$ with respect to the dual bases is $\trans{A}$. But the rank of an operator equals the rank of any matrix representation of that operator, so \cref{cor:adjoint-rank} implies that $A$ and $\trans{A}$ have the same (column) rank. Finally, the column rank of $\trans{A}$ is the row rank of $A$, proving the claim.
+\end{proof}
+
+
+% If $V$ and $W$ are instead \emph{topological} vector spaces, of arbitrary dimension, and $V^*$ and $W^*$ denote their respective \emph{continuous} dual spaces, then we may also consider the adjoint $T^\dagger$ of a \emph{continuous} linear map $T \colon V \to W$. It then turns out that $T^\dagger$ is also continuous when $V^*$ and $W^*$ are equipped with the appropriate topologies.
+
+% \begin{proposition}
+%     Let $T \colon V \to W$ be a continuous linear map, and let $T^\dagger \colon W^* \to V^*$ be its adjoint.
+%     %
+%     \begin{enumprop}
+%         \item $T^\dagger$ is continuous with respect to the weak$^*$-topologies on $W^*$ and $V^*$.
+
+%         \item \label{enum:operator-adjoint-continuous-normed} If $V$ and $W$ are normed vector spaces, then $T^\dagger$ is continuous with respect to the operator norms on $W^*$ and $V^*$, and $\norm{T^\dagger} = \norm{T}$.
+%     \end{enumprop}
+% \end{proposition}
+
+% \begin{proof}
+%     Let $(\phi_i)_{i \in I}$ be a net in $W^*$ that converges to some $\phi \in W^*$. That is, $\phi_i(w) \to \phi(w)$ for all $w \in W$, so in particular $\phi_i(Tv) \to \phi(Tv)$ for all $v \in V$. But then $T^\dagger \phi_i = \phi_i \circ T$ converges to $T^\dagger \phi = \phi \circ T$, so $T^\dagger$ is continuous as claimed.
+
+%     If $V$ and $W$ are normed, then
+%     %
+%     \begin{equation*}
+%         \norm{T^\dagger \phi}
+%             = \norm{\phi \circ T}
+%             \leq \norm{\phi} \, \norm{T}
+%     \end{equation*}
+%     %
+%     for all $\phi \in W^*$, implying that $T^\dagger$ is bounded with $\norm{T^\dagger} \leq \norm{T}$. If $T \neq 0$, then let $v \in V$ with $\norm{v} = 1$ such that $Tv \neq 0$. The Hahn--Banach theorem then furnishes a $\phi \in W^*$ with $\norm{\phi} = 1$ and $\phi(Tv) = \norm{Tv}$ (cf. \cite[Theorem~5.8(b)]{follandrealanalysis}). It follows that
+%     %
+%     \begin{equation*}
+%         \norm{T^\dagger}
+%             \geq \norm{T^\dagger \phi}
+%             \geq \abs{(T^\dagger \phi)v}
+%             = \abs{\phi(Tv)}
+%             = \norm{Tv}.
+%     \end{equation*}
+%     %
+%     This inequality then holds for all $v \in V$ with $\norm{v} = 1$, implying that $\norm{T^\dagger} \geq \norm{T}$.
+% \end{proof}
+
+% % TODO: $T \mapsto T^\dagger$ not necessarily injective now?
+
+
+\section{Resolutions of the identity}
+
+Let $V$ be a vector space. Two projections $P,Q \in \lin(V)$ are said to be \keyword{orthogonal} if $PQ = QP = 0$, in which case we write $P \perp Q$. A \keyword{resolution of the identity} on $V$ is a decomposition
+%
+\begin{equation*}
+    \id_V
+        = P_1 + \cdots + P_k.
+\end{equation*}
+%
+of the identity map on $V$, where $P_1, \ldots, P_k$ are pairwise orthogonal projections on $V$. If $V$ is an inner product space and the $P_i$ are themselves orthogonal projections, then we also say that the resolution of the identity is \keyword{orthogonal}. [TODO move orthogonal to somewhere in chapter on sesquilinear]
+
+\begin{proposition}
+    \label{prop:resolution-of-the-identity-characterisation}
+    If $\id_V = P_1 + \cdots + P_k$ is a resolution of the identity, then
+    %
+    \begin{equation*}
+        V
+            = \im P_1 \dirsum \cdots \dirsum \im P_k,
+        \quad \text{and} \quad
+        \ker P_i
+            = \bigdirsum_{j \neq i} \im P_j
+    \end{equation*}
+    %
+    for all $i = 1, \ldots, k$. Conversely, if
+    %
+    \begin{equation*}
+        V
+            = U_1 \dirsum \cdots \dirsum U_k
+    \end{equation*}
+    %
+    and $P_i$ is the projection onto $U_i$ along $\bigdirsum_{j \neq i} U_j$, then $\id_V = P_1 + \cdots + P_k$ is a resolution of the identity.
+\end{proposition}
+
+\begin{proof}
+    Clearly $V$ is a (not necessarily direct) sum of the above images. To see that the sum is direct, if for $v_1, \ldots, v_k \in V$ we have
+    %
+    \begin{equation*}
+        P_1 v_1 + \cdots P_k v_k = 0,
+    \end{equation*}
+    %
+    then applying $P_i$ we get $P_i v_i = 0$. Furthermore, we clearly have $\bigdirsum_{j \neq i} \im P_j \subseteq \ker P_i$ by orthogonality. For the opposite inclusion, notice that
+    %
+    \begin{equation*}
+        \im P_i \dirsum \ker P_i
+            = V
+            = \im P_i \dirsum \biggl( \bigdirsum_{j \neq i} \im P_j \biggr).
+    \end{equation*}
+    %
+    And since $\bigdirsum_{j \neq i} \im P_j \subseteq \im P_i$ by orthogonality, the opposite inclusion follows from \cref{lem:nested-complements}.
+
+    For the converse, if $i \neq j$ then $\im P_i = U_i \subseteq \ker P_j$, so $P_i \perp P_j$. Furthermore, if $v = u_1 + \cdots + u_k$ with $u_i \in U_i$, then $P_i v = u_i$, so
+    %
+    \begin{equation*}
+        v
+            = u_1 + \cdots + u_k
+            = P_1 v + \cdots + P_k v
+            = (P_1 + \cdots + P_k) v,
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
