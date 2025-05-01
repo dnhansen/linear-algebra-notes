@@ -7,6 +7,9 @@
 % NOTE: The use of thmtools below seems to mandate that \theoremstyle be executed before every \newtheorem
 % TODO look into commands provided by thmtools like \declaretheorem
 
+\RequirePackage{tcolorbox}
+\tcbuselibrary{most}
+
 
 %%%%%%%%%%
 % COMMANDS
@@ -216,3 +219,40 @@
 \renewcommand{\p@enumexamplei}{\perh@ps{\theexample}}
 \renewcommand{\p@enumremarki}{\perh@ps{\theremark}}
 \renewcommand{\p@enumdefinitioni}{\perh@ps{\thedefinition}}
+
+%%%%%%%
+% BOXES
+%%%%%%%
+
+\definecolor{backgroundyellow}{HTML}{ffefaf}
+\definecolor{fongspivakred}{HTML}{faebf0}
+\definecolor{fongspivakblue}{HTML}{ebebff}
+\definecolor{fongspivakgreen}{HTML}{edffed}
+
+\newlength{\theoremmargin}
+\setlength{\theoremmargin}{0.25cm}
+\tcbset{
+    enhanced,
+    boxrule=0pt,
+    sharp corners,
+    breakable,
+    frame hidden,
+    colback=backgroundyellow,
+    boxsep=\theoremmargin,
+    left=0pt,
+    right=0pt,
+    top=0pt,
+    bottom=0pt,
+    oversize,
+    before skip=10pt,
+    after skip=10pt
+}
+\tcolorboxenvironment{definition}{}
+\tcolorboxenvironment{theorem}{}
+\tcolorboxenvironment{theoremnoproof}{}
+\tcolorboxenvironment{proposition}{}
+\tcolorboxenvironment{propositionnoproof}{}
+\tcolorboxenvironment{corollary}{}
+\tcolorboxenvironment{corollarynoproof}{}
+\tcolorboxenvironment{lemma}{}
+\tcolorboxenvironment{lemmanoproof}{}
