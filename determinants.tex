@@ -1,0 +1,406 @@
+\chapter{Determinants}
+
+\section{Existence and uniqueness}\label{sec:determinant-existence-uniqueness}
+
+We begin by establishing some terminology and some basic properties of maps between modules. If $M_1, \ldots, M_n, N$ are modules over a commutative ring $R$, a map
+%
+\begin{equation*}
+    \phi \colon M_1 \prod \cdots \prod M_n \to N
+\end{equation*}
+%
+is called \keyword{$n$-linear} if, for all $i$, the maps $m_i \mapsto \phi(m_1, \ldots, m_n)$ are linear for all choices of $m_j \in M_j$ where $j \neq i$. Since there is a natural isomorphism $\mat{m,n}{R} \cong (R^n)^m$, a map $\phi \colon \mat{m,n}{R} \to N$ that is linear in each row is also called $n$-linear.
+
+In the case $M_1 = \cdots = M_n$, we call $\phi$ \keyword{alternating} if $\phi(m_1, \ldots, m_n) = 0$ whenever $m_i = m_j$ for some $i \neq j$. Furthermore, $\phi$ is called \keyword{skew-symmetric} if
+%
+\begin{multline*}
+    \phi(m_1, \ldots, m_{i-1}, m_i, m_{i+1}, \ldots, m_{j-1}, m_j, m_{j+1}, \ldots, m_n) \\
+        = -\phi(m_1, \ldots, m_{i-1}, m_j, m_{i+1}, \ldots, m_{j-1}, m_i, m_{j+1}, \ldots, m_n)
+\end{multline*}
+%
+for all $i < j$.
+
+With this terminology at hand, we can now define determinants:
+
+\begin{definition}[Determinant functions]
+    If $n$ be a positive integer, a \keyword{determinant function} is a map $\phi \colon \mat{n}{R} \to R$ that is $n$-linear, alternating, and which satisfies $\phi(I_n) = 1$.
+\end{definition}
+
+
+Before proceeding with proving the existence of determinants, we need the following lemma:
+
+\begin{lemma}
+    Let $M$ and $N$ be $R$-modules, and let $\phi \colon M^n \to N$ be an $n$-linear map.
+    %
+    \begin{enumlemma}
+        \item \label{enum:alternating-implies-skew-symmetric} If $\phi$ is alternating, then $\phi$ is skew-symmetric. If $\chr R \neq 2$ then the converse also holds.
+        \item \label{enum:alternating-adjacent-rows} If $\phi(m_1, \ldots, m_n) = 0$ whenever $m_i = m_{i+1}$ for some $i = 1, \ldots, n-1$, then $\phi$ is alternating.
+    \end{enumlemma}
+\end{lemma}
+%
+We shall not use the converse direction of \cref{enum:alternating-implies-skew-symmetric} but we include it for completeness.
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\itemref{enum:alternating-implies-skew-symmetric}]
+    Consider $m_1, \ldots, m_n \in M$, and let $1 \leq i < j \leq n$. Define a map $\psi \colon M \prod M \to N$ by
+    %
+    \begin{equation*}
+        \psi(a, b)
+            = \phi(m_1, \ldots, m_{i-1}, a, m_{i+1}, \ldots, m_{j-1}, b, m_{j+1}, \ldots, m_n),
+    \end{equation*}
+    %
+    and notice that it suffices to show that $\psi(m_i,m_j) = -\psi(m_j,m_i)$. But $\psi$ is $2$-linear and alternating, so for $a,b \in M$ we have
+    %
+    \begin{equation*}
+        \psi(a+b, a+b)
+            = \psi(a,a) + \psi(a,b) + \psi(b,a) + \psi(b,b)
+            = \psi(a,b) + \psi(b,a).
+    \end{equation*}
+    %
+    Thus $\psi(m_i,m_j) = -\psi(m_j,m_i)$, so $\phi$ is skew-symmetric as claimed.
+
+    Conversely, if $\chr R \neq 2$ and $\psi$ is skew-symmetric, then since $\psi(a,b) = -\psi(b,a)$, letting $a = b$ we have $2\psi(a,a) = 0$, so $\psi(a,a) = 0$.
+
+    \item[\itemref{enum:alternating-adjacent-rows}] 
+    The argument above shows that, in particular, if $A, B \in M^n$, and $B$ is obtained from $A$ by interchanging two adjacent elements, then $\phi(B) = -\phi(A)$. Assuming now that $B$ is obtained from $A$ by interchanging the $i$th and $j$th elements in $A$, with $i < j$, we claim that we may obtain $B$ by successively interchanging adjacent elements of $A$. Writing $A = (m_1, \ldots, m_n)$, we first perform $j - i$ such interchanges and arrive that the tuple
+    %
+    \begin{equation*}
+        (m_1, \ldots, m_{i-1}, m_{i+1}, \ldots, m_{j-1}, m_j, m_i, m_{j+1}, \ldots, m_n),
+    \end{equation*}
+    %
+    moving $m_i$ to the right $j - i$ places. Next we perform another $j-i-1$ interchanges, moving $m_j$ to the left until we reach
+    %
+    \begin{equation*}
+        B = (m_1, \ldots, m_{i-1}, m_j, m_{i+1}, \ldots, m_{j-1}, m_i, m_{j+1}, \ldots, m_n).
+    \end{equation*}
+    %
+    Since each interchange results in a sign change, we have
+    %
+    \begin{equation*}
+        \phi(B) = (-1)^{2(j-i) - 1} \phi(A) = -\phi(A).
+    \end{equation*}
+    %
+    If $m_i = m_j$ for $i < j$, then we claim that $\phi(A) = 0$. For let $B$ be obtained from $A$ by interchanging $m_{i+1}$ and $m_j$. Then $\phi(B) = 0$, so $\phi(A) = -\phi(B) = 0$ by the above argument, and hence $\phi$ is alternating as claimed.
+    \end{proofsec*}
+\end{proof}
+
+We now proceed with constructing determinants. If $A \in \mat{n}{R}$ with $n > 1$ and $1 \leq i,j \leq n$, denote by $M(A)_{i,j}$ the matrix in $\mat{n-1}{R}$ obtained by removing the the $i$th row and the $j$th column of $A$. This is called the \keyword{$(i,j)$-th minor} of $A$. If $\phi \colon \mat{n-1}{R} \to R$ is an $(n-1)$-linear function and $A \in \mat{n}{R}$, then we write $\phi_{i,j}(A) = \phi(M(A)_{i,j})$. Then $\phi_{i,j} \colon \mat{n}{R} \to R$ is clearly linear in all rows except row $i$, and is independent of row $i$.
+
+We construct determinants recursively, using the Laplace expansion:
+
+\begin{theorem}[Construction of determinants]
+    \label{thm:determinant-recursive-definition}
+    Let $n > 1$, and let $\phi \colon \mat{n-1}{R} \to R$ be alternating and $(n-1)$-linear. For $j = 1, \ldots, n$ define a map $\psi_j \colon \mat{n}{R} \to R$ by
+    %
+    \begin{equation*}
+        \psi_j(A)
+            = \sum_{i=1}^n (-1)^{i+j} a_{ij} \phi_{i,j}(A),
+    \end{equation*}
+    %
+    for $A = (a_{ij}) \in \mat{n}{R}$. Then $\psi_j$ is alternating and $n$-linear. If $\phi$ is a determinant function, then so is $\psi_j$.
+\end{theorem}
+
+\begin{proof}
+    Let $A = (a_{ij}) \in \mat{n}{R}$. Then $A \mapsto a_{ij}$ is independent of all rows except row $i$, and $\phi_{i,j}$ is linear in all rows except row $i$. Thus $A \mapsto a_{ij} \phi_{i,j}(A)$ is linear in all rows except row $i$. Conversely, $A \mapsto a_{ij}$ is linear in row $i$, and $\phi_{i,j}$ is independent of row $i$, so $A \mapsto a_{ij} \phi_{i,j}(A)$ is also linear in row $i$. Since $\psi_j$ is a linear combination of $n$-linear maps, is it itself $n$-linear.
+
+    Now assume that $A$ has two equal adjacent rows, say $a_k, a_{k+1} \in R^n$. If $i \neq k$ and $i \neq k+1$, then $M(A)_{i,j}$ has two equal rows, so $\phi_{i,j}(A) = 0$. Thus
+    %
+    \begin{equation*}
+        \psi_j(A)
+            = (-1)^{k+j} a_{kj} \phi_{k,j}(A)
+              + (-1)^{k+1+j} a_{(k+1)j} \phi_{k+1,j}(A).
+    \end{equation*}
+    %
+    Since $a_k = a_{k+1}$ we also have $a_{kj} = a_{(k+1)j}$ and $M(A)_{k,j} = M(A)_{k+1,j}$. Thus $\psi_j(A) = 0$, so \cref{enum:alternating-adjacent-rows} implies that $\psi_j$ is alternating.
+
+    Finally suppose that $\phi$ is a determinant function. Then $M(I_n)_{j,j} = I_{n-1}$ and we have
+    %
+    \begin{equation*}
+        \psi_j(I_n)
+            = (-1)^{j+j} \phi_{j,j}(I_n)
+            = \phi(I_{n-1})
+            = 1,
+    \end{equation*}
+    %
+    so $\psi_j$ is also a determinant function.
+\end{proof}
+
+
+\begin{corollary}[Existence of determinants]
+    For every positive integer $n$, there exists a determinant function $\mat{n}{R} \to R$.
+\end{corollary}
+
+\begin{proof}
+    The identity map on $\mat{1}{R} \cong R$ is a determinant function for $n = 1$, and \cref{thm:determinant-recursive-definition} allows us to recursively construct a determinant for each $n > 1$.
+\end{proof}
+
+We finally show that determinants are unique by showing that any determinant function must be given by the Leibniz formula:
+
+\begin{theorem}[Uniqueness of determinants]
+    \label{thm:determinant-uniqueness}
+    Let $n$ be a positive integer. There is precisely one determinant function on $\mat{n}{R}$, namely the function $\det \colon \mat{n}{R} \to R$ given by
+    %
+    \begin{equation*}
+        \det A
+            = \sum_{\sigma \in S_n} (\sign\sigma) a_{1 \sigma(1)} \cdots a_{n \sigma(n)}
+    \end{equation*}
+    %
+    for $A = (a_{ij}) \in \mat{n}{R}$. If $\phi \colon \mat{n}{R} \to R$ is any alternating $n$-linear function, then
+    %
+    \begin{equation*}
+        \phi(A)
+            = (\det A) \phi(I_n).
+    \end{equation*}
+\end{theorem}
+%
+We use the notation $\det$ for the unique determinant on $\mat{n}{R}$ for all $n$.
+
+\begin{proof}
+    Let $e_1, \ldots, e_n$ denote the rows of $I_n$, and denote the rows of a matrix $A = (a_{ij}) \in \mat{n}{R}$ by $a_1, \ldots, a_n$. Then $a_i = \sum_{j=1}^n a_{ij} e_j$, so
+    %
+    \begin{equation*}
+        \phi(A)
+            = \sum_{k_1, \ldots, k_n} a_{1k_1} \cdots a_{nk_n} \phi(e_{k_1}, \ldots, e_{k_n}),
+    \end{equation*}
+    %
+    where the sum is taken over all $k_i = 1, \ldots, n$. Since $\phi$ is alternating we have $\phi(e_{k_1}, \ldots, e_{k_n}) = 0$ if two of the indices $k_1, \ldots, k_n$ are equal. Thus it suffices to sum over those sequences $(k_1, \ldots, k_n)$ that are permutations of $(1, \ldots, n)$, and so
+    %
+    \begin{equation*}
+        \phi(A)
+            = \sum_{\sigma \in S_n} a_{1 \sigma(1)} \cdots a_{n \sigma(n)} \phi(e_{\sigma(1)}, \ldots, e_{\sigma(n)}).
+    \end{equation*}
+    %
+    Next notice that, since $\phi$ is also skew-symmetric by \cref{enum:alternating-implies-skew-symmetric}, we have $\phi(e_{\sigma(1)}, \ldots, e_{\sigma(n)}) = (-1)^m \phi(e_1, \ldots, e_n)$, where $m$ is the number of transpositions of $(1, \ldots, n)$ it takes to obtain the permutation $(\sigma(1), \ldots, \sigma(n))$. But then $(-1)^m$ is just the sign of $\sigma$, so
+    %
+    \begin{equation*}
+        \phi(A)
+            = \sum_{\sigma \in S_n} (\sign\sigma) a_{1 \sigma(1)} \cdots a_{n \sigma(n)} \phi(I_n).
+    \end{equation*}
+    %
+    Finally, if $\phi$ is a determinant function, then $\phi(I_n) = 1$, so we must have $\phi = \det$. The rest of the theorem follows directly from this.
+\end{proof}
+
+
+\section{Properties of determinants}
+
+We begin with what is surely the most important property of determinants, which is also our first application of the uniqueness theorem for determinants:
+
+\begin{theorem}
+    \label{thm:determinant-multiplicative}
+    Let $A,B \in \mat{n}{R}$. Then
+    %
+    \begin{equation*}
+        \det AB
+            = (\det A) (\det B).
+    \end{equation*}
+    %
+    In particular, $\det \colon \matGL{n}{R} \to R^*$ is a group homomorphism.
+\end{theorem}
+
+\begin{proof}
+    The map $\phi \colon \mat{n}{R} \to R$ given by $\phi(A) = \det AB$ is clearly $n$-linear and alternating. Hence $\phi(A) = (\det A) \phi(I)$, and $\phi(I) = \det B$.
+
+    Furthermore, if $A$ is invertible, then $1 = \det I = (\det A) (\det \inv{A})$. Thus $\det A \in R^*$, so $\det$ is a group homomorphism as claimed.
+\end{proof}
+
+
+\begin{corollary}
+    \label{cor:determinant-similar-matrices}
+    If $A,B \in \mat{n}{\fieldF}$ are similar matrices, then $\det A = \det B$.
+\end{corollary}
+
+\begin{proof}
+    Let $P \in \mat{n}{\fieldF}$ be such that $B = \inv{P}AP$. \Cref{thm:determinant-multiplicative} then implies that
+    %
+    \begin{equation*}
+        \det B
+            = (\det \inv{P})(\det A)(\det P)
+            = (\det A)(\det \inv{P}P)
+            = \det A.
+    \end{equation*}
+\end{proof}
+
+\Cref{cor:determinant-similar-matrices} allows us to define the determinant of a general linear operator $T \colon V \to V$ on a finite-dimensional $\fieldF$-vector space. If $\calV$ and $\calW$ are bases for $V$, then the matrix representations $\mr{\calV}{T}{\calV}$ and $\mr{\calW}{T}{\calW}$ are similar. This allows us to define the determinant $\det T$ of $T$ as the matrix representation $\mr{\calV}{T}{\calV}$ for any basis $\calV$.
+
+Next the fairly obvious result that the determinant of a matrix equals the determinant of its transpose:
+
+\begin{proposition}
+    Let $A \in \mat{n}{R}$. Then $\det A = \det \trans{A}$.
+\end{proposition}
+
+\begin{proof}
+    Writing $A = (a_{ij})$, first notice that
+    %
+    \begin{equation*}
+        \det \trans{A}
+            = \sum_{\sigma \in S_n} (\sign \inv{\sigma}) a_{\sigma(1)1} \cdots a_{\sigma(n)n},
+    \end{equation*}
+    %
+    since $\sign \sigma = \sign \inv{\sigma}$. Next notice that, if $j = \sigma(i)$, then $a_{\sigma(i)i} = a_{j \inv{\sigma}(j)}$. Since $R$ is commutative, it follows that
+    %
+    \begin{equation*}
+        \det \trans{A}
+            = \sum_{\sigma \in S_n} (\sign \inv{\sigma}) a_{1\inv{\sigma}(1)} \cdots a_{n\inv{\sigma}(n)},
+    \end{equation*}
+    %
+    and since $\sigma \mapsto \inv{\sigma}$ is a bijection on $S_n$, it follows that $\det \trans{A} = \det A$ as desired.
+\end{proof}
+
+
+Let $A \in \mat{n}{R}$. For $1 \leq i,j \leq n$, the \keyword{$(i,j)$-th cofactor} of $A$ is the number $A_{i,j} = (-1)^{i+j} \det M(A)_{i,j}$, where we recall that $M(A)_{i,j}$ is the $(i,j)$-th minor of $A$. The \keyword{cofactor matrix} of $A$ is the matrix $\cof A \in \mat{n}{R}$ whose $(i,j)$-th entry is the cofactor $A_{i,j}$. Note that
+%
+\begin{equation*}
+    (\trans{A})_{i,j}
+        = (-1)^{i+j} \det M(\trans{A})_{i,j}
+        = (-1)^{j+i} \det M(A)_{j,i}
+        = A_{j,i},
+\end{equation*}
+%
+so $\cof \trans{A} = \trans{(\cof A)}$. Of greater importance than the cofactor matrix is the \keyword{adjoint matrix} of $A$, written $\adj A$, which is just the transpose of $\cof A$. That is, the $(i,j)$-th entry of $\adj A$ is the cofactor $A_{j,i}$. Similar to the cofactor matrix we have
+%
+\begin{equation*}
+    \adj \trans{A}
+        = \trans{(\cof \trans{A})}
+        = \cof A
+        = \trans{(\adj A)}.
+\end{equation*}
+%
+We then have the following:
+
+\begin{proposition}
+    \label{thm:adjoint-matrix-product}
+    Let $A \in \mat{n}{R}$. Then
+    %
+    \begin{equation*}
+        (\adj A) A
+            = (\det A) I
+            = A (\adj A).
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    Writing $A = (a_{ij})$ and fixing some $j \in \{1, \ldots, n\}$, \cref{thm:determinant-recursive-definition} implies that
+    %
+    \begin{equation*}
+        \det A
+            = \sum_{i=1}^n (-1)^{i+j} a_{ij} \det M(A)_{i,j}
+            = \sum_{i=1}^n a_{ij} A_{i,j},
+    \end{equation*}
+    %
+    which is just the $(j,j)$-th entry in the product $(\adj A)A$.
+
+    Next we claim that if $k \neq j$, then $\sum_{i=1}^n a_{ik} A_{i,j} = 0$. Let $B = (b_{ij}) \in \mat{n}{R}$ be the matrix obtained from $A$ by replacing the $j$th column of $A$ by its $k$th column. Then $B$ has two equal columns, so $\det B = 0$. Also, $b_{ij} = a_{ik}$ and $M(B)_{i,j} = M(A)_{i,j}$, so it follows that
+    %
+    \begin{align*}
+        0
+            &= \det B
+             = \sum_{i=1}^n (-1)^{i+j} b_{ij} \det M(B)_{i,j} \\
+            &= \sum_{i=1}^n (-1)^{i+j} a_{ik} \det M(A)_{i,j}
+             = \sum_{i=1}^n a_{ik} A_{i,j}.
+    \end{align*}
+    %
+    That is, the $(j,k)$-th entry of the product $(\adj A)A$ is zero, so the off-diagonal entries of $(\adj A)A$ are zero. In total we thus have $(\adj A)A = (\det A) I$.
+
+    Finally we prove the equality $A(\adj A) = (\det A) I$, Applying the first equality to $\trans{A}$ yields
+    %
+    \begin{equation*}
+        (\adj \trans{A}) \trans{A}
+            = (\det \trans{A})I
+            = (\det A)I,
+    \end{equation*}
+    %
+    and transposing we get
+    %
+    \begin{equation*}
+        A (\adj A)
+            = A \trans{(\adj \trans{A})}
+            = (\det A) I
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+\begin{corollary}
+    Let $A \in \mat{n}{R}$. The following are equivalent:
+    %
+    \begin{enumcorollary}
+        \item $A$ is a (two-sided) unit in $\mat{n}{R}$.
+        \item $A$ is a left- or right-unit in $\mat{n}{R}$.
+        \item $\det A$ is a unit in $R$.
+    \end{enumcorollary}
+\end{corollary}
+
+\begin{proof}
+    If $A$ is e.g. a left-unit, then \cref{thm:determinant-multiplicative} implies that
+    %
+    \begin{equation*}
+        1
+            = \det I_n
+            = (\det A)(\det \inv{A}),
+    \end{equation*}
+    %
+    so $\det A$ is a unit in $R$. Conversely, if $\det A$ is a unit then \cref{thm:adjoint-matrix-product} implies that $\inv{(\det A)}(\adj A)$ is a two-sided inverse of $A$.
+\end{proof}
+
+Notice that this gives us a second proof of the fact that a matrix is invertible just when it has either a left- or right-inverse. In fact, we see that this holds for matrices with entries in any commutative ring.
+
+
+We close this section by proving a result on the determinant of a block matrix:
+
+\begin{proposition}
+    \label{prop:block-matrix-determinant}
+    Let $A_{11}, \ldots, A_{nn}$ be square matrices with entries in $R$ and consider the block matrix
+    %
+    \begin{equation*}
+        M
+            = \begin{pmatrix}
+                A_{11} & A_{12} & \cdots & A_{1n} \\
+                0      & A_{22} & \cdots & A_{2n} \\
+                \vdots & \ddots & \ddots & \vdots \\
+                0      & \cdots & 0      & A_{nn}
+            \end{pmatrix},
+    \end{equation*}
+    %
+    where the remaining $A_{ij}$ are matrices of appropriate dimensions. Then $\det M = \bigprod_{i=1}^n \det A_{ii}$.
+\end{proposition}
+
+\begin{proof}
+    By induction it suffices to consider the case where $M$ has the block form
+    %
+    \begin{equation*}
+        M
+            = \begin{pmatrix}
+                A & C \\
+                0 & B
+            \end{pmatrix},
+    \end{equation*}
+    %
+    where $A \in \mat{r}{R}$, $B \in \mat{s}{R}$ and $C \in \mat{r,s}{R}$ for appropriate integers $r,s$. Notice that if we define the matrices
+    %
+    \begin{equation*}
+        M_1
+            = \begin{pmatrix}
+                I_r & 0 \\
+                0   & B
+            \end{pmatrix}
+        \quad \text{and} \quad
+        M_2
+            = \begin{pmatrix}
+                A & C   \\
+                0 & I_s
+            \end{pmatrix},
+    \end{equation*}
+    %
+    then $M = M_1 M_2$. But using \cref{thm:determinant-recursive-definition} we easily see that $\det M_1 = \det B$ and $\det M_2 = \det A$, so it follows that
+    %
+    \begin{equation*}
+        \det M
+            = (\det M_1) (\det M_2)
+            = (\det A) (\det B)
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+
+
+\section{Cross products}

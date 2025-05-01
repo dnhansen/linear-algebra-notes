@@ -12,6 +12,7 @@
 \newcommand{\fieldK}{\mathbb{K}}
 \newcommand{\naturals}{\mathbb{N}}
 \newcommand{\mat}[2]{\mathrm{M}_{#1}(#2)}
+\newcommand{\matGL}[2]{\mathrm{GL}_{#1}(#2)}
 
 \renewcommand{\implies}{\Rightarrow}
 \renewcommand{\iff}{\Leftrightarrow}
@@ -64,6 +65,10 @@
 \DeclareMathOperator{\im}{im}
 \DeclareMathOperator{\codim}{codim}
 \DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\chr}{char}
+\DeclareMathOperator{\sign}{sgn}
+\DeclareMathOperator{\cof}{cof}
+\DeclareMathOperator{\adj}{adj}
 
 
 \newcommand{\defeq}{\coloneqq}
@@ -76,3 +81,7 @@
 \newcommand{\ev}{\mathrm{ev}}
 
 \renewcommand{\hom}[1][]{\mathrm{Hom}_{#1}}
+
+\let\oldprod\prod
+\renewcommand{\prod}{\times}
+\newcommand{\bigprod}{\oldprod}
