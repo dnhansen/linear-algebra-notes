@@ -1,0 +1,112 @@
+\chapter{Complexification}
+
+If $W$ is a complex vector space, then we may restrict the scalar multiplication $\complex \prod W \to W$ to a map $\reals \prod W \to W$. When we equip $W$ with this restricted scalar multiplication instead of the original one, we call the resulting space the \keyword{real version} of $W$ and denote it by $W_\reals$.
+
+Conversely, if $V$ is a real vector space then we define the \keyword{complexification} of $V$ as the vector space $V^\complex$ whose underlying set is $V \prod V$, and which is equipped with componentwise addition and the complex scalar multiplication
+%
+\begin{equation*}
+    (\alpha + \iu \beta)(v,u)
+        = (\alpha v - \beta u, \alpha u + \beta v),
+\end{equation*}
+%
+for $\alpha,\beta \in \reals$ and $v,u \in V$. Notice that the map $v \mapsto (v,0)$ is injective (and real linear), that $(v,0) + (w,0) = (v+w,0)$, and that $\alpha(v,0) = (\alpha v,0)$ for $\alpha \in \reals$, so $V^\complex$ contains an isomorphic copy of $V$, and we may identify elements $v \in V$ with elements $(v,0) \in V^\complex$. Furthermore, notice that $(v,u) = (v,0) + \iu (u,0)$, so by the above identification we may write $(v,u) = v + \iu u$.
+
+
+We briefly study the relationship between a real vector space and its complexification.
+
+\begin{proposition}
+    If $\calB$ is a basis for $V$, then $\calB^\complex = \set{b + \iu 0}{b \in \calB}$ is a basis for $V^\complex$. In particular, $\dim_\reals V = \dim_\complex V^\complex$.
+\end{proposition}
+
+\begin{proof}
+    Let $v + \iu u \in V^\complex$. Then there are real numbers $\alpha_b$ and $\beta_b$ (finitely many nonzero) such that $v = \sum_{b \in \calB} \alpha_b b$ and $u = \sum_{b \in \calB} \beta_b b$. But then
+    %
+    \begin{equation*}
+        v + \iu u
+            = \sum_{b \in \calB} \alpha_b b
+                + \iu \sum_{b \in \calB} \beta_b b
+            = \sum_{b \in \calB} (\alpha_b + \iu \beta_b) b
+            = \sum_{b \in \calB} (\alpha_b + \iu \beta_b) (b + \iu 0),
+    \end{equation*}
+    %
+    so $\calB^\complex$ spans $V^\complex$. Furthermore, if $v + \iu u = 0$, then the previous computation shows that $\sum_{b \in \calB} \alpha_b b = 0 = \sum_{b \in \calB} \beta_b b$. Linear independence of $\calB$ then implies that $\alpha_b = \beta_b = 0$ for all $b \in \calB$.
+\end{proof}
+
+\begin{example}
+    Notice that $(\reals^n)^\complex \cong \complex^n$. The above proposition then implies that the standard basis for $\reals^n$ gives rise to a basis for $\complex^n$, and we notice that this is precisely the standard basis.
+\end{example}
+
+
+We now show how to extend linear maps defined between real vector spaces to the complexifications of those spaces. If $T \colon V \to W$ is a linear map between real vector spaces, then we define the complexification of $T$ by
+%
+\begin{align*}
+    T^\complex \colon V^\complex &\to W^\complex, \\
+    v + \iu u &\mapsto Tv + \iu Tu.
+\end{align*}
+%
+That is, $T^\complex$ is just the product map $T \prod T$. This is easily seen to be complex-linear.
+
+\begin{proposition}
+    \label{prop:complexification-eigenvalue}
+    Let $V$ be a real vector space, and let $T \in \lin(V)$. If $\lambda \in \reals$ is an eigenvalue of the complexification $T^\complex$ of $T$, then $\lambda$ is also an eigenvalue of $T$. Furthermore, if $v + \iu u \in E_{T^\complex}(\lambda)$ then $v,u \in E_T(\lambda)$.
+\end{proposition}
+%
+Note that this does not mean that $v$ and $u$ are eigenvectors of $T$ since they might be zero. But if $v + \iu u$ is an eigenvector of $T^\complex$, then at least one of $v$ and $u$ is nonzero and hence an eigenvector of $T$.
+
+\begin{proof}
+    Let $v + \iu u \in V^\complex$ be an eigenvector of $T^\complex$ corresponding to $\lambda$. Then
+    %
+    \begin{equation*}
+        Tv + \iu Tu
+            = T^\complex (v + \iu u)
+            = \lambda(v + \iu u)
+            = \lambda v + \iu \lambda u.
+    \end{equation*}
+    %
+    It follows that $Tv = \lambda v$ and $Tu = \lambda u$ as desired.
+\end{proof}
+
+
+If $V$ is finite-dimensional and $\calV$ is an ordered basis for $V$, then $\calV^\complex$ carries the obvious ordering. Since $V$ and $V^\complex$ have the same dimension, the following result is not surprising:
+
+\begin{proposition}
+    Let $V$ and $W$ be a finite-dimensional real vector spaces, and consider $T \colon V \to W$. If $\calV = (v_1, \ldots, v_n)$ and $\calW$ are ordered bases of $V$ and $W$ respectively, then
+    %
+    \begin{equation*}
+        \mr{\calW^\complex}{T^\complex}{\calV^\complex}
+            = \mr{\calW}{T}{\calV}.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    By \cref{enum:mr-explicit-formula}, the $i$th column of $\mr{\calW^\complex}{T^\complex}{\calV^\complex}$ is given by
+    %
+    \begin{equation*}
+        \coordvec{T^\complex (v_i + \iu 0)}{\calW^\complex}
+            = \coordvec{Tv_i + \iu 0}{\calW^\complex}
+            = \coordvec{Tv_i}{\calW},
+    \end{equation*}
+    %
+    that is, the $i$th column of $\mr{\calW}{T}{\calV}$, which proves the claim.
+\end{proof}
+
+
+Finally, if $V$ is a real normed space, then we define a norm on $V^\complex$ by the equation
+%
+\begin{equation}
+    \label{eq:complexification-norm}
+    \norm{v + \iu u}^2
+        = \norm{v}^2 + \norm{u}^2.
+\end{equation}
+%
+Furthermore, if $V$ is an inner product space, then we define an inner product on $V^\complex$ by
+%
+\begin{equation}
+    \label{eq:complexification-inner-product}
+    \inner{v + \iu u}{x + \iu y}
+        = \inner{v}{x}
+          + \inner{u}{y}
+          + \iu (\inner{v}{y} - \inner{u}{x}).
+\end{equation}
+%
+The norm induced by this inner product agrees with the norm defined by \cref{eq:complexification-norm}. Notice that the identity \cref{eq:complexification-inner-product} holds in any \emph{complex} inner product space, where the notation $v + \iu u$ instead means the sum of $v$ and the scalar product of $\iu$ and $u$ (recalling that our sesquilinear forms are linear in the \emph{second} entry).
