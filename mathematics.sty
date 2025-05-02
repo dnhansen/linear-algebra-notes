@@ -1,6 +1,9 @@
 \RequirePackage{mathtools}
 \RequirePackage{pgffor} % foreach loops
 
+\newcommand{\blank}{\mathrel{\;\cdot\;}}
+\newcommand{\blankifempty}[1]{\ifstrempty{#1}{\blank}{#1}}
+
 \let\temp\phi
 \let\phi\varphi
 \let\varphi\temp
@@ -11,6 +14,7 @@
 \newcommand{\fieldF}{\mathbb{F}}
 \newcommand{\fieldK}{\mathbb{K}}
 \newcommand{\naturals}{\mathbb{N}}
+\newcommand{\reals}{\mathbb{R}}
 \newcommand{\mat}[2]{\mathrm{M}_{#1}(#2)}
 \newcommand{\matGL}[2]{\mathrm{GL}_{#1}(#2)}
 
@@ -85,3 +89,9 @@
 \let\oldprod\prod
 \renewcommand{\prod}{\times}
 \newcommand{\bigprod}{\oldprod}
+
+\newcommand{\crossp}{\times}
+
+\DeclarePairedDelimiterX{\abs}[1]{\lvert}{\rvert}{\blankifempty{#1}}
+\DeclarePairedDelimiterX{\norm}[1]{\lVert}{\rVert}{\blankifempty{#1}}
+\DeclarePairedDelimiterX{\inner}[2]{\langle}{\rangle}{\blankifempty{#1},\blankifempty{#2}}

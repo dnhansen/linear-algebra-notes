@@ -404,3 +404,301 @@ We close this section by proving a result on the determinant of a block matrix:
 
 
 \section{Cross products}
+
+We now study rigorously the well-known
+
+\begin{definition}[Cross products]
+    Let $v = (\alpha_1, \alpha_2, \alpha_3)$ and $w = (\beta_1, \beta_2, \beta_3)$ be vectors in $\reals^3$. The \keyword{cross product} of $v$ and $w$ is the vector
+    %
+    \begin{equation*}
+        v \crossp w =
+        \begin{pmatrix}
+            \alpha_2 \beta_3 - \alpha_3 \beta_2 \\
+            \alpha_3 \beta_1 - \alpha_1 \beta_3 \\
+            \alpha_1 \beta_2 - \alpha_2 \beta_1
+        \end{pmatrix}.
+    \end{equation*}
+\end{definition}
+%
+Denote the standard basis on $\reals^3$ by $\calE = (e_1, e_2, e_3)$. We easily see that $e_i \crossp e_j = e_k$ when $(i,j,k)$ is a cyclic permutation of $(1,2,3)$. Perhaps surprisingly, there is an important connection between cross products and determinants which from which will follow most of the elementary properties of cross products:
+
+\begin{lemma}
+    \label{lem:cross-product-determinant}
+    Let $v,w,u \in \reals^3$. Then
+    %
+    \begin{equation*}
+        \inner{u}{v \crossp w}
+            = \det(u,v,w).
+    \end{equation*}
+\end{lemma}
+
+\begin{proof}
+    By multilinearity of the inner product and of determinants, it suffices to prove the lemma when $u$ is a basis vector. But it is clear that
+    %
+    \begin{equation*}
+        \inner{e_i}{v \crossp w}
+            = \det(e_i,v,w),
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+%
+The product $\inner{u}{v \crossp w}$ is called the \keyword{(scalar) triple product} of $u$, $v$ and $w$, and is denoted $[u,v,w]$. We call it the \emph{scalar} triple product to distinguish it from the \emph{vector} triple product $u \crossp (v \crossp w)$, whose properties we will examine in \cref{cor:vector-triple-product}. The scalar triple product has some very nice properties summarised in the following proposition:
+
+\begin{proposition}
+    Let $u,v,w \in \reals^3$.
+    %
+    \begin{enumproposition}
+        \item The cross product map $(v,w) \mapsto v \crossp w$ is bilinear.
+
+        \item $v \crossp w = - w \crossp v$.
+
+        \item The triple product $[u,v,w]$ is invariant under cyclic permutations, i.e.
+        %
+        \begin{equation*}
+            [u,v,w]
+                = [v,w,u]
+                = [w,u,v]
+        \end{equation*}
+        %
+        and invariant under interchange of inner product and cross product, i.e.
+        %
+        \begin{equation*}
+            \inner{u}{v \crossp w}
+                = [u,v,w]
+                = \inner{u \crossp v}{w}.
+        \end{equation*}
+
+        \item $v \crossp w = 0$ if and only if $v$ and $w$ are linearly dependent.
+
+        \item $v \crossp w$ is orthogonal to both $v$ and $w$.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+    The first three claims follow from \cref{lem:cross-product-determinant} since the determinant is multilinear and alternating (hence skew-symmetric).
+    
+    For the fourth claim, if $v$ and $w$ are linearly dependent then $\det(u,v,w) = 0$ for all $u \in \reals^3$, so $v \crossp w = 0$. Conversely, if $v$ and $w$ are linearly independent, then extending to a basis $(u,v,w)$ for $\reals^3$ we have $\det(u,v,w) \neq 0$, implying that $v \crossp w \neq 0$.
+
+    To prove the final claim, notice that
+    %
+    \begin{equation*}
+        \inner{v}{v \crossp w}
+            = \det(v,v,w)
+            = 0,
+    \end{equation*}
+    %
+    and similarly for $w$.
+\end{proof}
+
+
+\begin{proposition}
+    Let $a,b,v,w \in \reals^3$. Then
+    %
+    \begin{equation*}
+        \inner{a \crossp b}{v \crossp w}
+            = \det
+            \begin{pmatrix}
+                \inner{a}{v} & \inner{b}{v} \\
+                \inner{a}{w} & \inner{b}{w}
+            \end{pmatrix}.
+    \end{equation*}
+    %
+    In particular,
+    %
+    \begin{equation}
+        \label{eq:Lagrange-identity}
+        \norm{v \crossp w}^2
+            = \det
+            \begin{pmatrix}
+                \norm{v}^2 & \inner{v}{w} \\
+                \inner{v}{w} & \norm{w}^2
+            \end{pmatrix}.
+    \end{equation}
+\end{proposition}
+
+\begin{proof}
+    By linearity it suffices to prove the identity when the four vectors are basis vectors. If $a = b$ or $v = w$ then both sides are zero, so we may assume that $a = e_i$, $b = e_j$, $v = e_k$ and $v = e_l$ with $i \neq j$ and $k \neq l$. By potentially swapping $a$ and $b$ and/or $v$ and $w$ we may assume that $e_i \crossp e_j = e_p$ and $e_k \crossp e_l = e_q$ for some $p,q \in \{1,2,3\}$.
+
+    If $p = q$ then $i = k$ and $j = l$, so both sides equal $1$. If instead $p \neq q$, then the two cross products on the left-hand side are orthogonal, so the inner product is zero. Furthermore, either $k$ or $l$ equals $p$, so one of the rows in the right-hand side matrix is zero, and hence the determinant is zero.
+\end{proof}
+%
+The identity \cref{eq:Lagrange-identity} is just Lagrange's identity in three dimensions. If $\theta$ is the angle between $v$ and $w$, then $\inner{v}{w} = \norm{v} \, \norm{w} \cos\theta$, so
+%
+\begin{equation*}
+    \norm{v \crossp w}^2
+        = \norm{v}^2 \norm{w}^2 - \inner{v}{w}^2
+        = \norm{v}^2 \norm{w}^2 (1 - \cos^2 \theta)
+        = \norm{v}^2 \norm{w}^2 \sin^2 \theta.
+\end{equation*}
+%
+Hence $\norm{v \crossp w} = \norm{v} \, \norm{w} \, \abs{\sin \theta}$, which is the area of the parallelogram spanned by $v$ and $w$. If $u \in \reals^3$ is another vector and $\phi$ is the angle between $u$ and the normal of the plane spanned by $v$ and $w$ (e.g. $v \crossp w$), then
+%
+\begin{equation*}
+    \abs[\big]{[u,v,w]}
+        = \abs{\inner{u}{v \crossp w}}
+        = \norm{u} \, \norm{v \crossp w} \, \abs{\cos\phi}
+        = \norm{u} \, \norm{v} \, \norm{w} \, \abs{\sin\theta \cos\phi}.
+\end{equation*}
+%
+But this is the volume of the parallelepiped spanned by $u$, $v$ and $w$. This gives a geometric interpretation (or \enquote{proof}) of the invariance of the scalar triple product.
+
+
+\begin{corollary}
+    \label{cor:vector-triple-product}
+    Let $u,v,w \in \reals^3$. Then
+    %
+    \begin{equation}
+        \label{eq:bac-cab}
+        u \crossp (v \crossp w)
+            = v\inner{u}{w} - w\inner{u}{v}.
+    \end{equation}
+    %
+    In particular, the cross product satisfies the \keyword{Jacobi identity}
+    %
+    \begin{equation}
+        \label{eq:cross-product-Jacobi}
+        u \crossp (v \crossp w)
+            + v \crossp (w \crossp u)
+            + w \crossp (u \crossp v)
+            = 0.
+    \end{equation}
+\end{corollary}
+%
+The identity \cref{eq:bac-cab} is sometimes called the \enquote{bac-cab rule}, a name that would have been self-explanatory had we used the names $a$, $b$ and $c$ instead of $u$, $v$ and $w$. Note that to conform to this rule we need to write the vectors before the scalars.
+
+\begin{proof}
+    For $x \in \reals^3$ we have
+    %
+    \begin{align*}
+        \inner{x}{u \crossp (v \crossp w)}
+            &= [x, u, v \crossp w] \\
+            &= \inner{x \crossp u}{v \crossp w} \\
+            &= \det \begin{pmatrix}
+                \inner{x}{v} & \inner{u}{v} \\
+                \inner{x}{w} & \inner{u}{w}
+            \end{pmatrix} \\
+            &= \inner{x}{v} \inner{u}{w} - \inner{u}{v} \inner{x}{w} \\
+            &= \inner[\big]{x}{ v\inner{u}{w} - w\inner{u}{v} }.
+    \end{align*}
+    %
+    The claim then follows since $x$ was arbitrary.
+\end{proof}
+
+
+We now study how the cross product transforms under linear transformations. Since $\mat{d}{\reals}$ is a finite-dimensional vector space, it has a unique vector space topology. More concretely, all norms on $\mat{d}{\reals}$ are Lipschitz equivalent, so we may choose whatever norm we wish. We choose the Euclidean norm, identifying $\mat{d}{\reals}$ with $\reals^{d^2}$. First a lemma:
+
+\begin{lemma}
+    \label{lem:GL-density}
+    $\matGL{d}{\reals}$ is dense in $\mat{d}{\reals}$.
+\end{lemma}
+
+\begin{proof}
+    Let $A \in \mat{d}{\reals}$, and let $t \in \reals \setminus \{0\}$. Then $A - tI$ is invertible if and only if $\det(A - tI) = 0$, but $\det(A - tI)$ is a polynomial in $t$, so it has finitely many roots. Hence the nonzero roots of $\det(A - tI)$ are bounded away from zero, so since $A - tI \to A$ as $t \to 0$, the claim follows.
+\end{proof}
+
+
+\begin{proposition}[Transformation of cross products]
+    Let $u,v,w \in \reals^3$, and let $A \in \mat{3}{\reals}$. Then we have the following:
+    %
+    \begin{enumproposition}
+        \item \label{enum:triple-product-transformation} $[Au, Av, Aw] = (\det A) [u,v,w]$.
+        
+        \item \label{enum:cross-product-transformation} $Av \crossp Aw = (\cof A)(v \crossp w) = \trans{(\adj A)} (v \crossp w)$.
+
+        \item \label{enum:cross-product-orthogonal-transformation} If $A$ is orthogonal, then $A(v \crossp w) = (\det A)(Av \crossp Aw)$.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\itemref{enum:triple-product-transformation}]
+    Simply notice that
+    %
+    \begin{equation*}
+        [Au, Av, Aw]
+            = \det(Au, Av, Aw)
+            = (\det A) \det(u,v,w)
+            = (\det A) \inner{u}{v \crossp w},
+    \end{equation*}
+    %
+    where the second equality follows since $\det(Au, Av, Aw)$ is also the determinant of the matrix
+    %
+    \begin{equation*}
+        \bigl( Au \mid Av \mid Aw \bigr)
+            = A \bigl( u \mid v \mid w \bigr),
+    \end{equation*}
+    %
+    and the determinant is multiplicative.
+
+    \item[\itemref{enum:cross-product-transformation}]
+    First assume that $A$ is invertible. Then replacing $u$ with $\inv{A} u$ in \itemref{enum:triple-product-transformation} we obtain
+    %
+    \begin{align*}
+        \inner{u}{Av \crossp Aw}
+            &= (\det A) \inner{\inv{A} u}{v \crossp w} \\
+            &= (\det A) \inner{u}{\trans{(\inv{A})} (v \crossp w)} \\
+            &=  \inner{u}{(\cof A)(v \crossp w)},
+    \end{align*}
+    %
+    where the last equality follows from \cref{thm:adjoint-matrix-product}. Hence we obtain the desired identity when $A$ is invertible. Finally notice that both the maps $A \mapsto \cof A$ and $A \mapsto Av \crossp Aw$ are continuous. Hence the claim for general $A$ follows from \cref{lem:GL-density}.
+
+    \item[\itemref{enum:cross-product-orthogonal-transformation}]
+    Notice that $\inv{A} = \trans{A}$, so this follows immediately from \itemref{enum:cross-product-transformation}.
+\end{proofsec*}
+\end{proof}
+%
+This gives a geometric interpretation of the determinant. If $[u,v,w]$ is the signed volume of the parallelepiped spanned by $u$, $v$ and $w$, and $[Au,Av,Aw]$ is the signed volume of the parallelepiped spanned by $Au$, $Av$ and $Aw$, then $\det A$ is the factor by which this volume increasing when applying $A$ to each of $u$, $v$ and $w$. In particular, this explains why the determinant of $A$ is zero if and only if $A$ is singular: This means that $A$ sends a basis of $\reals^3$ to a linearly dependent set, and the parallelepiped spanned by such a set has zero volume.
+
+
+If $A$ is a proper rotation, i.e. if $A$ is orthogonal and $\det A = 1$, then \cref{enum:cross-product-orthogonal-transformation} implies that $A(v \crossp w) = Av \crossp Aw$. This allows us to define a cross product on any three-dimensional inner product space, when this is equipped with an orientation.
+
+First, if $\calV$ and $\calW$ are ordered bases for any finite-dimensional real vector space $V$, then we say that $\calV$ and $\calW$ have the \keyword{same orientation} if the change of basis operator $\basischange{\calW}{\calV}$ has positive determinant. It follows that orientation partitions the set of ordered bases for $V$ into two \keyword{orientation classes}, each called an \keyword{orientation} of $V$. If $V$ is equipped with an orientation $\calO$, then we call this class the \keyword{positive orientation} of $V$, and the other class the \keyword{negative orientation} of $V$. An ordered basis for $V$ is called \keyword{positive} if it lies in $\calO$ and \keyword{negative} if it does not.
+
+Returning to the case where $V$ is three-dimensional and equipped with an orientation, let $\calV$ and $\calW$ be positive ordered orthonormal bases for $V$. For vectors $v,w \in V$ we can then consider the cross products of their coordinate vectors, i.e.
+%
+\begin{equation*}
+    \coordvec{v}{\calV} \crossp \coordvec{w}{\calV}
+    \quad \text{and} \quad
+    \coordvec{v}{\calW} \crossp \coordvec{w}{\calW}.
+\end{equation*}
+%
+Since $\basischangemat{\calW}{\calV}$ is orthogonal with determinant $1$, we have
+%
+\begin{equation*}
+    \basischangemat{\calW}{\calV}(\coordvec{v}{\calV} \crossp \coordvec{w}{\calV})
+        = \basischangemat{\calW}{\calV} \cdot \coordvec{v}{\calV} \crossp \basischangemat{\calW}{\calV} \cdot \coordvec{w}{\calV}
+        = \coordvec{v}{\calW} \crossp \coordvec{w}{\calW}.
+\end{equation*}
+%
+Hence we have
+%
+\begin{equation*}
+    \inv{\coordmap{\calV}}(\coordvec{v}{\calV} \crossp \coordvec{w}{\calV})
+        = \inv{\coordmap{\calW}}(\coordvec{v}{\calW} \crossp \coordvec{w}{\calW}),
+\end{equation*}
+%
+so we may define the cross product of $v$ and $w$ as $v \crossp w = \inv{\coordmap{\calV}}(\coordvec{v}{\calV} \crossp \coordvec{w}{\calV})$ where $\calV$ is any positive ordered orthonormal basis for $V$. Notice that this means that $\coordvec{v \crossp w}{\calV} = \coordvec{v}{\calV} \crossp \coordvec{w}{\calV}$.
+
+This allows us to generalise most of the above results to abstract real vector spaces. For instance, using that the coordinate map $\coordmap{\calV}$ is an isometry, the scalar triple product of $u,v,w \in V$ is given by
+%
+\begin{equation*}
+    [u,v,w]
+        = \inner{u}{v \crossp w}
+        = \inner{\coordvec{u}{\calV}}{\coordvec{v \crossp w}{\calV}}
+        = \inner{\coordvec{u}{\calV}}{\coordvec{v}{\calV} \crossp \coordvec{w}{\calV}}
+        = \bigl[ \coordvec{u}{\calV}, \coordvec{v}{\calV}, \coordvec{w}{\calV} \bigr],
+\end{equation*}
+%
+and hence it has all the properties of the scalar triple product on $\reals^3$, such as invariance under cyclic permutations. Notice also that it is indeed a \emph{scalar} quantity, in the sense that it is invariant under a change of basis. Similarly, the \enquote{bac-cab rule} \cref{eq:bac-cab} becomes
+%
+\begin{align*}
+    \coordvec{u \crossp (v \crossp w)}{\calV}
+        &= \coordvec{u}{\calV} \crossp \coordvec{v \crossp w}{\calV} \\
+        &= \coordvec{u}{\calV} \crossp (\coordvec{v}{\calV} \crossp \coordvec{w}{\calV}) \\
+        &= \coordvec{v}{\calV} \inner{\coordvec{u}{\calV}}{\coordvec{w}{\calV}} - \coordvec{w}{\calV} \inner{\coordvec{u}{\calV}}{\coordvec{v}{\calV}} \\
+        &= \coordvec{v}{\calV} \inner{u}{w} - \coordvec{w}{\calV} \inner{u}{v} \\
+        &= \coordvec{ v \inner{u}{w} - w \inner{u}{v} }{\calV}.
+\end{align*}
+%
+Hence $u \crossp (v \crossp w) = v \inner{u}{w} - w \inner{u}{v}$ since $\coordmap{\calV}$ is an isomorphism. In particular, the cross product on $V$ also satisfies the Jacobi identity \cref{eq:cross-product-Jacobi}, so $V$ becomes a Lie algebra whose Lie bracket is given by the cross product, i.e. $[v,w] = v \crossp w$.
