@@ -1,0 +1,288 @@
+\chapter{Eigenvalues and eigenvectors}
+
+\section{Eigenvalues and spectra}
+
+Let $V$ be a vector space, and let $T \in \lin(V)$. Recall that an \keyword{eigenvalue} of $T$ is an element $\lambda \in \fieldF$ such that there is a nonzero vector $v \in V$ with $Tv = \lambda v$. Then $v$ is called an \keyword{eigenvector} of $T$ associated with $\lambda$. The set of eigenvectors associated with an eigenvalue $\lambda$ is called the \keyword{eigenspace} of $\lambda$ and is denoted $E_T(\lambda)$. This is clearly a subspace of $V$, and its dimension is called the \keyword{geometric multiplicity} of $\lambda$ and is denoted $\geomult_T(\lambda)$. The set of eigenvalues of $T$ is called the \keyword{spectrum} of $T$ and is denoted $\spec T$. Clearly $\lambda \in \spec T$ if and only if $\lambda I - T$ is not injective.
+
+On finite-dimensional spaces being injective is the same as being invertible, but on infinite-dimensional vector spaces this is not the case, so the above definition of the spectrum is usually not sufficient. If $V$ and $W$ are Banach spaces over $\fieldK$ and $U$ is a subspace of $V$, then a (not necessarily bounded) linear map $T \colon U \to W$ is said to be \keyword{boundedly invertible} if there is a bounded operator $S \colon W \to V$ such that $TS = \id_W$ and $ST = \id_U$. The \keyword{resolvent set} $\rho(T)$ of $T$ is the set of $\lambda \in \fieldK$ such that $\lambda I - T$ is boundedly invertible. The \keyword{spectrum} of $T$ is then the set $\sigma(T) = \fieldK \setminus \rho(T)$.
+
+If $T$ is in fact bounded and $U = V$, then another definition of the spectrum of $T$ does not require that $\lambda I - T$ is not \emph{boundedly} invertible, but that it is not invertible at all.\footnote{This agrees with the definition of the spectrum of an element of a unital Banach algebra.} But the bounded inverse theorem (cf. e.g. \cite[Corollary~5.11]{follandrealanalysis}) says that if $T$ is a bounded and invertible linear map between Banach spaces, then its inverse is also bounded.
+
+In this setting it is usual to collect the eigenvalues of $T$ in a set called the \keyword{point spectrum} of $T$. This thus agrees with the definition of $\spec T$ above.
+
+
+Let $V$ be a vector space, and let $T \in \lin(V)$.
+
+\begin{proposition}
+    If $\calV$ be a collection of eigenvectors for $T$ associated with distinct eigenvalues. Then $\calV$ is linearly independent.
+\end{proposition}
+
+\begin{proof}
+    Note that it suffices to show that any finite subset of $\calV$ is linearly independent. Let $\calI \subseteq \calV$ be a finite subset with $n$ elements. If $n = 1$, then since the sole element of $\calI$ is an eigenvector, it is nonzero and hence $\calI$ is linearly independent.
+
+    Assume now that $n > 1$ and that any $n-1$ element subset of $\calV$ is linearly independent. Write $\calI = \{v_1, \ldots, v_n\}$ and consider a linear relation
+    %
+    \begin{equation}
+        \label{eq:eigenvalues-linearly-independent-1}
+        \alpha_1 v_1 + \cdots + \alpha_n v_n = 0.
+    \end{equation}
+    %
+    Applying $T$ to both sides yields
+    %
+    \begin{equation}
+        \label{eq:eigenvalues-linearly-independent-2}
+        \alpha_1 \lambda_1 v_1 + \cdots + \alpha_n \lambda_n v_n = 0.
+    \end{equation}
+    %
+    Multiplying \cref{eq:eigenvalues-linearly-independent-1} by $\lambda_1$ and subtracting it from \cref{eq:eigenvalues-linearly-independent-2} then gives
+    %
+    \begin{equation*}
+        \alpha_2 (\lambda_2 - \lambda_1) v_2 + \cdots + \alpha_n (\lambda_n - \lambda_1) v_n = 0.
+    \end{equation*}
+    %
+    But the set $\{v_2, \ldots, v_n\}$ is linearly independent, so the coefficients above must all vanish. And since the eigenvalues are distinct, this implies that $\alpha_2 = \cdots \alpha_n = 0$. Hence $\alpha_1 v_1 = 0$, so also $\alpha_1 = 0$.
+\end{proof}
+
+
+\begin{corollarynoproof}
+    The direct sum
+    %
+    \begin{equation*}
+        \bigdirsum_{\lambda \in \spec T} E_T(\lambda)
+    \end{equation*}
+    %
+    exists.
+\end{corollarynoproof}
+
+
+We end this section with the following result on eigenvalues of matrix representations:
+
+\begin{lemma}
+    \label{lemma:mr-eigenvalues}
+    Let $V$ be a finite-dimensional vector space, let $T \in \lin(V)$, and let $\calV$ be an ordered basis for $V$. Then $v \in V$ is an eigenvector for $T$ if and only if $\coordvec{v}{\calV}$ is an eigenvector for $\mr{\calV}{T}{\calV}$ with the same eigenvalue.
+\end{lemma}
+
+\begin{proof}
+    Let $\lambda \in \fieldF$ be the eigenvalue of $v$. Then
+    %
+    \begin{equation*}
+        \mr{\calV}{T}{\calV} \cdot \coordvec{v}{\calV}
+            = \coordvec{Tv}{\calV}
+            = \coordvec{\lambda v}{\calV}
+            = \lambda \coordvec{v}{\calV}.
+    \end{equation*}
+    %
+    For the converse, a similar calculation shows that  $\coordvec{Tv}{\calV} = \coordvec{\lambda v}{\calV}$. Since $\coordmap{\calV}$ is an isomorphism, it follows that $Tv = \lambda v$ as desired.
+\end{proof}
+
+
+
+\section{The characteristic polynomial}
+
+If $V$ is finite-dimensional, then $\lambda$ is an eigenvalue of $T$ just when $\det(\lambda \id_V - T) = 0$. This motivates the definition of the \keyword{characteristic polynomial} $p_T(t) \in \fieldF[t]$ of $T$, given by $p_T(t) = \det(t \id_V - T)$. The eigenvalues of $T$ are then precisely the roots of $p_T(t)$.
+
+It is also common to define the characteristic polynomial of $T$ as the polynomial $\det(T - t \id_V)$ in $t$. Nothing substantial hangs on this choice, but our convention has the benefit that $p_T(t)$ becomes a monic polynomial, as the following result shows:
+
+\begin{proposition}
+    \label{prop:determinant-eigenvalues}
+    Let $T \in \lin(V)$.
+    %
+    \begin{enumproposition}
+        \item \label{enum:characteristic-polynomial-monic} $p_T(t)$ is a monic polynomial of degree $n$.
+        \item \label{enum:characteristic-polynomial-constant-term} The constant term of $p_T(t)$ equals $(-1)^n \det T$.
+        \item \label{enum:characteristic-polynomial-coefficient} The coefficient of $t^{n-1}$ in $p_T(t)$ equals $-\trace T$.
+    \end{enumproposition}
+    %
+    Assume further that $p_T(t)$ splits over $\fieldF$. Then:
+    %
+    \begin{enumproposition}[resume]
+        \item \label{enum:eigenvalue-existence} $T$ has an eigenvalue.
+        \item \label{enum:eigenvalue-product} $\det T$ is the product of the eigenvalues of $T$.
+        \item \label{enum:eigenvalue-sum} $\trace T$ is the sum of the eigenvalues of $T$.
+    \end{enumproposition}
+\end{proposition}
+%
+The condition that $p_T(t)$ splits over $\fieldF$ means that $p_T(t)$ decomposes into a product of linear factors on the form $t - a \in \fieldF[t]$ (up to multiplication by a constant). This is in particular the case if $\fieldF$ is algebraically closed.
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\itemref{enum:characteristic-polynomial-monic}]
+    Let $A = (a_{ij}) \in \mat{n}{\fieldF}$ be a matrix representation of $T$. The $(i,j)$-th entry of $tI - A$ is then $t\delta_{ij} - a_{ij}$, so
+    %
+    \begin{equation}
+        \label{eq:characteristic-polynomial-Leibniz}
+        \det(t \id_V - T)
+            = \sum_{\sigma \in S_n} (\sign\sigma) (t\delta_{1\sigma(1)} - a_{1\sigma(1)}) \cdots (t\delta_{n\sigma(n)} - a_{n \sigma(n)})
+    \end{equation}
+    %
+    by \cref{thm:determinant-uniqueness}. Thus $p_T(t)$ is a polynomial in $t$. Furthermore, the only entries in $tI - A$ containing $t$ are the diagonal entries, and the largest number of such entries occurring in a single term of \cref{eq:characteristic-polynomial-Leibniz} is $n$, so $\deg p_T(t) \leq n$. But notice that there is only one term in which $t$ appears $n$ times, namely the term corresponding to the identity permutation in $S_n$, giving the product of the diagonal entries in $tI-A$. This term equals
+    %
+    \begin{equation}
+        \label{eq:characteristic-polynomial-diagonal-product}
+        (t-a_{11})(t-a_{22}) \cdots (t-a_{nn}),
+    \end{equation}
+    %
+    and multiplying out we see that the only resulting term containing $t^n$ is $t^n$ itself. Hence $p_T(t)$ is monic and of degree $n$. Thus we may write $p_T(t) = \sum_{i=0}^n c_i t^i$ for appropriate $c_0, \ldots, c_n \in \fieldF$.
+
+    \item[\itemref{enum:characteristic-polynomial-constant-term}]
+    Simply notice that
+    %
+    \begin{equation*}
+        (-1)^n \det T
+            = \det(-T)
+            = p_T(0)
+            = c_0
+    \end{equation*}
+    %
+    by $n$-linearity of $\det$ and the definition of $p_T(t)$.
+
+    \item[\itemref{enum:characteristic-polynomial-coefficient}]
+    Consider a term in the sum \cref{eq:characteristic-polynomial-Leibniz}. The only way for this term to contain the factor $t^{n-1}$ is for at least $n-1$ of the $t\delta_{i\sigma(i)} - a_{i\sigma(i)}$ to be a diagonal element. But in choosing $n-1$ elements along the diagonal we are forced to also choose the final diagonal element, since otherwise $\sigma$ would not be a permutation. Thus $\sigma$ is forced to be the identity permutation, and in particular the only term in \cref{eq:characteristic-polynomial-Leibniz} that contains the factor $t^{n-1}$ is the diagonal term \cref{eq:characteristic-polynomial-diagonal-product}. Multiplying out the factors in this term, it is then clear that the coefficient of $t^{n-1}$ is
+    %
+    \begin{equation*}
+        c_{n-1}
+            = - (a_{11} + \cdots + a_{nn})
+            = - \trace T
+    \end{equation*}
+    %
+    as claimed.
+
+    \item[\itemref{enum:eigenvalue-existence}]
+    Now assume that $p_T(t)$ splits over $\fieldF$. Then some linear factor $t-\lambda \in \fieldF[t]$ divides $p_T(t)$, which implies that $\lambda \in \fieldF$ is an eigenvalue of $T$.
+    
+    \item[\itemref{enum:eigenvalue-product}]
+    Since $p_T(t)$ is monic we have
+    %
+    \begin{equation*}
+        p_T(t)
+            = (t - \lambda_1) (t - \lambda_2) \cdots (t - \lambda_n)
+    \end{equation*}
+    %
+    for appropriate $\lambda_1, \ldots, \lambda_n \in \fieldF$. These are then the (not necessarily distinct) eigenvalues of $T$. Thus $p_T(0) = (-1)^n \lambda_1 \cdots \lambda_n$, and the claim follows from \itemref{enum:characteristic-polynomial-constant-term}.
+
+    \item[\itemref{enum:eigenvalue-sum}]
+    We similarly find that $c_{n-1} = -(\lambda_1 + \cdots + \lambda_n)$, so the final claim follows from \itemref{enum:characteristic-polynomial-coefficient}.
+\end{proofsec*}
+\end{proof}
+
+
+Above we defined the geometric multiplicity of an eigenvalue. The characteristic polynomial gives rise to another kind of multiplicity: The \keyword{algebraic multiplicity} of $\lambda$ is the multiplicity of $\lambda$ as a root of the characteristic polynomial $p_T$. We denote this by $\algmult_T(\lambda)$.
+
+\begin{proposition}
+    If $\lambda$ is an eigenvalue of $T$, then $\geomult_T(\lambda) \leq \algmult_T(\lambda)$.
+\end{proposition}
+
+\begin{proof}
+    Let $d = \geomult_T(\lambda)$. Choose any basis for the eigenspace $E_T(\lambda)$ and extend it to a basis $\calV$ for $V$. The corresponding matrix representation of $T$ then has the block form
+    %
+    \begin{equation*}
+        \mr{\calV}{T}{\calV} =
+        \begin{pmatrix}
+            \lambda I_d & A \\
+            0 & B
+        \end{pmatrix},
+    \end{equation*}
+    %
+    for appropriate matrices $A$ and $B$. It follows from \cref{prop:block-matrix-determinant} that
+    %
+    \begin{align*}
+        p_T(t)
+            &= \det(t \id_V - T) \\
+            &= \det(t I_d - \lambda I_d) \det(t I_{n-d} - B) \\
+            &= (t - \lambda)^d \det(t I_{n-d} - B).
+    \end{align*}
+    %
+    This proves the claim.
+\end{proof}
+
+
+\section{Diagonalisability}\label{par:diagonalisability}
+
+If $V$ is finite-dimensional and $T \in \lin(V)$, then we say that $T$ is \keyword{diagonalisable} if there is a basis for $V$ consisting of eigenvectors for $T$. That is, $V$ has a basis $\calV = (v_1, \ldots, v_n)$ such that $Tv_i = \lambda_i v_i$ for appropriate $\lambda_i$. It is then obvious that
+
+\begin{propositionnoproof}
+    \label{prop:diagonalisability-equivalent-properties}
+    Let $T \in \lin(V)$. The following are equivalent:
+    %
+    \begin{enumproposition}
+        \item $T$ is diagonalisable.
+        
+        \item $V$ has an ordered basis $\calV$ such that $\mr{\calV}{T}{\calV}$ is diagonal.
+        
+        \item $V$ has the form
+        %
+        \begin{equation*}
+            V
+                = \bigoplus_{\lambda \in \spec T} E_T(\lambda).
+        \end{equation*}
+        
+        \item If $\spec T = \{\lambda_1, \ldots, \lambda_k\}$ and $P_i$ is projection onto $E_T(\lambda_i)$ along $\bigoplus_{j \neq i} E_T(\lambda_j)$, then $\id_V = P_1 + \cdots + P_k$ is a resolution of the identity.
+        
+        \item $T$ is similar to a multiplication operator $M_A$, where $A \in \mat{n}{\fieldF}$ is a diagonal matrix whose diagonal contains the eigenvalues of $T$ with multiplicity:
+        %
+        \begin{equation*}
+            T
+                = \inv{\coordmap{\calV}} \circ M_A \circ \coordmap{\calV}.
+        \end{equation*}
+    \end{enumproposition}
+\end{propositionnoproof}
+%
+Note that the last two properties are equivalent by \cref{prop:resolution-of-the-identity-characterisation}.
+
+
+There is a different way of characterising diagonalisability using resolutions of the identity. If $T \in \lin(V)$, then a \keyword{spectral resolution} of $T$ is a decomposition
+%
+\begin{equation*}
+    T
+        = \lambda_1 P_1 + \cdots + \lambda_k P_k,
+\end{equation*}
+%
+where $\id_V = P_1 + \cdots + P_k$ is a resolution of the identity and $\lambda_1, \ldots, \lambda_k \in \fieldF$. Note that any resolution of the identity is itself a spectral resolution of $\id_V$ with all coefficients equal to $1$. We then have the following result, which follows from \cref{prop:diagonalisability-equivalent-properties} and \cref{prop:projection-characterisation}:
+
+\begin{propositionnoproof}
+    A linear operator $T \in \lin(V)$ is diagonalisable if and only if it has a spectral resolution
+    %
+    \begin{equation*}
+        T
+            = \lambda_1 P_1 + \cdots + \lambda_k P_k.
+    \end{equation*}
+    %
+    In this case $\spec T = \{\lambda_1, \ldots, \lambda_k\}$, and
+    %
+    \begin{equation*}
+        \im P_i = E_T(\lambda_i),
+        \quad \text{and} \quad
+        \ker P_i = \bigoplus_{j \neq i} E_T(\lambda_j).
+    \end{equation*}
+\end{propositionnoproof}
+
+
+\section{Proofs without determinants}
+
+We now show how to obtain the results in \cref{prop:determinant-eigenvalues} without using determinants. Since we do not have access to the characteristic polynomial, we must assume that $V$ is a (finite-dimensional) vector space over an algebraically closed field $\fieldF$. Consider $T \in \lin(V)$.
+
+
+We begin by showing that $T$ has an eigenvalue. For $d \in \naturals$, let $\fieldF[t]_d$ denote the vector space of polynomials in $\fieldF[t]$ with degree strictly less than $d$, such that $\dim \fieldF[t]_d = d$. Consider the linear map $\ev_T \colon \fieldF[t]_{n^2+1} \to \lin(V)$ given by $\ev_T(p) = p(T)$. This cannot be injective, so there is some nonzero $p(t) \in \fieldF[t]_{n^2+1}$ such that $p(T) = 0$. Note that $p(t)$ cannot be constant.
+
+Since $\fieldF$ is algebraically closed, there exist $c, \lambda_1, \ldots, \lambda_m \in \fieldF$ such that $p(t) = c \bigprod_{i=1}^m (t - \lambda_i)$. But then
+%
+\begin{equation*}
+    0
+        = p(T)
+        = c \bigprod_{i=1}^m (T - \lambda_i I),
+\end{equation*}
+%
+so at least one $T - \lambda_i I$ is not injective. Hence $\lambda_i$ is an eigenvalue of $T$.
+
+
+And for the remaining of the promised results:
+
+\begin{corollary}
+    Let $\fieldF$ be algebraically closed, and let $T \in \lin(V)$. Then the sum of the eigenvalues of $T$ is $\trace T$, and the product of the eigenvalues of $T$ is $\det T$.
+\end{corollary}
+
+\begin{proof}
+    Let $A \in \mat{n}{\fieldF}$ be an upper triangular matrix for $T$. As we will see in \cref{prop:upper-triangular-basis-exists}, such a matrix always exists. The diagonal elements of $A$ are then the eigenvalues, and the trace of $T$ is of course the sum of these elements.
+
+    For the second claim, simply notice that if $A$ is upper triangular then the Leibniz formula for $\det A$ only contains a single term, namely the one corresponding to the identity permutation.
+\end{proof}
