@@ -1,0 +1,121 @@
+\chapter{Triangularisation}
+
+Recall that a matrix $A = (a_{ij}) \in \mat{n}{R}$ is called \keyword{upper triangular} if $a_{ij} = 0$ whenever $i > j$. If $V$ is an $n$-dimensional $\fieldF$-vector space and $\calV$ is an ordered basis for $V$, then we say that the operator $T \in \lin(V)$ is upper triangular \keyword{with respect to $\calV$} if the matrix representation $\mr{\calV}{T}{\calV}$ is upper triangular.
+
+A subspace $U$ of a vector space $V$ is said to be \keyword{invariant under $T$} if $T(U) \subseteq U$ for some $T \in \lin(T)$.
+
+\begin{proposition}
+    \label{prop:upper-triangular-criterion}
+    Let $V$ be an $\fieldF$-vector space with $n = \dim V < \infty$, and let $\calV = (v_1, \ldots, v_n)$ be an ordered basis for $V$. An operator $T \in \lin(V)$ is upper triangular with respect to $\calV$ if and only if $\Span(v_1, \ldots, v_i)$ is invariant under $T$ for all $i \in \{1, \ldots, n\}$.
+\end{proposition}
+
+\begin{proof}
+    This is obvious.
+\end{proof}
+
+
+\begin{lemma}
+    Let $V$ be an $\fieldF$-vector space, and let $T \in \lin(V)$ be an isomorphism. If $U$ is a finite-dimensional subspace of $V$ that is invariant under $T$, then $U$ is also invariant under $\inv{T}$.
+\end{lemma}
+
+\begin{proof}
+    Since $U$ is finite-dimensional and $T|_U \colon U \to U$ is injective, applying the rank--nullity theorem implies that $T|_U$ is also surjective. Hence if $u \in U$, then there exists a $v \in U$ such that $Tv = u$. It follows that
+    %
+    \begin{equation*}
+        \inv{T} u
+            = \inv{T} Tv
+            = v
+            \in U,
+    \end{equation*}
+    %
+    so $U$ is invariant under $\inv{T}$.
+\end{proof}
+
+
+\begin{proposition}
+    Let $V$ be a finite-dimensional $\fieldF$-vector space, and let $\calV$ be an ordered basis for $V$. If $T \in \lin(V)$ is an isomorphism that is upper triangular with respect to $\calV$, then $\inv{T}$ is also upper triangular with respect to $\calV$.
+
+    In particular, the subset of $\matGL{n}{\fieldF}$ consisting of upper triangular matrices is a subgroup.
+\end{proposition}
+
+\begin{proof}
+    This is an obvious consequence of the above two results.
+\end{proof}
+
+
+\begin{lemma}
+    \label{lem:upper-triangular-invertible}
+    Let $A \in \mat{n}{\fieldF}$ be upper triangular. Then $A$ is invertible if and only if all its diagonal elements are nonzero.
+\end{lemma}
+
+\begin{proof}
+    Denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$, and let $(e_1, \ldots, e_n)$ be the standard basis of $\fieldF^n$. First assume that the diagonal elements are nonzero. Then notice that $e_1 \in R(A)$, and that
+    %
+    \begin{equation*}
+        A e_i
+            = a_1 e_1 + \cdots + a_{i-1} e_{i-1} + \lambda_i e_i
+    \end{equation*}
+    %
+    for appropriate $a_1, \ldots, a_{i-1} \in \fieldF$. By induction we then have $e_i \in R(A)$. Since $(e_1, \ldots, e_n)$ is a basis, this implies that $R(A) = \fieldF^n$.
+
+    Conversely, assume that some diagonal element $\lambda_i$ is zero. Then
+    %
+    \begin{equation*}
+        A \Span(e_1, \ldots, e_i)
+            \subseteq \Span(e_1, \ldots, e_{i-1}),
+    \end{equation*}
+    %
+    so the null-space of $A$ is nontrivial, and hence $A$ is singular.
+\end{proof}
+
+
+\begin{lemma}
+    Let $A \in \mat{n}{\fieldF}$ be upper triangular. Then the eigenvalues of $A$ are its diagonal elements.
+\end{lemma}
+
+\begin{proof}
+    Let $\lambda \in \fieldF$, and denote the diagonal elements of $A$ by $\lambda_1, \ldots, \lambda_n$. By \cref{lem:upper-triangular-invertible}, the matrix $\lambda I - A$ is singular if and only if $\lambda - \lambda_i = 0$ for some $i$, and hence $\lambda_1, \ldots, \lambda_n$ are the eigenvalues of $A$.
+\end{proof}
+
+
+\begin{proposition}
+    \label{prop:upper-triangular-basis-exists}
+    Let $\fieldF$ be algebraically closed, and let $V$ be a finite-dimensional $\fieldF$-vector space. If $T \in \lin(V)$, then $V$ has an ordered basis with respect to which $T$ is upper triangular.
+\end{proposition}
+
+\begin{proof}
+    This is obvious if $\dim V = 1$, so assume that $n = \dim V > 1$, and assume that the claim is true for $\fieldF$-vector spaces of dimension $n-1$. Since $\fieldF$ is algebraically closed, $T$ has an eigenvector $v_1 \in V$. Then $U = \Span(v_1)$ is invariant under $T$, so we may define a linear operator\footnote{The operator $\tilde T$ may arise as follows: Let $\pi \colon V \to V/U$ be the quotient map. Then $U \subseteq \ker (\pi \circ T)$ since $U$ is invariant under $T$, so $\pi \circ T$ descends to a linear map $\tilde T \colon V/U \to V/U$.} $\tilde T \in \lin(V/U)$ by $\tilde T(v + U) = Tv + U$. Since $\dim V/U = n-1$, by induction there is a basis $v_2 + U, \ldots, v_n + U$ of $V/U$ with respect to which the matrix of $\tilde T$ is upper triangular. It is easy to show that the collection $v_1, \ldots, v_n$ is linearly independent, hence a basis for $V$.
+
+    Now notice that
+    %
+    \begin{equation*}
+        Tv_i + U
+            = \tilde T(v_i + U)
+            \in \Span(v_2 + U, \ldots, v_i + U)
+    \end{equation*}
+    %
+    for $i \in \{2, \ldots, n\}$. That is, there exist $a_2, \ldots, a_i \in \fieldF$ such that
+    %
+    \begin{equation*}
+        Tv_i + U
+            = (a_2 v_2 + \cdots + a_i v_i) + U.
+    \end{equation*}
+    %
+    But then $Tv_i \in \Span(v_1, \ldots, v_i)$ for all $i \in \{2, \ldots, n\}$, and since $U$ is invariant under $T$ this also holds for $i = 1$. Hence $T$ is upper triangular with respect to the basis $v_1, \ldots, v_n$ of $V$.
+\end{proof}
+
+
+\begin{theorem}[Schur's Theorem]
+    Let $V$ be a finite-dimensional complex inner product space. If $T \in \lin(V)$, then $V$ has an ordered orthonormal basis with respect to which $T$ is upper triangular.
+\end{theorem}
+
+\begin{proof}
+    By \cref{prop:upper-triangular-basis-exists} $V$ has an ordered basis $\calV = (v_1, \ldots, v_n)$ with respect to which $\mr{\calV}{T}{\calV}$ is upper triangular. Now apply the Gram--Schmidt procedure to $\calV$ and obtain an orthonormal basis $\calU = (u_1, \ldots, u_n)$ for $V$ such that
+    %
+    \begin{equation*}
+        \Span(u_1, \ldots, u_i)
+            = \Span(v_1, \ldots, v_i)
+    \end{equation*}
+    %
+    for all $i \in \{1, \ldots, n\}$. Then \cref{prop:upper-triangular-criterion} shows that $\mr{\calU}{T}{\calU}$ is also upper triangular, proving the claim.
+\end{proof}
