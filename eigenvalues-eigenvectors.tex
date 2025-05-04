@@ -257,6 +257,58 @@ where $\id_V = P_1 + \cdots + P_k$ is a resolution of the identity and $\lambda_
 \end{propositionnoproof}
 
 
+\begin{definition}[Functional calculus]
+    Let $T \in \lin(V)$ be diagonalisable with spectral resolution
+    %
+    \begin{equation*}
+        T = \lambda_1 P_1 + \cdots + \lambda_k P_k.
+    \end{equation*}
+    %
+    If $f \colon \spec T \to \fieldF$ is any function, then $f(T)$ is the operator
+    %
+    \begin{equation*}
+        f(T) = f(\lambda_1) P_1 + \cdots + f(\lambda_k) P_k.
+    \end{equation*}
+\end{definition}
+
+This construction is extremely powerful. For instance, here are some applications:
+%
+\begin{enumerate}
+    \item Clearly $\spec f(T) = \image{f}{\spec T}$. If $g \colon \im f \to \fieldF$ is another function, the operator $g(f(T))$ is thus well-defined. This is clearly the same as $(g \circ f)(T)$.
+
+    \item If $p(x) \in \fieldF[x]$ is a polynomial, the operator $p(T)$ is obtained by substituting $T$ for $x$ in $p(x)$. Say that $p(x) = \sum_{i=0}^d \alpha_i x^i$, then substituting $T$ into $p(x)$ yields
+    %
+    \begin{align*}
+        \sum_{i=0}^d \alpha_i T^i
+            &= \sum_{i=0}^d \alpha_i \bigg( \sum_{j=1}^k \lambda_j P_j \bigg)^i \\
+            &= \alpha_0 I + \sum_{i=1}^d \alpha_i \sum_{j=1}^k \lambda_j^i P_j \\
+            &= \sum_{j=1}^k \alpha_0 P_j + \sum_{j=1}^k \sum_{i=1}^d \alpha_i \lambda_j^i P_j \\
+            &= \sum_{j=1}^k p(\lambda_j) P_j \\
+            &= p(T).
+    \end{align*}
+    %
+    The second equality follows since the $P_j$ are projections and pairwise orthogonal, so all cross-terms vanish, and positive powers of $P_j$ are all just $P_j$. The third equality follows since $I = P_1 + \cdots + P_k$. Note that the notation $p(T)$ is also used for non-diagonalisable operators to mean the operator resulting from substituting $T$ into $p$. The above shows that this notation is consistent with that used in the functional calculus.
+
+    \item If all eigenvalues of $T$ are real and non-negative, we can define the positive square root of $T$ as
+    %
+    \begin{equation*}
+        \sqrt{T}
+            = \sqrt{\lambda_1} P_1 + \cdots + \sqrt{\lambda_k} P_k.
+    \end{equation*}
+    %
+    Clearly the square of this operator is just $T$.
+
+    \item Similarly, if $V$ is a real or complex vector space, we can apply various functions such as exponential functions to $T$:
+    %
+    \begin{equation*}
+        \e^T
+            = \e^{\lambda_1} P_1 + \cdots + \e^{\lambda_k} P_k.
+    \end{equation*}
+    %
+    Of course, we may also define the exponential function of linear operators that are not diagonalisable, but this provides a simple way to handle diagonalisable operators. Under the right circumstances we can also define e.g. logarithms of operators.
+\end{enumerate}
+
+
 \section{Proofs without determinants}
 
 We now show how to obtain the results in \cref{prop:determinant-eigenvalues} without using determinants. Since we do not have access to the characteristic polynomial, we must assume that $V$ is a (finite-dimensional) vector space over an algebraically closed field $\fieldF$. Consider $T \in \lin(V)$.
