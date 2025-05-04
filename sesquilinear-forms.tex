@@ -1261,3 +1261,46 @@ for all $u,v \in V$. Further notice that for $u \in V$ the map $v \mapsto \phi(u
 \end{align*}
 %
 where we have used that $Q(-w) = Q(w)$. And this is precisely TODO ref.
+
+
+\section{Polar and singular value decompositions}
+
+TODO polar
+
+Singular value:
+
+Let $T \colon V \to W$ be a linear map between inner product spaces over $\fieldK$ of dimension $n$ and $m$, respectively. Since $T^*T$ is self-adjoint, there is an orthonormal basis $\calV = (v_1,\ldots,v_n)$ for $V$ of eigenvectors for $T$, with associated real eigenvalues
+%
+\begin{equation*}
+    \lambda_1
+        \geq \lambda_2
+        \geq \cdots
+        \geq \lambda_r
+        > 0
+        = \lambda_{r+1}
+        = \cdots
+        = \lambda_n,
+\end{equation*}
+%
+where $r = \rank T$. Let $s_i = \sqrt{\lambda_i}$, and for $i \leq r$ let $w_i = \tfrac{1}{s_i}Tv_i$. Notice that the $w_i$ are orthonormal, since
+%
+\begin{equation*}
+    \inner{w_i}{w_j}
+        = \frac{1}{s_i s_j} \inner{Tv_i}{Tv_j}
+        = \frac{1}{s_i s_j} \inner{T^*Tv_i}{v_j}
+        = \frac{s_i}{s_j} \inner{v_i}{v_j}
+        = \delta_{ij}.
+\end{equation*}
+%
+We extend $w_1,\ldots,w_r$ to an orthonormal basis $\calW$ for $W$. We thus have both $Tv_i = s_i w_i$ and $T^*w_i = s_i v_i$ for all $i$, and we also have $T^*Tv_i = s_i^2 w_i$ and $TT^*w_i = s_i^2 v_i$. The numbers $s_1, \ldots, s_r$ are called the \keyword{singular values} of $T$. (TODO also of $T^*$)
+
+Consider next a matrix $A \in \mat{m,n}{\fieldK}$, and let $T = M_A$ be the associated multiplication operator. We then find that
+%
+\begin{align*}
+    A
+        &= \mr{\calE_m}{M_A}{\calE_n} \\
+        &= \basischangemat{\calE_m}{\calW} \cdot \mr{\calW}{M_A}{\calV} \cdot \basischangemat{\calV}{\calE_n} \\
+        &= P \Sigma Q^*,
+\end{align*}
+%
+where $P = \basischangemat{\calE_m}{\calW}$ and $Q = \basischangemat{\calE_n}{\calV}$ are unitary, and $\Sigma = \mr{\calW}{M_A}{\calV}$ is a rectangular diagonal matrix with the singular values $s_1, \ldots, s_n$ along the main diagonal. This is called the \keyword{singular value decomposition} of $A$.
