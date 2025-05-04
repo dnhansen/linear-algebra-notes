@@ -1,0 +1,1263 @@
+\chapter{Sesquilinear forms}\label{ch:sesquilinear-forms}
+
+\section{Definitions}
+
+If $V$ is a complex vector space, recall that a map $\phi \colon V \prod V \to \complex$ is called \keyword{sesquilinear} if it is linear in one entry and conjugate-linear in the other. Opinions differ as to in which entry $\phi$ should be linear, but our sesquilinear forms will be linear in the \emph{second} entry. Similarly, if $V$ is a vector space over an arbitrary field $\fieldF$, recall that $\phi \colon V \prod V \to \fieldF$ is \keyword{bilinear} if it is linear in each entry (i.e., if it is $2$-linear in the terminology of \cref{sec:determinant-existence-uniqueness}).
+
+In order to collect these two properties under one concept, we first note explicitly the difference between linearity
+%
+\begin{equation*}
+    T(\alpha u + v)
+        = \alpha Tu + Tv
+\end{equation*}
+%
+of a map $T \colon V \to W$ between $\fieldF$-vector spaces, and conjugate linearity
+%
+\begin{equation*}
+    T(\alpha u + v)
+        = \conj{\alpha} Tu + Tv
+\end{equation*}
+%
+in the case where $\fieldF = \complex$. We notice that both of the right-hand side expressions are on the form
+%
+\begin{equation*}
+    T(\alpha u + v)
+        = \sigma(\alpha) Tu + Tv,
+\end{equation*}
+%
+where in the first case $\sigma$ is just the identity function on $\fieldF$, and in the latter case it is complex conjugation. Both of these maps are field automorphisms, and in fact they are involutions, in the sense that $\sigma^2 = \id$. We denote the automorphisms on $\fieldF$ by $\Aut(\fieldF)$.
+
+If $\sigma \in \Aut(\fieldF)$ and $T \colon V \to W$ is a map between $\fieldF$-vector spaces, then we will say that $T$ is \keyword{$\sigma$-linear} if
+%
+\begin{equation*}
+    T(\alpha u + v)
+        = \sigma(\alpha) Tu + Tv
+\end{equation*}
+%
+for all $u,v \in V$ and $\alpha \in \fieldF$. We note that if $T$ is $\sigma$-linear and bijective, then its inverse is $\inv{\sigma}$-linear: For if $w,z \in W$ with $w = Tu$ and $z = Tv$, then
+%
+\begin{equation*}
+    \alpha w + z
+        = \alpha Tu + Tv
+        = T(\inv{\sigma}(\alpha)u + v),
+\end{equation*}
+%
+and applying $\inv{T}$ to both sides we find that $\inv{T}(\alpha w + z) = \inv{\sigma}(\alpha)Tw + Tz$. If $T$ is $\sigma$-linear and bijective, we will call $T$ a \keyword{$\sigma$-isomorphism}, though this is really most useful when $\sigma$ is an involution, since then $\inv{T}$ is then also a $\sigma$-isomorphism and not just a $\inv{\sigma}$-isomorphism. Furthermore, if $S \colon V \to W$ is also $\sigma$-linear, then it is easy to see that $T + S$ is $\sigma$-linear, and that $\alpha T$ is $\sigma$-linear for all $\alpha \in \fieldF$. Hence the set of $\sigma$-linear maps $V \to W$ is a vector space. Finally, if $R \colon W \to U$ is $\rho$-linear for an automorphism $\rho$, then $R \circ T$ is $\rho \circ \sigma$-linear.
+
+
+We wish to study forms whose first entry respect such an automorphism $\sigma$. However, it is not ideal to consider the automorphism $\sigma$ as part of the underlying structure on which we define the form, say as a pair $(V,\sigma)$. Notice for instance that if we did so, then we could not define a sesquilinear and a bilinear form on the same complex vector space $V$, since in the former case $\sigma$ is complex conjugation and in the latter it is the identity. But notice also that since we wish to consider sesquilinear forms in general, and not just sesquilinear forms that respect a particular automorphism, we also do not wish to consider $\sigma$ as part of the form itself. Hence we arrive at the following definition:
+
+\begin{definition}[Sesquilinear form]
+    Let $V$ be an $\fieldF$-vector space. A map $\phi \colon V \prod V \to \fieldF$ is called a \keyword{sesquilinear form} on $V$ if there exists a $\sigma \in \Aut(\fieldF)$ such that $\phi(\blank,v)$ is $\sigma$-linear and $\phi(v,\blank)$ is linear for all $v \in V$. If $\sigma$ is such an automorphism, then we also call $\phi$ a \keyword{$\sigma$-sesquilinear form}.
+\end{definition}
+%
+The usual notion of sesquilinear forms on complex vector spaces is recovered if $\sigma$ is complex conjugation. Notice also that a bilinear form is just a $\id_V$-sesquilinear form. We should also note that there is a generalisation of this concept to modules over a division ring, but we shall not need this.
+
+In fact, if $\phi$ is \emph{nonzero}, in the sense that $\phi(u,v) \neq 0$ for some vectors $u,v \in V$ (as defined in \cref{def:sesquilinear-form-types} below), the automorphism $\sigma$ is unique. For note that for $\alpha \in \fieldF$ we have $\phi(\alpha u, v) = \sigma(\alpha)\phi(u,v)$, and hence
+%
+\begin{equation*}
+    \sigma(\alpha)
+        = \frac{\phi(\alpha u, v)}{\phi(u,v)}.
+\end{equation*}
+
+We next describe the different kinds of sesquilinear forms that are of interest to us.
+
+% TODO sigma epsilon hermitian without being sigma sesquilinear???? Or: bi-additive + (sigma,epsilon)-Hermitian => sigma-sesquilinear?
+
+\begin{definition}
+    \label{def:sesquilinear-form-types}
+    The sesquilinear form $\phi$ on $V$ is said to be
+    %
+    \begin{enumdefinition}
+        \item \keyword{nonzero} if $\phi(u,v) \neq 0$ for some $u,v \in V$.
+        
+        \item \keyword{degenerate} if there is a nonzero vector $v \in V$ such that $\phi(u,v) = 0$ for all $u \in V$.
+
+        \item \keyword{reflexive} if $\phi(u,v) = 0$ implies $\phi(v,u) = 0$ for all $u,v \in V$.
+
+        \item \keyword{$(\sigma,\epsilon)$-Hermitian} if there is a $\sigma \in \Aut(\fieldF)$ and an $\epsilon \in \fieldF$ such that $\phi$ is $\sigma$-sesquilinear, and such that $\phi(u,v) = \epsilon \sigma(\phi(v,u))$ for all $u,v \in V$. Furthermore, $\phi$ is called
+        %
+        \begin{center}
+            \begin{tabular}{lcl}
+                \keyword{$\sigma$-Hermitian} & \multirow{4}{*}{if it is} & $(\sigma,1)$- \\
+                \keyword{$\sigma$-anti-Hermitian} && $(\sigma,-1)$- \\
+                \keyword{symmetric} && $(\id_\fieldF,1)$- \\
+                \keyword{antisymmetric} && $(\id_\fieldF,-1)$- \\
+            \end{tabular}
+        \end{center}
+        %
+        Hermitian. If $\phi$ is $(\sigma,\epsilon)$-Hermitian for some $\sigma$ and $\epsilon$, then it is simply called \keyword{Hermitian}.
+
+        \item \keyword{alternating} if $\phi(v,v) = 0$ for all $v \in V$.
+    \end{enumdefinition}
+\end{definition}
+%
+More concretely, $\phi$ is symmetric if $\phi(u,v) = \phi(v,u)$ for all $u,v \in V$, and antisymmetric if $\phi(u,v) = -\phi(v,u)$ for all $u,v \in V$. Note that antisymmetric forms are often called \keyword{skew-symmetric}, but we prefer \enquote{antisymmetric} since it starts with a different letter than \enquote{symmetric}. Note that degeneracy is an \enquote{asymmetric} property, in that switching $u$ and $v$ in the definition yields a different notion. In practice forms are usually reflexive, in which case the two notions of degeneracy coincide.
+
+Usually the element $\epsilon$ above will be nonzero; indeed it is most often $\pm 1$. Furthermore, as mentioned in \cref{par:sigma-linearity} the case where $\sigma$ is an involution is particularly nice, since then a bijective map $T$ is a $\sigma$-isomorphism just when its inverse $\inv{T}$ is a $\sigma$-isomorphism. On the other hand, Hermitian forms are also of great interest, not least because they generalise the many important cases mentioned above. But it also turns out that there is a connection between Hermitian forms and involutions:
+
+\begin{lemma}
+    \label{lem:Hermitian-implies-involution}
+    If $\phi$ is a nonzero $(\sigma,\epsilon)$-Hermitian form, then $\sigma$ is an involution. Furthermore, $\phi$ is $(\sigma,\epsilon)$-Hermitian for unique $\sigma$ and $\epsilon$.
+\end{lemma}
+
+\begin{proof}
+    There exist $u,v \in V$ such that $\phi(u,v) \neq 0$. If $\alpha \in \fieldF$, then
+    %
+    \begin{align*}
+        \alpha \phi(u,v)
+            &= \phi(u, \alpha v) \\
+            &= \epsilon \sigma \bigl( \phi(\alpha v, u) \bigr) \\
+            &= \epsilon \sigma \bigl( \sigma(\alpha) \phi(v,u) \bigr) \\
+            &= \epsilon \sigma^2(\alpha) \sigma \bigl( \phi(v,u) \bigr) \\
+            &= \sigma^2(\alpha) \phi(u,v).
+    \end{align*}
+    %
+    Dividing through by $\phi(u,v)$ yields $\sigma^2(\alpha) = \alpha$, so $\sigma$ is an involution.
+
+    For the second claim, $\sigma$ is unique since $\phi$ (being nonzero) can be $\sigma$-sesquilinear only for a single $\sigma$. As for $\epsilon$, notice that this is given by
+    %
+    \begin{equation*}
+        \epsilon
+            = \frac{\phi(u,v)}{\sigma(\phi(v,u))},
+    \end{equation*}
+    %
+    where $\phi(u,v) \neq 0$ as above.
+\end{proof}
+
+
+TODO The following result doesn't belong here, but it is required in the next lemma.
+
+\begin{lemma}
+    \label{lem:functionals-same-kernel}
+    Let $\phi,\psi \colon V \to \fieldF$ be linear functionals. If $\ker\phi \subseteq \ker\psi$, then there is an element $\lambda \in \fieldF$ such that $\psi = \lambda\phi$.
+\end{lemma}
+
+\begin{proof}
+    If $\ker\phi = V$ then this is obvious, so assume that $\phi(v) \neq 0$ for some $v \in V$. For all $u \in V$ we then have
+    %
+    \begin{equation*}
+        \phi \big( \phi(u)v - \phi(v)u \big)
+            = \phi(u)\phi(v) - \phi(v)\phi(u) = 0,
+    \end{equation*}
+    %
+    so $\phi(u)v - \phi(v)u$ lies in the kernel of $\phi$, hence also in the kernel of $\psi$. It follows that
+    %
+    \begin{equation*}
+        0
+            = \psi \big( \phi(u)v - \phi(v)u \big)
+            = \phi(u)\psi(v) - \phi(v)\psi(u),
+    \end{equation*}
+    %
+    which implies that
+    %
+    \begin{equation*}
+        \psi(u) = \frac{\psi(v)}{\phi(v)} \phi(u)
+    \end{equation*}
+    %
+    as claimed.
+\end{proof}
+
+
+
+Now note the following relationships between the properties in \cref{def:sesquilinear-form-types}:
+
+\begin{lemma}
+    \begin{enumlemma}
+        \item For all sesquilinear forms,
+        %
+        \begin{equation*}
+            \text{non-degenerate}
+                \implies \text{nonzero}.
+        \end{equation*}
+
+        \item If $\chr \fieldF = 2$, then
+        %
+        \begin{equation*}
+            \text{alternating}
+                \implies \text{symmetric}
+                \iff \text{antisymmetric}.
+        \end{equation*}
+
+        \item If $\chr \fieldF \neq 2$, then
+        %
+        \begin{equation*}
+            \text{alternating}
+                \iff \text{antisymmetric}.
+        \end{equation*}
+
+        \item \label{enum:Hermitian-implies-reflexive} For all sesquilinear forms,
+        %
+        \begin{equation*}
+            \text{Hermitian}
+                \implies \text{reflexive}.
+        \end{equation*}
+        %
+        The opposite implication holds for forms with the property that $U^\perp = W^\perp$ implies $U = W$ for one-dimensional subspaces $U$ and $W$.
+    \end{enumlemma}
+\end{lemma}
+%
+The notation $U^\perp$ in the final claim is defined in \cref{def:orthogonality}. Note that the property on one-dimensional subspaces holds for TODO.
+
+\begin{proof}
+    Note that if $\phi$ is alternating then it is antisymmetric: For
+    %
+    \begin{equation*}
+        0
+            = \phi(u + v, u + v)
+            = \phi(u,v) + \phi(v,u),
+    \end{equation*}
+    %
+    implying that $\phi$ is antisymmetric. If $\chr \fieldF = 2$ then $1 = -1$, and so symmetry and skew-symmetry are clearly equivalent. If instead $\chr \fieldF \neq 2$ and $\phi$ is antisymmetric, then $\phi(v,v) = -\phi(v,v)$, so $2\phi(v,v) = 0$ which implies that $\phi(v,v) = 0$.
+
+    For the final claim, assume that $\phi$ is $(\sigma,\epsilon)$-Hermitian, and let $u,v \in V$ satisfy $\phi(u,v) = 0$. It follows that
+    %
+    \begin{equation*}
+        \phi(v,u)
+            = \epsilon \sigma(\phi(u,v))
+            = \epsilon \sigma(0)
+            = 0,
+    \end{equation*}
+    %
+    since $\sigma$ is a field homomorphism. Conversely, given $u \in V$ define linear functionals $\psi_u,\chi_u \colon V \to \fieldF$ by
+    %
+    \begin{equation*}
+        \psi_u(v) = \phi(u,v)
+        \quad \text{and} \quad
+        \chi_u(v) = \inv{\sigma}\big( \phi(v,u) \big).
+    \end{equation*}
+    %
+    Since $\phi$ is reflexive and $\sigma$ is a field isomorphism, $\ker \psi_u = \ker \chi_u$. Then \cref{lem:functionals-same-kernel} yields a $\lambda \in \fieldF$ such that
+    %
+    \begin{equation*}
+        \phi(u,v)
+            = \psi_u(v)
+            = \lambda \chi_u(v)
+            = \lambda \inv{\sigma}\big( \phi(v,u) \big)
+    \end{equation*}
+    %
+    for all $v \in V$. We claim that the same $\lambda$ works for all $u$. Given any $u' \in V$ we similarly have
+    %
+    \begin{equation*}
+        \phi(u',v)
+            = \lambda' \inv{\sigma}\big( \phi(v,u') \big)
+    \end{equation*}
+    %
+    for all $v \in V$, for some $\lambda' \in \fieldF$. Subtracting these equalities yields
+    %
+    \begin{equation*}
+        \phi(u - u',v)
+            = \inv{\sigma}\big( \phi(v, \sigma(\lambda)u - \sigma(\lambda')u') \big).
+    \end{equation*}
+    %
+    for all $v \in V$. But this implies that
+    %
+    \begin{equation*}
+        \gen{u - u'}^\perp
+            = \gen{\sigma(\lambda)u - \sigma(\lambda')u'}^\perp,
+    \end{equation*}
+    %
+    which by the assumption in the lemma implies that
+    %
+    \begin{equation*}
+        \gen{u - u'}
+            = \gen{\sigma(\lambda)u - \sigma(\lambda')u'}.
+    \end{equation*}
+    %
+    Hence there is a $\mu \in \fieldF$ such that
+    %
+    \begin{equation*}
+        \mu(u - u') = \sigma(\lambda)u - \sigma(\lambda')u'.
+    \end{equation*}
+    %
+    Suppose now that $u$ and $u'$ are linearly independent. Then $\lambda = \inv{\sigma}(\mu) = \lambda'$ as desired. If instead $u$ and $u'$ are linearly dependent, let $u'' \in V$ be linearly independent of $u$ and $u'$, and obtain a nonzero $\lambda''$ as before. The above argument with $u''$ in place of either $u$ or $u'$ then yields $\lambda = \lambda''$ and $\lambda'' = \lambda'$ respectively, proving the claim.
+\end{proof}
+%
+In particular, an antisymmetric form is either symmetric or alternating, and we thus do not need to explicitly study antisymmetric forms.
+
+
+If $\phi$ is a sesquilinear form on $V$, then the \keyword{associated quadratic form} is the map $Q \colon V \to \fieldF$ given by $Q(v) = \phi(v,v)$. If $\phi$ is $\sigma$-sesquilinear, then it follows that $Q(\alpha v) = \alpha \sigma(\alpha) Q(v)$. In particular, if $\phi$ is bilinear then $Q(\alpha v) = \alpha^2 Q(v)$.
+
+It is well-known that the real and complex inner products can be recovered from their quadratic forms, and we will return to these in TODO ref. For now we assume that $\phi$ is bilinear and that $\chr \fieldF \neq 2$, and we let
+%
+\begin{equation*}
+    \phi_s(u,v)
+        = \tfrac{1}{2} \bigl( \phi(u,v) + \phi(v,u) \bigr)
+    \quad \text{and} \quad
+    \phi_a(u,v)
+        = \tfrac{1}{2} \bigl( \phi(u,v) - \phi(v,u) \bigr),
+\end{equation*}
+%
+so that $\phi = \phi_s + \phi_a$. Then both $\phi_s$ and $\phi_a$ are bilinear, $\phi_s$ is symmetric and $\phi_a$ antisymmetric, hence alternating. If $Q_s$ is the quadratic form associated with $\phi_s$, then
+%
+\begin{equation*}
+    Q(v)
+        = \phi(v,v)
+        = \phi_s(v,v) + \phi_a(v,v)
+        = \phi_s(v,v)
+        = Q_s(v)
+\end{equation*}
+%
+for all $v \in V$. That is, the quadratic form associated with a bilinear form can only determine its \textquote{symmetric part}. Indeed, we could replace $\phi_a$ with any anti-symmetric bilinear form and we would still have $Q = Q_s$. Hence we cannot hope to find a polarisation identity for arbitrary bilinear forms, a fortiori for sesquilinear forms. But if $\phi$ is already symmetric, then we have the following:
+
+\begin{propositionnoproof}[Polarisation]
+    Assume that $\phi$ is bilinear and symmetric, and that $\chr \fieldF \neq 2$. Then
+    %
+    \begin{equation*}
+        \phi(u,v)
+            = \tfrac{1}{2} \bigl( Q(u+v) - Q(u) - Q(v) \bigr)
+            = \tfrac{1}{4} \bigl( Q(u+v) - Q(u-v) \bigr)
+    \end{equation*}
+    %
+    for all $u,v \in V$.
+\end{propositionnoproof}
+%
+The proof is simply a case of inserting the definition of $Q$.
+
+The real case is thus taken care of. There is of course also a polarisation identity for inner products on complex vector spaces, but since this is not bilinear it takes a slightly different form. We will return to this in TODO ref.
+
+
+If there are multiple sesquilinear forms in play, we decorate \enquote{$Q$} with subscripts to disambiguate. For instance, we might denote the quadratic form associated with $\phi$ by $Q_\phi$, or in the case that $\phi$ is part of the structure of some vector space $V$ we might write $Q_V$. We also write $\inner{}{}$ or $\inner{}{}_V$ for the sesquilinear form on $V$. Below we equip spaces $V$ and $W$ with fixed sesquilinear forms.
+
+
+\section{Properties of sesquilinear forms}
+
+We begin with a concept familiar from the theory of inner product spaces:
+
+\begin{definition}[Orthogonality]
+    \label{def:orthogonality}
+    Let $M,N \subseteq V$ be subsets. If $\phi(u,v) = 0$ for all $u \in M$ and $v \in N$, then we say that $M$ is \keyword{left-orthogonal} to $N$ and $N$ is \keyword{right-orthogonal} to $M$ (with respect to $\phi$), written $M \perp_\phi N$. The \keyword{(left) orthogonal complement} of $N$ is the set
+    %
+    \begin{equation*}
+        N^\perp
+            = \set{v \in V}{\forall u \in N \colon \phi(v,u) = 0}.
+    \end{equation*}
+\end{definition}
+%
+When $\phi$ is understood we simply write $M \perp N$. If either $M$ or $N$ (or both) is a singleton, then we write e.g. $u \perp N$ for $\{u\} \perp N$, and we say that $u$ is left-orthogonal to $N$. Note that $N^\perp$ is the set of vectors $v$ such that $v \perp N$, i.e., all vectors that are left-orthogonal to $N$. There is of course a related notion of a \emph{right} orthogonal complement, but we make do with the above. Note that left- and right-orthogonality coincide precisely when $\phi$ is reflexive.
+
+Also note that if $M \subseteq N$, then $N^\perp \subseteq M^\perp$.
+
+\begin{lemma}
+    If $M \subseteq V$, then $M^\perp$ is a subspace of $V$.    
+\end{lemma}
+
+\begin{proof}
+    If $u,v \in M^\perp$ and $\alpha \in \fieldF$, then for all $w \in M$ we have
+    %
+    \begin{equation*}
+        \phi(\alpha u + v, w)
+            = \sigma(\alpha) \phi(u,w) + \phi(v,w)
+            = 0,
+    \end{equation*}
+    %
+    so $\alpha u + v \in M^\perp$.
+\end{proof}
+
+
+A vector $v \in V$ is \keyword{isotropic} if $v \perp v$, and \keyword{nonisotropic} otherwise. If $V$ contains at least one isotropic vector, then $V$ itself is called isotropic, and otherwise nonisotropic. In case every vector in $V$ is isotropic, then $V$ is said to be \keyword{totally isotropic}. Notice that $\phi$ is alternating if and only if $V$ is totally isotropic.
+
+On the other hand, $v$ is \keyword{degenerate} if $v \perp V$. The set of all degenerate vectors in $V$ is called the \keyword{radical} of $V$ and is denoted $\rad{V}$. If $\rad{V} = 0$ then $V$ is called \keyword{non-degenerate}, if $\rad{V} \neq 0$ it is \keyword{degenerate}, and if $\rad{V} = V$ it is \keyword{totally degenerate}. Notice that we apply the term \enquote{degenerate} to both forms, vectors and spaces. Sadly, unless the form is reflexive these notions do \emph{not} coincide as defined. % TODO consider changing one of the definitions.
+
+Note that if $U$ is a subspace of $V$, then the notation $U^\perp$ is ambiguous. It might refer to the subset of $U$ of vectors orthogonal to $U$, or the subset of $V$ of vectors orthogonal to $U$. However, the notation $\rad{U}$ always refers to the former. We have the following result:
+
+\begin{lemmanoproof}
+    Let $U$ be a subspace of $V$. Then $\rad{U} = U \intersect U^\perp$, where $U^\perp$ either denotes the orthogonal complement of $U$ in $V$ or in $U$ itself. In particular, $\rad{U}$ is a subspace of $U$.
+\end{lemmanoproof}
+
+% That is, a degenerate vector is isotropic, so a nonisotropic space is non-degenerate. On pseudo inner product spaces, the converse is also the case due to the Cauchy--Schwarz inequality, but this is not so for general sesquilinear forms. Notice also that a subspace of a nonisotropic space is also nonisotropic, while a subspace of a non-degenerate space might still be degenerate.
+
+
+To better understand the significance of degeneracy, we note the following result:
+
+\begin{lemma}
+    \label{lem:non-degenerate-vectors-equal}
+    Assume that $V$ is non-degenerate and let $u,v \in V$. If $\inner{u}{w} = \inner{v}{w}$ for all $w \in V$, then $u = v$.
+
+    In particular, if $X$ is a set and the functions $f,g \colon X \to V$ satisfy $\inner{f(x)}{w} = \inner{g(x)}{w}$ for all $x \in X$ and $w \in V$, then $f = g$.
+\end{lemma}
+
+\begin{proof}
+    If the assumption holds, then $\inner{u-v}{w}$ for all $w \in V$, i.e., $u-v$ is degenerate. But then we must have $u-v = 0$ since $V$ is non-degenerate.
+\end{proof}
+
+
+Every subspace of a vector space has a complement. However, in the present context we can wish for something more:
+
+\begin{definition}[Orthogonal direct sum]
+    The space $V$ is the \keyword{orthogonal direct sum} of the subspaces $U$ and $W$, written
+    %
+    \begin{equation*}
+        V
+            = U \orthsum W,
+    \end{equation*}
+    %
+    if $V = U \oplus W$ and $U \perp W$.
+\end{definition}
+
+\begin{proposition}
+    If $U$ is a complement of $\rad{V}$, then $U$ is non-degenerate and $V = \rad{V} \orthsum U$.
+\end{proposition}
+
+\begin{proof}
+    Clearly $\rad{V} \perp U$. Now notice that if $v \in \rad{U}$, then $v \perp U$, and we obviously also have $v \perp \rad{V}$. Hence $v \perp \rad{V} \oplus U = V$, so $\rad{U} \subseteq \rad{V}$. And since also $\rad{U} \subseteq U$, we must have $\rad{U} = 0$, so $U$ is non-degenerate.
+\end{proof}
+%
+This result shows that we can find a subspace of $V$ that is non-degenerate, and every element of $V$ almost lies in $U$: we just have to add a degenerate vector to it. And if degenerate vectors are somehow insignificant, then a restriction to non-degenerate spaces is not very severe. And of course, we can always obtain a complement $U$ of $\rad{V}$ as the quotient $V/\rad{V}$ by \cref{prop:complement-iso-to-quotient}.
+
+If $V = U \orthsum W$, then we regrettably cannot call $U$ an \textquote{orthogonal complement} of $W$, since we have already used this term for the set $U^\perp$, as is standard, and while $U$ and $U^\perp$ are certainly orthogonal, it is not generally the case that $V = U \oplus U^\perp$.
+
+
+If $u \in V$, define a map\footnote{We begin to see why it is useful that sesquilinear forms are linear in the \emph{second} entry. In this way, the vectors $u$ and $v$ appear in the same order in the expressions $\phi_u(v)$ and $\inner{u}{v}$. Notice that this is simply a consequence of the fact that functions are written to the left of their arguments.} $\phi_u \colon V \to \fieldF$ by $\phi_u(v) = \inner{u}{v}$. If $V$ is a topological vector space, recall that $V^*$ denotes its topological dual, and that $\inner{}{}$ is assumed to be continuous in each entry, so $\phi_u$ is continuous. Hence this gives rise to the $\sigma$-linear \keyword{Riesz map} $\Phi_V \colon V \to V^*$ given by $\Phi_V(u) = \phi_u$. If a functional $\phi \in V^*$ is on the form $\phi_u$ for some $u \in V$, then $u$ is called a \keyword{Riesz vector} for $\phi$. If $\Phi_V$ is bijective, then the unique Riesz vector for $\phi$ is denoted $r_\phi$, and the map $\phi \mapsto r_\phi$ is of course the inverse of $\Phi_V$, so it is $\inv{\sigma}$-linear. Hence $r_{\phi_u} = u$ and $\phi_{r_\psi} = \psi$ for $u \in V$ and $\psi \in V^*$.
+
+It is sometimes the case that if there is a $\sigma \in \Aut(\fieldF)$ such that $\Phi_V$ is a $\sigma$-isomorphism, then $V$ is in fact reflexive. This is for instance the case for Hilbert spaces. We cannot pursue the theory of duality for general topological spaces here in any detail.
+
+
+We now make the further assumption that $V$ is finite-dimensional. In this case we have the following fundamental theorem:
+
+\begin{theorem}[The Riesz representation theorem]
+    \label{thm:Riesz-representation-theorem}
+    The Riesz map $\Phi_V$ is injective if and only if $V$ is non-degenerate. In particular, if $V$ is finite-dimensional and non-degenerate, then $\Phi_V$ is a $\sigma$-isomorphism.
+\end{theorem}
+
+\begin{proof}
+    Notice that $\phi_u(v) = 0$ for all $v \in V$ just when $u \perp V$, i.e. when $u$ is degenerate. This is the case if and only if $u \in \rad{V}$, so $\ker \Phi_V = \rad{V}$.
+\end{proof}
+
+While the Riesz representation theorem only applies to non-degenerate spaces, there is also a version for singular subspaces of non-degenerate spaces which is sometimes useful. If $U$ is a subspace of $V$, define a map $\Psi^V_U \colon V \to U^*$ by $\Psi^V_U(v) = \phi_v|_U$. Note that $\Psi^V_U = \iota_U^\dagger \circ \Phi_V$, so $\Psi^V_U$ is $\sigma$-linear. We then have the following:
+
+\begin{corollary}
+    \label{thm:Riesz-representation-theorem-for-subspaces}
+    Let $V$ be finite-dimensional, and let $U$ be a subspace of $V$. Then $\ker \Psi^V_U = U^\perp$, and if either $V$ or $U$ is non-degenerate, then $\Psi^V_U$ is surjective.
+\end{corollary}
+
+\begin{proof}
+    Notice that $\phi_v|_U$ is zero just when $\inner{v}{u} = 0$ for all $u \in U$. But this says that $v \perp U$, i.e. $v \in U^\perp$. Hence $\ker \Psi^V_U = U^\perp$ as claimed.
+    
+    Next assume that $V$ is non-degenerate. Let $\phi \in U^*$ and extend this by $0$ to a linear functional $\overline{\phi}$ on $V$. \Cref{thm:Riesz-representation-theorem} then furnishes a vector $v \in V$ such that $\overline{\phi} = \phi_v$. But then $\phi = \phi_v|_U$ as desired. If instead $U$ is non-degenerate, then we can simply apply \cref{thm:Riesz-representation-theorem} to $U$ directly.
+\end{proof}
+%
+As an example of an application of this corollary, we have the following result, which itself has an important corollary:
+
+\begin{proposition}
+    \label{prop:non-degenerate-space-decomposition}
+    Let $V$ be finite-dimensional, and let $U$ be a subspace of $V$. If either $V$ or $U$ is non-degenerate, then
+    %
+    \begin{equation*}
+        \dim V
+            = \dim U + \dim U^\perp.
+    \end{equation*}
+    %
+    Hence the following are equivalent:
+    %
+    \begin{enumproposition}
+        \item $V = U + U^\perp$.
+        \item $V = U \orthsum U^\perp$.
+        \item $U$ is non-degenerate, i.e., $U \intersect U^\perp = \{0\}$.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+    By \cref{thm:Riesz-representation-theorem-for-subspaces}, the map $\Psi^V_U$ is surjective onto $U$ with kernel $U^\perp$. Hence \cref{cor:rank-nullity} implies that
+    %
+    \begin{equation*}
+        \dim V
+            = \dim U^* + \dim U^\perp.
+    \end{equation*}
+    %
+    But since $U$ is finite-dimensional, it follows that $\dim U = \dim U^*$ by \cref{prop:dual-basis}, so the claim follows.
+\end{proof}
+
+
+\begin{corollary}
+    \label{cor:orthogonal-basis-existence}
+    Let $V$ be finite-dimensional and nonisotropic. Then $V$ has an orthogonal basis.
+\end{corollary}
+
+\begin{proof}
+    Every subspace of $V$ is also nonisotropic, in particular non-degenerate, so \cref{prop:non-degenerate-space-decomposition} applies. We prove the claim by induction on $n = \dim V$. If $n = 0$, then the claim is obvious, so assume that $n > 0$ and that the claim holds for $n-1$. Choose some nonzero $v \in V$ and let $U = \Span(v)$. Then $\dim U^\perp = n-1$, so $U^\perp$ has an orthogonal basis $\calU$ by induction. Then $\calU \union \{v\}$ is clearly an orthogonal basis for $V$.
+\end{proof}
+
+
+We next study maps that respect sesquilinear forms.
+
+\begin{definition}[Isometry]
+    \label{def:isometry}
+    Let $V$ and $W$ be equipped with sesquilinear forms. A linear map $T \colon V \to W$ is an \keyword{isometry} if
+    %
+    \begin{equation*}
+        \inner{Tu}{Tv}_W
+            = \inner{u}{v}_V
+    \end{equation*}
+    %
+    for all $u,v \in V$. If $T$ is also bijective, we say that it is \keyword{unitary} and say that $V$ and $W$ are \keyword{isometric}.
+\end{definition}
+%
+Clearly the composition of two isometries is an isometry, and the inverse of a unitary map is also unitary. In particular, the set of unitary maps on $V$ is a group under composition.
+
+If $T$ is an isometry, then notice that it also respects the associated quadratic forms, i.e. that $Q_W(Tv) = Q_V(v)$ for all $v \in V$. [TODO converse when quadratic form determines sesquilinear form.] Furthermore, we are used to isometries being injective, and the analogous result for sesquilinear forms is the following:
+
+\begin{lemma}
+    \label{lem:isometry-injective}
+    If $V$ is nonisotropic and $T \colon V \to W$ is an isometry, then $T$ is injective.
+\end{lemma}
+
+\begin{proof}
+    Let $u,v \in V$ and assume that $Tu = Tv$. Then
+    %
+    \begin{equation*}
+        0
+            = Q_W(Tu - Tv)
+            = Q_W \bigl( T(u-v) \bigr)
+            = Q_V(u-v),
+    \end{equation*}
+    %
+    and since $V$ is nonisotropic, this is only possible when $u = v$.
+\end{proof}
+
+
+\section{Hilbert space adjoints}
+
+In \cref{sec:operator-adjoints} we defined one notion of adjoint of a linear map $T \colon V \to W$, namely the pullback $T^\dagger \colon W^* \to V^*$. We now define a different kind of adjoint, denoted $T^*$, that only makes sense for linear maps between spaces equipped with sesquilinear forms. For $T^*$ to be linear we need $V$ and $W$ to both be equipped with a $\sigma$-sesquilinear form for the same $\sigma \in \Aut(\fieldF)$, so we make this assumption from the onset. We also assume that $V$ and $W$ are nonsingular; this is not strictly necessary to define $T^*$, but we lose fundamental properties of adjoints if this is not the case (cf. \cref{prop:adjoint-inner-product}).\footnote{Also strictly speaking, it is only necessary that one of $V$ and $W$ is nonsingular, but we assume that both are for simplicity.} Later we will also need to assume that $V$ and $W$ are nonisotropic (cf. \cref{prop:normal-operator-properties}).
+
+It will also turn out to be useful to assume that the forms on $V$ and $W$ are $(\sigma,\epsilon)$-Hermitian for possibly different $\epsilon$. In $V$ and $W$ are nontrivial, then since they are assumed nonsingular, we must have $\epsilon \neq 0$. Under the same assumptions the forms must be nontrivial, so \cref{lem:Hermitian-implies-involution} implies that $\sigma$ is an involution. The case where $V$ and $W$ is trivial is -- of course -- trivial, so to avoid having to deal this special case, we simply assume that $\sigma$ is always an involution, and that $\epsilon \neq 0$.
+
+Finally, we require that the Riesz maps $\Phi_V$ and $\Phi_W$ (cf. \cref{par:Riesz-map}) are $\sigma$-isomorphisms. It is not strictly necessary for this to be true of $\Phi_W$ to define $T^*$, but we again lose important properties without this assumption. For later use we also let $U$ denote another vector space with the same properties. In total:
+
+Assumption:
+
+In this section, $V,W,U$ are $\fieldF$-vector spaces that are
+%
+\begin{enumerate}
+    \item equipped with $(\sigma,\epsilon)$-Hermitian forms for the same $\sigma \in \Aut(\fieldF)$ but possibly different $\epsilon \in \fieldF$, and
+    \item nonsingular,
+\end{enumerate}
+%
+such that
+%
+\begin{enumerate}[resume]
+    \item $\sigma$ is an involution,
+    \item $\epsilon \neq 0$, and
+    \item the Riesz maps $\Phi_V$, $\Phi_W$ and $\Phi_U$ are $\sigma$-isomorphisms.
+\end{enumerate}
+
+
+We are now ready for the main definition in this section:
+
+\begin{definition}[Hilbert space adjoints]
+    Let $T \in \lin(V,W)$. The \keyword{(Hilbert space) adjoint} of $T$ is the operator $T^* \colon W \to V$ given by
+    %
+    \begin{equation*}
+        T^*
+            = \inv{\Phi_V} \circ T^\dagger \circ \Phi_W.
+    \end{equation*}
+\end{definition}
+%
+Properties of the operator adjoint $T^\dagger$ are often inherited by the Hilbert space adjoint: Since $\Phi_V$ and $\Phi_W$ are both $\sigma$-linear and $T^\dagger$ is linear, it follows that $T^*$ is linear. Furthermore, if $S \in \lin(W,U)$ then
+%
+\begin{align*}
+    (ST)^*
+        &= \inv{\Phi_V} \circ (ST)^\dagger \circ \Phi_U \\
+        &= \inv{\Phi_V} \circ T^\dagger \circ S^\dagger \circ \Phi_U \\
+        &= (\inv{\Phi_V} \circ T^\dagger \circ \Phi_W) \circ (\inv{\Phi_W} \circ S^\dagger \circ \Phi_U) \\
+        &= T^* S^*.
+\end{align*}
+
+\begin{proposition}
+    \label{prop:adjoint-inner-product}
+    Let $T \in \lin(V,W)$. For all $w \in W$ we have $T^\dagger \phi_w = \phi_{T^* w}$. In particular, $T^*$ is the unique linear operator $W \to V$ with the property that
+    %
+    \begin{equation*}
+        \inner{T^*w}{v}_V = \inner{w}{Tv}_W,
+    \end{equation*}
+    %
+    or equivalently
+    \begin{equation*}
+        \inner{v}{T^*w}_V = \inner{Tv}{w}_W,
+    \end{equation*}
+    %
+    for all $v \in V$ and $w \in W$. Furthermore, $T^{**} = T$, i.e., the map $T \mapsto T^*$ is an involution.
+\end{proposition}
+%
+Note that we cannot (at least prima facie) prove that $T^{**} = T$ just by using the definition, since $V^*$ and $W^*$ are not equipped with sesquilinear forms.
+
+\begin{proof}
+    First notice that $T^*$ indeed has this property. For $w \in W$ we have
+    %
+    \begin{equation*}
+        \phi_{T^* w}
+            = \Phi_V (T^* w)
+            = (T^\dagger \circ \Phi_W)(w)
+            = T^\dagger \phi_w,
+    \end{equation*}
+    %
+    so for $v \in V$ it thus follows that
+    %
+    \begin{equation*}
+        \inner{T^* w}{v}_V
+            = \phi_{T^* w}(v)
+            = T^\dagger \phi_w (v)
+            = \phi_w(Tv)
+            = \inner{w}{Tv}_W,
+    \end{equation*}
+    %
+    as desired. The other identity follows since the forms are Hermitian. Furthermore, if $S \colon W \to V$ is another such operator, then $\inner{Sw}{v}_V = \inner{T^*w}{v}_V$ for all $v$ and $w$, so $S = T^*$ by \cref{lem:nonsingular-vectors-equal} since $V$ is nonsingular. The final claim that $T^{**} = T$ follows by uniqueness, by replacing $T$ with $T^*$ in the identities above.
+\end{proof}
+
+
+In \cref{def:isometry} we defined what it means for a linear map to be an isometry or to be unitary. In the present context we can also characterise isometries using adjoints. Furthermore, recall from \cref{lem:isometry-injective} that an isometry between \emph{nonisotropic} spaces is automatically injective. We have not (yet, see \cref{par:spectral-theorem}) assumed that the spaces in question are nonisotropic, only that they are nonsingular, but in the current setting we still get injectivity:
+
+\begin{lemma}
+    A linear map $T \colon V \to W$ is an isometry if and only if $T^*T = \id_V$. In particular, isometries are injective, and $T$ is unitary if and only if $T$ is bijective with $\inv{T} = T^*$.
+\end{lemma}
+
+\begin{proof}
+    If $T$ is an isometry, then
+    %
+    \begin{equation*}
+        \inner{T^*Tv}{u}_V
+            = \inner{Tv}{Tu}_W
+            = \inner{v}{u}_V,
+    \end{equation*}
+    %
+    implying that $T^*T = \id_V$ by \cref{lem:nonsingular-vectors-equal}. The converse is obvious.
+
+    For the final claims, notice that the above says that $T^*$ is a left-inverse of $T$, so $T$ is injective. Furthermore, if $T$ is unitary it is bijective, so $T^*$ is also a right-inverse of $T$. Conversely, if $TT^* = \id_W$ then $T$ is surjective and hence unitary.
+\end{proof}
+%
+An operator $T$ with the property $TT^* = \id_W$ is called a \keyword{coisometry}.
+
+In the case $W = V$ we say that $T$ is \keyword{normal} if $TT^* = T^*T$, and that $T$ is \keyword{self-adjoint} if $T^* = T$. Clearly both self-adjoint and unitary operators (with $V = W$) are normal.
+
+
+Properties of adjoints TODO text
+
+\begin{proposition} 
+    Let $V$ be a finite-dimensional inner product space, and let $T \in \lin(V)$ and $\lambda \in \mathbb{F}$. Then $\lambda \id_V - T$ is invertible if and only if $\sigma(\lambda) \id_V - T^*$ is invertible. In other words, $\lambda$ is an eigenvalue of $T$ if and only if $\sigma(\lambda)$ is an eigenvalue of $T^*$.
+\end{proposition}
+
+TODO what about infinite dimension? Boundedly invertible? Also need $\sigma$ to be an involution for the iff.
+
+\begin{proof}
+    Since the maps $T \mapsto T^*$ and $\sigma$ are involutions it suffices to prove one implication, so assume that $\lambda \id_V - T$ is invertible. Then there exists an $S \in \lin(V)$ such that
+    %
+    \begin{equation*}
+        S(\lambda \id_V - T)
+            = (\lambda \id_V - T)S
+            = \id_V,
+    \end{equation*}
+    %
+    and taking adjoints we find that
+    %
+    \begin{equation*}
+        (\sigma(\lambda) \id_V - T^*)S^*
+            = S^*(\sigma(\lambda) \id_V - T^*)
+            = \id_V.
+    \end{equation*}
+    %
+    That is, $\sigma(\lambda) \id_V - T^*$ is invertible as claimed.
+\end{proof}
+
+\begin{remark}
+    Note that this does \emph{not} say that $v \in V$ is an eigenvector of $T^*$ if it is an eigenvector of $T$. A counterexample is given by the matrix
+    %
+    \begin{equation*}
+        A =
+        \begin{pmatrix}
+            1 & 1 \\
+            0 & 0
+        \end{pmatrix},
+    \end{equation*}
+    %
+    which has the eigenvector $(1,0)$ with eigenvalue $1$. However, while $1$ is also an eigenvalue of the transpose $\trans{A}$ (with eigenvector $(1,1)$), $(1,0)$ is not an eigenvector of $\trans{A}$.
+
+    While this does not hold in general, recall that in \cref{enum:normal-adjoint-eigenvalues} we saw that it holds for \emph{normal} operators.
+\end{remark}
+
+
+\begin{proposition}
+    \label{prop:normal-operator-properties}
+    Let $T \in \lin(V)$ be a normal operator.
+    %
+    \begin{enumproposition}
+        \item \label{enum:normal-adjoint-norm} $Q(Tv) = Q(T^*v)$ for all $v \in V$.
+        
+        \item \label{enum:normal-adjoint-eigenvalues} Assume that $V$ is nonisotropic. Then $E_T(\lambda) = E_{T^*}(\sigma(\lambda))$ for all $\lambda \in \fieldF$.
+
+        \item \label{enum:normal-orthogonal-eigenspaces} Assume that $V$ is nonisotropic. If $\lambda,\mu \in \mathbb{F}$ are distinct eigenvalues of $T$, then $E_T(\lambda)$ and $E_T(\mu)$ are orthogonal.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+\begin{proofsec*}
+    \item[\itemref{enum:normal-adjoint-norm}]
+    Notice that
+    %
+    \begin{equation*}
+        Q(Tv)
+            = \inner{Tv}{Tv}
+            = \inner{T^*Tv}{v}
+            = \inner{TT^*v}{v}
+            = \inner{T^*v}{T^*v}
+            = Q(T^*v).
+    \end{equation*}
+
+    \item[\itemref{enum:normal-adjoint-eigenvalues}]
+    If $T$ is normal then so is $\lambda \id_V - T$, so \itemref{enum:normal-adjoint-norm} implies that
+    %
+    \begin{equation*}
+        Q\bigl( (\lambda \id_V - T)v \bigr)
+            = Q\bigl( (\sigma(\lambda) \id_V - T^*)v \bigr),
+    \end{equation*}
+    %
+    and since $V$ is assumed nonisotropic, this implies that $(\lambda \id_V - T)v = 0$ if and only if $(\sigma(\lambda) \id_V - T^*)v = 0$. Hence $v$ is an eigenvector for $T$ with eigenvalue $\lambda$ if and only if $v$ is an eigenvector for $T^*$ with eigenvalue $\sigma(\lambda)$.
+
+    \item[\itemref{enum:normal-orthogonal-eigenspaces}]
+    Let $v \in E_T(\lambda)$ and $u \in E_T(\mu)$. Since $v$ is also an eigenvector for $T^*$ with eigenvalue $\sigma(\lambda)$ by \itemref{enum:normal-adjoint-eigenvalues}, we have
+    %
+    \begin{equation*}
+        \mu \inner{v}{u}
+            = \inner{v}{Tu}
+            = \inner{T^*v}{u}
+            = \inner{\sigma(\lambda)v}{u}
+            = \lambda \inner{v}{u}.
+    \end{equation*}
+    %
+    Since $\lambda \neq \mu$ we must have $\inner{v}{u} = 0$ as claimed.
+\end{proofsec*}
+\end{proof}
+
+
+In the proof of \cref{thm:spectral-theorem} we will need to restrict normal operators to subspaces of $V$. In the discussion above we have assumed that $V$ is nonsingular, but since this is not a hereditary property, we need to assume that relevant subspaces of $V$ are also nonsingular. In \cref{par:spectral-theorem} we will assume that $V$ is nonisotropic, in which case this is automatically satisfied.
+
+If $U$ is a subspace of $V$ and $T \in \lin(V)$, then we say that $U$ is \keyword{invariant} under $T$. In this case we define an operator $T_U \in \lin(U)$ by $T_U u = Tu$ for $u \in U$. We then have the following results:
+
+\begin{lemma}
+    \label{lem:adjoint-invariant-subspace}
+    Let $T \in \lin(V)$. If a subspace $U$ of $V$ is invariant under $T$, then $U^\perp$ is invariant under $T^*$.
+\end{lemma}
+
+\begin{proof}
+    Let $v \in U^\perp$. For $u \in U$ we have $Tu \in U$, so
+    %
+    \begin{equation*}
+        \inner{T^*v}{u}
+            = \inner{v}{Tu}
+            = 0.
+    \end{equation*}
+    %
+    Since this holds for all $u \in U$, it follows that $T^*v \in U^\perp$ as desired.
+\end{proof}
+
+
+\begin{lemma}
+    \label{lem:normal-operator-restriction-is-normal}
+    If $T \in \lin(V)$ is normal and the subspace $U \subseteq V$ is nonsingular and invariant under both $T$ and $T^*$, then $T_U \in \lin(U)$ is also normal. To wit, $(T_U)^* = (T^*)_U$.
+\end{lemma}
+
+\begin{proof}
+    This is obvious from \cref{prop:adjoint-inner-product}.
+\end{proof}
+
+
+\section{Orthogonal diagonalisation}
+
+If $V$ is a vector space equipped with a sesquilinear form, then a basis $\calV$ for $V$ is \keyword{orthogonal} if for $u,v \in \calV$, $\inner{u}{v} = 0$ when $u \neq v$. Furthermore, $\calV$ is called \keyword{orthonormal} if also $Q(v) = 1$ for all $v \in \calV$. In real or complex vector spaces any orthogonal basis can be modified to obtain an orthonormal basis, by dividing each basis vector by its norm. But for general $\sigma$-sesquilinear forms this is not possible, since even if $\sigma = \id_V$ we would need to divide $v$ by a square root of $Q(v)$, and this might not exist; indeed $Q(v)$ might not even be nonzero.
+
+To state the spectral theorem we need a definition. Recall that we in \cref{par:diagonalisability} defined what it means for an operator $T$ to be diagonalisable. In the context of sesquilinear forms we have the following stronger properties: If $V$ is finite-dimensional and equipped with a sesquilinear form, then an operator $T \in \lin(V)$ is \keyword{orthogonally diagonalisable} if there is an orthogonal basis for $V$ consisting of eigenvectors for $T$. If there is an \emph{orthonormal} basis for $V$ of eigenvectors, then $T$ is \keyword{orthonormally diagonalisable}. Clearly the latter is the stronger of the two properties.
+
+Furthermore, if $\id_V = P_1 + \cdots + P_k$ is a resolution of the identity, then we say that it is \keyword{orthogonal} if each $P_i$ is an orthogonal projection. We then have the following analogue of \cref{prop:diagonalisability-equivalent-properties}:
+
+\begin{propositionnoproof}
+    \label{prop:orthogonal-diagonalisability-equivalent-properties}
+    Let $T \in \lin(V)$. The following are equivalent:
+    %
+    \begin{enumproposition}
+        \item $T$ is orthogonally diagonalisable.
+        
+        \item $V$ has an ordered orthogonal basis $\calV$ such that $\mr{\calV}{T}{\calV}$ is diagonal.
+        
+        \item $V$ has the form
+        %
+        \begin{equation*}
+            V
+                = \bigorthsum_{\lambda \in \spec T} E_T(\lambda).
+        \end{equation*}
+        
+        \item If $\spec T = \{\lambda_1, \ldots, \lambda_k\}$ and $P_i$ is projection onto $E_T(\lambda_i)$ along $\bigdirsum_{j \neq i} E_T(\lambda_j)$, then $\id_V = P_1 + \cdots + P_k$ is an orthogonal resolution of the identity.
+        
+        \item $T$ is orthogonally similar\footnote{Cf. \cref{par:equivalent-similar-congruent-maps}.} to a multiplication operator $M_A$, where $A \in \mat{n}{\fieldF}$ is a diagonal matrix whose diagonal contains the eigenvalues of $T$ with multiplicity:
+        %
+        \begin{equation*}
+            T
+                = \inv{\coordmap{\calV}} \circ M_A \circ \coordmap{\calV}.
+        \end{equation*}
+    \end{enumproposition}
+\end{propositionnoproof}
+
+
+We now arrive at the main theorem in this chapter, the spectral theorem. This is usually proved for normal operators on complex vector spaces, but as we show in this section, we can get away with assuming somewhat less. Apart from the assumptions we made in \cref{par:Hilbert-space-adjoints}, we will need the vector space $V$ to be nonisotropic in order to access the results in \cref{prop:normal-operator-properties}. We also need $V$ to be finite-dimensional, partly since our proof of the spectral theorem will be by induction in the dimension of $V$, and partly since we will also need every (normal) operator on $V$ to have an eigenvalue. For the latter reason we also assume that $\fieldF$ is algebraically closed. In total:
+
+Assumption:
+
+For the remainder of this section, $V$ denotes an $\fieldF$-vector space that is
+%
+\begin{enumerate}
+    \item finite-dimensional,
+    \item equipped with a $(\sigma,\epsilon)$-Hermitian form, and
+    \item nonisotropic,
+\end{enumerate}
+%
+such that
+%
+\begin{enumerate}[resume]
+    \item $\fieldF$ is algebraically closed,
+    \item $\sigma$ is an involution, and
+    \item $\epsilon \neq 0$.
+\end{enumerate}
+
+Note that since $V$ is finite-dimensional, we do not need to assume that the Riesz map $\Phi_V$ is a $\sigma$-isomorphism.
+
+
+\begin{theorem}[The spectral theorem]
+    \label{thm:spectral-theorem}
+    An operator $T \in \lin(V)$ is normal if and only if it is orthogonally diagonalisable.
+\end{theorem}
+
+\begin{proof}
+    First assume that $T$ is normal. We prove by induction in $n = \dim V$ that $T$ is orthogonally diagonalisable. If $n = 1$ then this follows since $T$ has an eigenvalue, so assume that the claim is proved for operators on spaces of dimension strictly less than $n$.
+
+    Let $\lambda \in \spec T$, and consider the corresponding eigenspace $E_T(\lambda)$. If $d \defeq \dim E_T(\lambda) = n$, then any orthogonal basis of $E_T(\lambda)$ will suffice (and such a basis exists by \cref{cor:orthogonal-basis-existence}). Assume therefore that $0 < d < n$.
+
+    The space $E_T(\lambda) = E_{T^*}(\sigma(\lambda))$ is clearly invariant under both $T$ and $T^*$. It follows from \cref{lem:adjoint-invariant-subspace} that $E_T(\lambda)^\perp$ is also invariant under both $T$ and $T^*$. We furthermore have $\dim E_T(\lambda)^\perp = n-d$ and $0 < n-d < n$ by \cref{prop:nonsingular-space-decomposition}. Let $T_\parallel \in \lin(E_T(\lambda))$ and $T_\perp \in \lin(E_T(\lambda)^\perp)$ denote the restrictions of $T$ to $E_T(\lambda)$ and $E_T(\lambda)^\perp$ respectively. Both $T_\parallel$ and $T_\perp$ are also normal by \cref{lem:normal-operator-restriction-is-normal}, so the induction hypothesis furnishes orthogonal bases $\calU$ and $\calW$ for $E_T(\lambda)$ and $E_T(\lambda)^\perp$ consisting of eigenvectors of $T$. But then $\calV = \calU \union \calW$ is an orthogonal basis for $V$ as desired.
+
+    Conversely, let $\calV$ be an orthogonal basis for $V$ consisting of eigenvectors for $T$, so that the matrix representation $\mr{\calV}{T}{\calV}$ is diagonal. Hence this commutes with $\mr{\calV}{T^*}{\calV}$, so $T$ and $T^*$ also commute.
+\end{proof}
+
+
+\section{Coordinate representations}
+
+In the sequel we fix a finite-dimensional $\fieldF$-vector space, and we also fix a $\sigma$-sesquilinear form $\inner{}{}$ on $V$. If $A = (a_{ij}) \in \mat{m,n}{\fieldF}$ is a matrix, we denote by $A^\sigma$ the $n \prod m$ matrix whose $(i,j)$th element is $\sigma(a_{ji})$ and call this the \keyword{$\sigma$-conjugate} of $A$. That is, $A^\sigma$ is obtained from $A$ by transposition and entrywise application of $\sigma$. If $B \in \mat{n,k}{\fieldF}$ is another matrix, notice that $(AB)^\sigma = B^\sigma A^\sigma$.
+
+In the case where $\sigma = \id_V$, we recover the transpose $\trans{A}$, and when $\fieldF = \complex$ and $\sigma$ is complex conjugation, $A^\sigma$ is the conjugate transpose.
+
+
+Consider an ordered basis $\calV = (v_1, \ldots, v_n)$ for $V$, and let $u = \sum_{i=1}^n \alpha_i v_i$ and $v = \sum_{i=1}^n \beta_i v_i$ be vectors in $V$. Notice that
+%
+\begin{equation*}
+    \inner{u}{v}
+        = \sum_{i=1}^n \sum_{j=1}^n \sigma(\alpha_i) \inner{v_i}{v_j} \beta_j.
+\end{equation*}
+%
+Hence if we define the matrix $\Sigma = (\inner{v_i}{v_j})_{i,j} \in \mat{n}{\fieldF}$, then\footnote{Again we see the usefulness of sesquilinear forms being linear in the second entry: For then we simply $\sigma$-transpose the coordinate vector of the left argument and leave the coordinate vector of the right argument untouched.}
+%
+\begin{equation}
+    \label{eq:sesquilinear-form}
+    \inner{u}{v} =
+    \begin{pmatrix}
+        \sigma(\alpha_1) & \cdots & \sigma(\alpha_n)
+    \end{pmatrix}
+    \begin{pmatrix}
+        \inner{v_1}{v_1} & \cdots & \inner{v_1}{v_n} \\
+        \vdots & \ddots & \vdots \\
+        \inner{v_n}{v_1} & \cdots & \inner{v_n}{v_n}
+    \end{pmatrix}
+    \begin{pmatrix}
+        \beta_1 \\ \vdots \\ \beta_n
+    \end{pmatrix}
+        = \coordvec{v}{\calV}^\sigma \, \Sigma \, \coordvec{w}{\calV}.
+\end{equation}
+%
+We call $\Sigma$ the \keyword{matrix representation} of the form $\inner{\,\cdot\,}{\,\cdot\,}$ with respect to the basis $\calV$. [TODO $\Sigma$ singular iff $V$ singular, right?]
+
+Conversely, notice that after fixing a basis $\calV$, any square matrix $\Sigma$ gives rise to a sesquilinear form by the identity \cref{eq:sesquilinear-form}. Furthermore, such a matrix is uniquely determined (once a basis has been chosen), so there is a one-to-one correspondence between sesquilinear forms and square matrices, given a choice of basis. [TODO is there? Just double check.]
+
+
+Next we study how a matrix representation of transforms under a change of basis. If $\calW$ is another basis for $V$ then the results in [TODO ref] show that e.g. $\coordvec{v}{\calW} = \basischangemat{\calW}{\calV} \, \coordvec{v}{\calV}$. If $\Sigma$ and $\Gamma$ are the matrix representation of $\phi$ with respect to $\calV$ and $\calW$, respectively, then
+%
+\begin{equation*}
+    \inner{u}{v}
+        = \coordvec{u}{\calW}^\sigma \, \Gamma \, \coordvec{v}{\calW}
+        = \coordvec{u}{\calV}^\sigma \, \basischangemat{\calW}{\calV}^\sigma \, \Gamma \, \basischangemat{\calW}{\calV} \, \coordvec{v}{\calV},
+\end{equation*}
+%
+so $\Sigma = \basischangemat{\calW}{\calV}^\sigma \, \Gamma \, \basischangemat{\calW}{\calV}$ by uniqueness. Two matrices $A,B \in \mat{n}{\fieldF}$ are said to be \keyword{$\sigma$-congruent} if there is an invertible matrix $P$ such that $A = P^\sigma BP$. We have thus shown that matrix representations of a form with respect to different bases are $\sigma$-congruent. [TODO converse, there exists a basis for which...]
+
+
+Now let $V$ and $W$ be finite-dimensional inner product spaces, and let $\Sigma \in \mat{n}{\fieldK}$ and $\Gamma \in \mat{m}{\fieldK}$ be the matrices of the inner products of $V$ and $W$ with respect to ordered bases $\calV$ and $\calW$, respectively. We then have the following characterisation of adjoints of linear maps $V \to M$.
+
+\begin{proposition}
+    \label{prop:adjoint-formula-IP-matrix}
+    Let $T \colon V \to W$ be a linear map. Its adjoint $T^* \colon W \to V$ is the unique linear map satisfying
+    %
+    \begin{equation*}
+        \Sigma \, \mr{\calV}{T^*}{\calW}
+            = (\mr{\calW}{T}{\calV})^* \, \Gamma.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    \Cref{prop:adjoint-inner-product} implies that
+    %
+    \begin{equation*}
+        \coordvec{v}{\calV}^* \, \Sigma \, \mr{\calV}{T^*}{\calW} \, \coordvec{w}{\calW}
+            = \inner{v}{T^* w}_V
+            = \inner{Tv}{w}_W
+            = \coordvec{v}{\calV}^* \, (\mr{\calW}{T}{\calV})^* \, \Gamma \, \coordvec{w}{\calW},
+    \end{equation*}
+    %
+    for all $v \in V$ and $w \in W$, and $T^*$ is clearly unique with this property.
+\end{proof}
+%
+This result has various important consequences in the case where $\calV$ and $\calW$ are orthonormal:
+
+\begin{corollarynoproof}
+    If $\calV$ and $\calW$ are orthonormal, then
+    %
+    \begin{equation*}
+        \mr{\calV}{T^*}{\calW}
+            = (\mr{\calW}{T}{\calV})^\sigma.
+    \end{equation*}
+\end{corollarynoproof}
+
+\begin{corollary}
+    \label{cor:adjoint-mr-orthogonal-basis}
+    If $V = W$, and if $\calV$ is orthogonal and consists of nonisotropic vectors, then
+    %
+    \begin{equation*}
+        \mr{\calV}{T^*}{\calV}
+            = (\mr{\calV}{T}{\calV})^\sigma.
+    \end{equation*}
+\end{corollary}
+
+\begin{proof}
+    In this case $\Sigma = \Gamma$ is diagonal, so it commutes with $(\mr{\calV}{T}{\calV})^\sigma$. Its diagonal elements are also nonzero, so it is invertible, and hence
+    %
+    \begin{equation*}
+        \mr{\calV}{T^*}{\calV}
+            = \inv{\Sigma} (\mr{\calV}{T}{\calV})^\sigma \Sigma
+            = \inv{\Sigma} \Sigma (\mr{\calV}{T}{\calV})^\sigma
+            = (\mr{\calV}{T}{\calV})^\sigma,
+    \end{equation*}
+    %
+    as claimed.
+\end{proof}
+
+
+\begin{corollarynoproof}
+    If $T \colon \fieldK^n \to \fieldK^m$, then
+    %
+    \begin{equation*}
+        \smr{T^*}
+            = \smr{T}^*.
+    \end{equation*}
+\end{corollarynoproof}
+
+\begin{corollarynoproof}
+    If $A \in \mat{m,n}{\fieldK}$, then
+    %
+    \begin{equation*}
+        M_{A^*}
+            = (M_A)^*.
+    \end{equation*}
+\end{corollarynoproof}
+
+
+\section{Projections II}\label{sec:projections-2}
+
+If $V$ is equipped with a sesquilinear form, then a projection $P \colon V \to V$ is \keyword{orthogonal} if $\im P$ and $\ker P$ are orthogonal subspaces of $V$.
+
+In this section we make the same further assumptions as in \cref{par:Hilbert-space-adjoints}. In particular, operators on $V$ have Hilbert space adjoints. 
+
+\begin{proposition}
+    A projection $P \colon V \to V$ is orthogonal if and only if $P$ is self-adjoint.
+\end{proposition}
+
+\begin{proof}
+    Assume that $P$ is orthogonal so that $\im P \perp \ker P$ and let $u,v \in V$. Since then $Pu \in \im P$ and $u - Pu \in \ker P$, and similarly for $v$, we get
+    %
+    \begin{equation*}
+        \inner{u - Pu}{Pv}
+            = 0
+            = \inner{Pu}{v - Pv}.
+    \end{equation*}
+    %
+    This implies that
+    %
+    \begin{equation*}
+        \inner{u}{Pv}
+            = \inner{Pu}{Pv}
+            = \inner{Pu}{v}
+            = \inner{u}{P^* v},
+    \end{equation*}
+    %
+    which shows that $P = P^*$.
+
+    Conversely assume that $P$ is self-adjoint. For $u \in \im P$ and $v \in \ker P$ we then have
+    %
+    \begin{equation*}
+        \inner{u}{v}
+            = \inner{Pu}{v}
+            = \inner{u}{Pv}
+            = \inner{u}{0}
+            = 0,
+    \end{equation*}
+    %
+    so $\im P$ and $\ker P$ are orthogonal.
+\end{proof}
+
+
+TODO Next we consider finite-dimensional inner product spaces $V$ and $W$. If $U$ is a subspace of $V$, then the inclusion map $\iota_U \colon U \to V$ is injective and its image is $\im \iota_U$. Hence the following gives a formula for orthogonal projection operators onto any subspace:
+
+\begin{proposition}
+    \label{prop:projection-formula}
+    Let $T \colon W \to V$ be an injective linear operator, and let $P$ be the orthogonal projection onto $\im T$. Then $P = T\inv{(T^* T)} T^*$.
+\end{proposition}
+
+\begin{proof}
+    First note that $T^* T$ is indeed injective (hence invertible) since $T$ is. This follows from the identity $\ker T^* = (\im T)^\perp$. TODO prove this
+
+    Next notice that the rank of $P$ is $\dim \im T$. But $T^*$ is surjective since $T$ is injective, so the rank of $T\inv{(T^* T)} T^*$ is also $\dim \im T$. It thus suffices to show that $P$ and $T\inv{(T^* T)} T^*$ agree on $\im T$, and writing $v = Tw$ we have
+    %
+    \begin{equation*}
+        T\inv{(T^* T)} T^* v
+            = T\inv{(T^* T)} (T^* T) w
+            = Tw
+            = v,
+    \end{equation*}
+    %
+    as desired.
+\end{proof}
+%
+Note that the proof does not go through in the infinite-dimensional case, for then we cannot simply use dimension arguments.
+
+We specialise to the case where $V = \reals^n$, and the inner product on $\reals^n$ has the matrix representation $\Sigma$ with respect to the standard basis.\footnote{Note that the standard basis is not necessarily orthonormal with respect to the given inner product.} In this case we may also assume that $W = \reals^k$ where $k = \dim U$: Simply precompose $\iota_U$ with any isomorphism $\reals^k \to U$.
+
+Furthermore, let $A \in \mat{n,k}{\reals}$ be the standard matrix representation of $T \colon \reals^k \to \reals^n$. In this case, $U$ is of course the column space of $A$, and $A$ is of full rank. We then have the following result:
+
+\begin{proposition}
+    The orthogonal projection $P$ onto $R(A)$ is given by
+    %
+    \begin{equation*}
+        \smr{P}
+            = A\inv{(\trans{A} \Sigma A)} \trans{A} \Sigma.
+    \end{equation*}
+\end{proposition}
+
+\begin{proof}
+    Equip $\reals^k$ with the standard inner product. Its matrix representation with respect to the standard basis is then just the identity matrix, so \cref{prop:adjoint-formula-IP-matrix} implies that
+    %
+    \begin{equation*}
+        \smr{T^*}
+            = \trans{\smr{T}} \Sigma
+            = \trans{A} \Sigma.
+    \end{equation*}
+    %
+    Applying this to \cref{prop:projection-formula} we thus obtain
+    %
+    \begin{align*}
+        \smr{P}
+            &= A \inv{\bigl( \smr{T^*} A \bigr)} \smr{T^*} \\
+            &= A \inv{(\trans{A} \Sigma A)} \trans{A} \Sigma,
+    \end{align*}
+    %
+    as claimed.
+\end{proof}
+
+
+\section{Real and complex sesquilinear forms}
+
+The spectral theorem in the form stated in TODO ref applies directly to inner products on complex vector spaces, but there is of course also a version of the spectral theorem for real vector spaces. In order to formulate it in the desired generality, we first study how to extend the constructions developed in this chapter from real to complex vector spaces.
+
+
+We first consider how to extend a field automorphism on $\reals$ to an automorphism on $\complex$. Note that since an endomorphism on $\reals$ is in particular an $\reals$-linear map, it is either surjective or the zero map. But the latter is impossible since it must send $1$ to $1$, so every field endomorphism is automatically an automorphism.
+
+\begin{lemma}
+    Let $\sigma \in \Aut(\reals)$. Then the maps $\sigma^\complex_{\pm} \colon \complex \to \complex$ given by
+    %
+    \begin{equation*}
+        \sigma^\complex_{\pm}(\alpha + \iu \beta)
+            = \sigma(\alpha) \pm \iu \sigma(\beta)
+    \end{equation*}
+    %
+    for $\alpha,\beta \in \reals$ are the only endomorphisms on $\complex$ that extend $\sigma$, and they are also automorphisms. Furthermore, $\sigma$ is an involution if and only if the $\sigma^\complex_\pm$ are.
+\end{lemma}
+
+\begin{proof}
+    It is easy to see that they are in fact field homomorphisms, hence $\complex$-linear and thus bijective. To prove uniqueness, let $\tau \colon \complex \to \complex$ be a field homomorphism extending $\sigma$. For $\alpha,\beta \in \reals$ we then have
+    %
+    \begin{equation*}
+        \tau(\alpha + \iu \beta)
+            = \tau(\alpha) + \tau(\iu) \tau(\beta)
+            = \sigma(\alpha) + \tau(\iu) \sigma(\beta).
+    \end{equation*}
+    %
+    But since $\iu^2 = -1$, we have
+    %
+    \begin{equation*}
+        \tau(\iu)^2
+            = \tau(\iu^2)
+            = \tau(-1)
+            = -1,
+    \end{equation*}
+    %
+    so $\tau(\iu) \in \{\pm \iu\}$. The final claim is obvious.
+\end{proof}
+%
+We will see shortly which of $\sigma^\complex_+$ and $\sigma^\complex_-$ is the right choice.
+
+Next we must consider how to extend sesquilinear forms from a real vector space $V$ to its complexification $V^\complex$. There is of course a canonical way of extending inner products as mentioned in TODO ref, so we extend general sesquilinear forms to be consistent with that procedure: Namely, if $\phi$ is a sesquilinear form on $V$, then we define $\phi^\complex \colon V^\complex \prod V^\complex \to \complex$ by
+%
+\begin{equation*}
+    \phi^\complex(u + \iu v, x + \iu y)
+        = \phi(u,x) + \phi(v,y) + \iu \bigl( \phi(u,y) - \phi(v,x) \bigr),
+\end{equation*}
+%
+for $u,v,x,y \in V$. It is easy to see that this is bi-additive and $\complex$-linear in its second entry, and that it agrees with $\phi$ on $V \prod V$. But assume that $\phi$ is a $\sigma$-sesquilinear form. Then we might hope that $\phi^\complex$ is either a $\sigma^\complex_+$- or a $\sigma^\complex_-$-sesquilinear form. But a short calculation shows that it is indeed $\sigma^\complex_-$-sesquilinear. This we might have expected, since the canonical automorphism on $\complex$ is complex conjugation which precisely sends $\iu$ to $-\iu$.
+
+\begin{proposition}
+    \begin{enumproposition}
+        \item $\phi$ is nontrivial if and only if $\phi^\complex$ is nontrivial.
+        % \item TODO reflexive?
+        \item $\phi$ is $(\sigma,\epsilon)$-Hermitian if and only if $\phi^\complex$ is $(\sigma^\complex_-,\epsilon)$-Hermitian.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+    TODO
+\end{proof}
+
+
+\begin{proposition}
+    TODO Isotropic?
+\end{proposition}
+
+
+The trick is to take the complexification $T^\complex$ of a self-adjoint operator $T$ on a real vector space. We first show that $T^\complex$ is then also self-adjoint:
+
+\begin{proposition}
+    \label{prop:complexification-adjoint}
+    Let $V$ and $W$ be real Hilbert spaces, and let $T \in \lin(V,W)$. Then we have
+    %
+    \begin{equation*}
+        (T^\complex)^*
+            = (T^*)^\complex,
+    \end{equation*}
+    %
+    i.e., the adjoint of the complexification of $T$ is the complexification of the adjoint of $T$. In particular
+    %
+    \begin{enumproposition}
+        \item $T$ is normal if and only if $T^\complex$ is normal, and
+        \item $T$ is self-adjoint if and only if $T^\complex$ is self-adjoint.
+    \end{enumproposition}
+\end{proposition}
+
+\begin{proof}
+    For $v,u,x,y \in V$ we have
+    %
+    \begin{align*}
+        \inner{(T^*)^\complex(x + \iu y)}{v + \iu u}
+            &= \inner{ T^*x + \iu T^*y }{v + \iu u} \\
+            &= \inner{T^*x}{v}
+                + \inner{T^*y}{u}
+                + \iu ( \inner{T^*x}{u} - \inner{T^*y}{v} ) \\
+            &= \inner{x}{Tv}
+                + \inner{y}{Tu}
+                + \iu ( \inner{x}{Tu} - \inner{y}{Tv} ) \\
+            &= \inner{x + \iu y}{Tv + \iu Tu} \\
+            &= \inner{x + \iu y}{T^\complex(v + \iu u)}.
+    \end{align*}
+    %
+    Uniqueness of adjoints thus yields the claim.
+
+    Assume that $T$ is normal. Then
+    %
+    \begin{equation*}
+        T^\complex (T^\complex)^*
+            = T^\complex (T^*)^\complex
+            = (TT^*)^\complex
+            = (T^*T)^\complex
+            = (T^*)^\complex T^\complex
+            = (T^\complex)^* T^\complex,
+    \end{equation*}
+    %
+    so $T^\complex$ is normal. The converse follows similarly. If $T$ is self-adjoint, then
+    %
+    \begin{equation*}
+        (T^\complex)^*
+            = (T^*)^\complex
+            = T^\complex,
+    \end{equation*}
+    %
+    and similarly if $T^\complex$ is self-adjoint.
+\end{proof}
+
+
+As promised we prove a polarisation identity for certain sesquilinear forms on complex vector spaces. Let $V$ be a complex vector space, and denote complex conjugation by $\alpha \mapsto \alpha^*$. Then a ${}^*$-sesquilinear form is just a form that is conjugate-linear in its first entry. Its quadratic form $Q$ then satisfies $Q(\alpha v) = \abs{\alpha}^2 Q(v)$ for all $v \in V$ and $\alpha \in \complex$.
+
+\begin{propositionnoproof}
+    Let $\phi$ be a ${}^*$-sesquilinear form on $V$ with quadratic form $Q$. Then
+    %
+    \begin{equation*}
+        \phi(u,v)
+            = \frac{1}{4} \sum_{k=0}^3 \iu^k Q(\iu^k u + v)
+    \end{equation*}
+    %
+    for all $u,v \in V$.
+\end{propositionnoproof}
+%
+As in the proof of TODO ref, this follows simply by inserting the definition of $Q$.
+
+The usual complex inner product is in fact also $({}^*,1)$-Hermitian, and this property allows us to give a different proof of TODO ref which illustrates the connection between the polarisation identity for bilinear forms and the one for ${}^*$-sesquilinear forms. The first step is to notice that whether or not a form is $({}^*,1)$-Hermitian is determined by its quadratic form:
+%
+\begin{lemma}
+    Let $\phi$ be a ${}^*$-sesquilinear form on $V$ with quadratic form $Q$. Then $\phi$ is $({}^*,1)$-Hermitian if and only if $Q(v) \in \reals$ for all $v \in V$.
+\end{lemma}
+
+\begin{proof}
+    If $\phi$ is $({}^*,1)$-Hermitian, then
+    %
+    \begin{equation*}
+        \conj{Q(v)}
+            = \conj{\phi(v,v)}
+            = \phi(v,v)
+            = Q(v).
+    \end{equation*}
+    %
+    Conversely, if $Q$ is real-valued then
+    %
+    \begin{equation*}
+        0
+            = \Im Q(u+v)
+            = \Im \phi(u,v) + \Im \phi(v,u)
+    \end{equation*}
+    %
+    and
+    %
+    \begin{equation*}
+        0
+            = \Im Q(u+\iu v)
+            = - \Re \phi(u,v) + \Re \phi(v,u)
+    \end{equation*}
+    %
+    for all $u,v \in V$, implying that $\phi$ is $({}^*,1)$-Hermitian.
+\end{proof}
+%
+Now notice that if $\phi$ is ${}^*$-sesquilinear and $({}^*,1)$-Hermitian, then the quadratic forms corresponding to $\phi$ and $\Re \phi$ coincide since they are real-valued. It thus follows from TODO ref that
+%
+\begin{equation*}
+    \Re \phi(u,v)
+        = \frac{1}{4} \bigl( Q(u+v) - Q(u-v) \bigr)
+\end{equation*}
+%
+for all $u,v \in V$. Further notice that for $u \in V$ the map $v \mapsto \phi(u,v)$ is a linear functional, and hence on the form [TODO ref]
+%
+\begin{align*}
+    \phi(u,v)
+        &= \Re \phi(u,v) - \iu \Re \phi(u, \iu v) \\
+        &= \Re \phi(u,v) + \iu \Re \phi(\iu u, v) \\
+        &= \frac{1}{4} \bigl( Q(u+v) - Q(u-v) + \iu Q(\iu u + v) - \iu Q(\iu u - v) \bigr) \\
+        &= \frac{1}{4} \bigl( Q(u+v) - Q(-u+v) + \iu Q(\iu u + v) - \iu Q(-\iu u + v) \bigr),
+\end{align*}
+%
+where we have used that $Q(-w) = Q(w)$. And this is precisely TODO ref.
