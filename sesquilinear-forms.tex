@@ -1304,3 +1304,57 @@ Consider next a matrix $A \in \mat{m,n}{\fieldK}$, and let $T = M_A$ be the asso
 \end{align*}
 %
 where $P = \basischangemat{\calE_m}{\calW}$ and $Q = \basischangemat{\calE_n}{\calV}$ are unitary, and $\Sigma = \mr{\calW}{M_A}{\calV}$ is a rectangular diagonal matrix with the singular values $s_1, \ldots, s_r$ along the main diagonal, followed by zeros. This is called the \keyword{singular value decomposition} of $A$.
+
+
+Schmidt decomposition:
+
+Let $V$ and $W$ be $\fieldF$-vector spaces, let $\calV = (v_1, \ldots, v_n)$ be a basis for $V$, and let $\calW = (w_1, \ldots, w_m)$ be a basis for $W$. We identify the tensor product $V \tensor W$ with the space $\mat{n,m}{\fieldF}$ by the map $v_i \tensor w_j \mapsto E_{ij}$, where $E_{ij}$ is the matrix with a $1$ in its $(i,j)$-th entry and zeros everywhere else. This map has the property that an arbitrary tensor $u = \sum_{i,j} \alpha_{ij} v_i \tensor w_j$ is identified with the matrix $(\alpha_{ij})$. Furthermore, for any $v = \sum_i \alpha_i v_i$ and $w = \sum_j \beta_j w_j$, notice that the tensor
+%
+\begin{equation*}
+    v \tensor w
+        = \sum_{i,j} \alpha_i \beta_j v_i \tensor w_j
+\end{equation*}
+%
+is represented by the matrix $(\alpha_i \beta_j)$, which is just $\coordvec{v}{\calV} \trans{\coordvec{w}{\calW}}$.
+
+\begin{theorem}[Schmidt decomposition]
+    Let $V$ and $W$ be inner product spaces of dimension $n$ and $m$ respectively. For any $u \in V \tensor W$ there exist orthonormal vectors $x_1, \ldots, x_{m \meet n} \in V$ and $y_1, \ldots, y_{m \meet n} \in W$ such that $u = \sum_i \alpha_i x_i \tensor y_i$, and such that $\alpha_i \geq 0$. % TODO uniqueness of the coefficients.
+\end{theorem}
+
+\begin{proof}
+    Assume without loss of generality that $n \geq m$. Let $\calV = (v_1, \ldots, v_n)$ and $\calW = (w_1, \ldots, w_m)$ be bases for $V$ and $W$ respectively, and write $u$ in terms of the tensor product of these bases:
+    %
+    \begin{equation*}
+        u = \sum_{i,j} \beta_{ij} v_i \tensor w_j.
+    \end{equation*}
+    %
+    This is represented by the matrix $M_u = (\beta_{ij}) \in \mat{n,m}{\fieldK}$, and this has a singular value decomposition $M_u = P \Sigma Q^*$. Writing
+    %
+    \begin{equation*}
+        P =
+        \begin{pmatrix}
+            P_1 & P_2
+        \end{pmatrix}
+        \quad \text{and} \quad
+        \Sigma =
+        \begin{pmatrix}
+            \Sigma_1 \\
+            0
+        \end{pmatrix}
+    \end{equation*}
+    %
+    for appropriate $P_1 \in \mat{n,m}{\fieldK}$ and $\Sigma_1 \in \mat{m}{\fieldK}$, we have $M_u = P_1 \Sigma_1 Q^*$. Notice that $\Sigma_1$ is positive semidefinite and diagonal. If $p_1, \ldots, p_m$ and $q_1, \ldots, q_m$ are the columns of $P$ and $\conj{Q}$ respectively, and $\alpha_1, \ldots, \alpha_m$ are the diagonal elements of $\Sigma_1$, then
+    %
+    \begin{equation*}
+        M_u
+            = \sum_k \alpha_k p_k \trans{q_k}.
+    \end{equation*}
+    %
+    But $p_k = \coordvec{x_k}{\calV}$ and $q_k = \coordvec{y_k}{\calW}$ for some $x_k \in V$ and $y_k \in W$, which implies that
+    %
+    \begin{equation*}
+        u = \sum_k \alpha_k x_k \tensor y_k
+    \end{equation*}
+    %
+    as claimed.
+\end{proof}
